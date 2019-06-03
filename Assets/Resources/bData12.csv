@@ -1,0 +1,101 @@
+Country,Year,Value
+Austria,1989,13.6
+Austria,1990,20.6
+Austria,1991,25.1
+Austria,1992,26.5
+Austria,1993,25.7
+Austria,1994,23.7
+Austria,1995,21.1
+Austria,1996,18.4
+Austria,1997,16.1
+Austria,1998,14.3
+France,1989,5.1
+France,1990,10.1
+France,1991,16.6
+France,1992,22.2
+France,1993,25.3
+France,1994,26.3
+France,1995,26.1
+France,1996,25.5
+France,1997,25.1
+France,1998,24.8
+Australia,1989,1.7
+Australia,1990,5.9
+Australia,1991,14.3
+Australia,1992,21.6
+Australia,1993,24.2
+Australia,1994,24.5
+Australia,1995,24.1
+Australia,1996,23.6
+Australia,1997,23.5
+Australia,1998,23.6
+Belgium,1989,3.2
+Belgium,1990,6.1
+Belgium,1991,10.6
+Belgium,1992,16
+Belgium,1993,20.6
+Belgium,1994,23.6
+Belgium,1995,25.1
+Belgium,1996,25.6
+Belgium,1997,25.8
+Belgium,1998,25.9
+Canada,1989,1.2
+Canada,1990,2.9
+Canada,1991,6.1
+Canada,1992,10.7
+Canada,1993,14.8
+Canada,1994,17.1
+Canada,1995,18
+Canada,1996,18.1
+Canada,1997,18
+Canada,1998,17.8
+Netherlands,1989,2.2
+Netherlands,1990,4.1
+Netherlands,1991,7.1
+Netherlands,1992,10.7
+Netherlands,1993,14.1
+Netherlands,1994,16.1
+Netherlands,1995,16.5
+Netherlands,1996,15.7
+Netherlands,1997,14.3
+Netherlands,1998,13.1
+Italy,1989,1.6
+Italy,1990,2.7
+Italy,1991,4.1
+Italy,1992,5.8
+Italy,1993,7.7
+Italy,1994,9.4
+Italy,1995,10.6
+Italy,1996,11.2
+Italy,1997,11.4
+Italy,1998,11.5
+Denmark,1989,5.4
+Denmark,1990,8.4
+Denmark,1991,10.3
+Denmark,1992,10.5
+Denmark,1993,9.6
+Denmark,1994,8.4
+Denmark,1995,7.5
+Denmark,1996,6.8
+Denmark,1997,6.4
+Denmark,1998,6.3
+United States,1989,10.7
+United States,1990,10.2
+United States,1991,9.3
+United States,1992,8.4
+United States,1993,7.6
+United States,1994,7
+United States,1995,6.6
+United States,1996,6.4
+United States,1997,6.3
+United States,1998,6.5
+Norway,1989,8.8
+Norway,1990,11.9
+Norway,1991,13.9
+Norway,1992,14.7
+Norway,1993,14.5
+Norway,1994,13.8
+Norway,1995,13
+Norway,1996,12.1
+Norway,1997,11.4
+Norway,1998,11

@@ -1,0 +1,101 @@
+Country,Year,Value
+Austria,1989,75.38
+Austria,1990,81.82
+Austria,1991,58.73
+Austria,1992,56.79
+Austria,1993,39.18
+Austria,1994,27.76
+Austria,1995,50.62
+Austria,1996,49.68
+Austria,1997,46.65
+Austria,1998,44.02
+France,1989,36.53
+France,1990,38.94
+France,1991,32.82
+France,1992,29.02
+France,1993,23.32
+France,1994,23.04
+France,1995,30.12
+France,1996,20.3
+France,1997,18.77
+France,1998,23.92
+Australia,1989,35.52
+Australia,1990,32.82
+Australia,1991,17.24
+Australia,1992,18.01
+Australia,1993,17.32
+Australia,1994,16.68
+Australia,1995,14.07
+Australia,1996,29.51
+Australia,1997,36.03
+Australia,1998,36.03
+Belgium,1989,3.7
+Belgium,1990,66.86
+Belgium,1991,37.27
+Belgium,1992,37.16
+Belgium,1993,9
+Belgium,1994,23.52
+Belgium,1995,21.22
+Belgium,1996,18.31
+Belgium,1997,19.4
+Belgium,1998,16.63
+Canada,1989,5.31
+Canada,1990,15.95
+Canada,1991,24.02
+Canada,1992,22.69
+Canada,1993,22.55
+Canada,1994,25.91
+Canada,1995,20
+Canada,1996,26.65
+Canada,1997,31.15
+Canada,1998,26.63
+Netherlands,1989,10.36
+Netherlands,1990,36.39
+Netherlands,1991,33.45
+Netherlands,1992,38.06
+Netherlands,1993,8.07
+Netherlands,1994,6.21
+Netherlands,1995,6.79
+Netherlands,1996,6.21
+Netherlands,1997,6.19
+Netherlands,1998,6.7
+Italy,1989,18.5
+Italy,1990,13.59
+Italy,1991,17.77
+Italy,1992,14.36
+Italy,1993,8.06
+Italy,1994,9.56
+Italy,1995,10.08
+Italy,1996,9.33
+Italy,1997,11.39
+Italy,1998,11.94
+Denmark,1989,2.69
+Denmark,1990,10.33
+Denmark,1991,13.1
+Denmark,1992,13.02
+Denmark,1993,12.18
+Denmark,1994,12.58
+Denmark,1995,15.53
+Denmark,1996,15.06
+Denmark,1997,12.97
+Denmark,1998,11.7
+United States,1989,4.82
+United States,1990,6.03
+United States,1991,7.97
+United States,1992,9.7
+United States,1993,11.07
+United States,1994,11.21
+United States,1995,13.81
+United States,1996,14.98
+United States,1997,14.49
+United States,1998,14.46
+Norway,1989,2.53
+Norway,1990,2.54
+Norway,1991,2.59
+Norway,1992,3.01
+Norway,1993,1.17
+Norway,1994,2.44
+Norway,1995,3.25
+Norway,1996,7.13
+Norway,1997,12.1
+Norway,1998,13.44

@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 999622cfa423b4eeb9fc5082124fa352
+timeCreated: 1551931752
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - mainCamera: {instanceID: 0}
+  - viveCamera: {instanceID: 0}
+  - Ground: {instanceID: 0}
+  - Floor1: {instanceID: 0}
+  - Roof: {instanceID: 0}
+  - ACFile: {instanceID: 0}
+  - OAPUFile: {instanceID: 0}
+  - cylinderMesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  - simulationText: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,322 @@
+fileFormatVersion: 2
+guid: e302b1257fed04d899fab67366a22ca3
+timeCreated: 1517538689
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: AC-Comms
+    100002: 'AC1.1 '
+    100004: 'AC1.10 '
+    100006: 'AC1.11 '
+    100008: 'AC1.12 '
+    100010: AC1.13
+    100012: AC1.14
+    100014: AC1.15
+    100016: AC1.16
+    100018: 'AC1.2 '
+    100020: AC1.3
+    100022: AC1.4
+    100024: AC1.5
+    100026: AC1.6
+    100028: 'AC1.7  '
+    100030: 'AC1.8 '
+    100032: AC1.9
+    100034: ACG.1
+    100036: ACG.2
+    100038: ACG.3
+    100040: ACG.4
+    100042: ACG.5
+    100044: Block:block 131
+    100046: Block:block 4478
+    100048: Block:block 4568
+    100050: Block:block 5848
+    100052: Block:block 5853
+    100054: Block:block 6225
+    100056: Block:block 6341
+    100058: Box001
+    100060: //RootNode
+    100062: External walls
+    100064: floor
+    100066: Internal walls
+    100068: internalwall1
+    100070: Layer:1st floor
+    100072: Layer:1st floor 1
+    100074: Layer:1st floor457
+    100076: Line001
+    100078: OAPU1.1
+    100080: OAPU1.2
+    100082: OAPU1.3
+    100084: OAPU1.4
+    100086: OAPU1.5
+    100088: OAPU1.6
+    100090: OAPU1.7
+    100092: OAPUG.1
+    100094: OAPUG.2
+    100096: OAPUG.3
+    100098: PhysCamera002
+    100100: PhysCamera002.Target
+    100102: Plane001
+    400000: AC-Comms
+    400002: 'AC1.1 '
+    400004: 'AC1.10 '
+    400006: 'AC1.11 '
+    400008: 'AC1.12 '
+    400010: AC1.13
+    400012: AC1.14
+    400014: AC1.15
+    400016: AC1.16
+    400018: 'AC1.2 '
+    400020: AC1.3
+    400022: AC1.4
+    400024: AC1.5
+    400026: AC1.6
+    400028: 'AC1.7  '
+    400030: 'AC1.8 '
+    400032: AC1.9
+    400034: ACG.1
+    400036: ACG.2
+    400038: ACG.3
+    400040: ACG.4
+    400042: ACG.5
+    400044: Block:block 131
+    400046: Block:block 4478
+    400048: Block:block 4568
+    400050: Block:block 5848
+    400052: Block:block 5853
+    400054: Block:block 6225
+    400056: Block:block 6341
+    400058: Box001
+    400060: //RootNode
+    400062: External walls
+    400064: floor
+    400066: Internal walls
+    400068: internalwall1
+    400070: Layer:1st floor
+    400072: Layer:1st floor 1
+    400074: Layer:1st floor457
+    400076: Line001
+    400078: OAPU1.1
+    400080: OAPU1.2
+    400082: OAPU1.3
+    400084: OAPU1.4
+    400086: OAPU1.5
+    400088: OAPU1.6
+    400090: OAPU1.7
+    400092: OAPUG.1
+    400094: OAPUG.2
+    400096: OAPUG.3
+    400098: PhysCamera002
+    400100: PhysCamera002.Target
+    400102: Plane001
+    2300000: AC-Comms
+    2300002: 'AC1.1 '
+    2300004: 'AC1.10 '
+    2300006: 'AC1.11 '
+    2300008: 'AC1.12 '
+    2300010: AC1.13
+    2300012: AC1.14
+    2300014: AC1.15
+    2300016: AC1.16
+    2300018: 'AC1.2 '
+    2300020: AC1.3
+    2300022: AC1.4
+    2300024: AC1.5
+    2300026: AC1.6
+    2300028: 'AC1.7  '
+    2300030: 'AC1.8 '
+    2300032: AC1.9
+    2300034: ACG.1
+    2300036: ACG.2
+    2300038: ACG.3
+    2300040: ACG.4
+    2300042: ACG.5
+    2300044: Box001
+    2300046: External walls
+    2300048: floor
+    2300050: Internal walls
+    2300052: internalwall1
+    2300054: Layer:1st floor
+    2300056: Layer:1st floor 1
+    2300058: Layer:1st floor457
+    2300060: Line001
+    2300062: OAPU1.1
+    2300064: OAPU1.2
+    2300066: OAPU1.3
+    2300068: OAPU1.4
+    2300070: OAPU1.5
+    2300072: OAPU1.6
+    2300074: OAPU1.7
+    2300076: OAPUG.1
+    2300078: OAPUG.2
+    2300080: OAPUG.3
+    2300082: Plane001
+    3300000: AC-Comms
+    3300002: 'AC1.1 '
+    3300004: 'AC1.10 '
+    3300006: 'AC1.11 '
+    3300008: 'AC1.12 '
+    3300010: AC1.13
+    3300012: AC1.14
+    3300014: AC1.15
+    3300016: AC1.16
+    3300018: 'AC1.2 '
+    3300020: AC1.3
+    3300022: AC1.4
+    3300024: AC1.5
+    3300026: AC1.6
+    3300028: 'AC1.7  '
+    3300030: 'AC1.8 '
+    3300032: AC1.9
+    3300034: ACG.1
+    3300036: ACG.2
+    3300038: ACG.3
+    3300040: ACG.4
+    3300042: ACG.5
+    3300044: Box001
+    3300046: External walls
+    3300048: floor
+    3300050: Internal walls
+    3300052: internalwall1
+    3300054: Layer:1st floor
+    3300056: Layer:1st floor 1
+    3300058: Layer:1st floor457
+    3300060: Line001
+    3300062: OAPU1.1
+    3300064: OAPU1.2
+    3300066: OAPU1.3
+    3300068: OAPU1.4
+    3300070: OAPU1.5
+    3300072: OAPU1.6
+    3300074: OAPU1.7
+    3300076: OAPUG.1
+    3300078: OAPUG.2
+    3300080: OAPUG.3
+    3300082: Plane001
+    4300000: Internal walls
+    4300002: External walls
+    4300004: ACG.1
+    4300006: ACG.2
+    4300008: OAPUG.1
+    4300010: ACG.3
+    4300012: ACG.5
+    4300014: ACG.4
+    4300016: OAPUG.2
+    4300018: OAPUG.3
+    4300020: AC-Comms
+    4300022: Layer:1st floor
+    4300024: Layer:1st floor
+    4300026: floor
+    4300028: Plane001
+    4300030: Layer:1st floor457
+    4300032: internalwall1
+    4300034: 'AC1.10 '
+    4300036: 'AC1.11 '
+    4300038: AC1.16
+    4300040: 'AC1.1 '
+    4300042: 'AC1.2 '
+    4300044: AC1.3
+    4300046: AC1.4
+    4300048: AC1.5
+    4300050: 'AC1.7  '
+    4300052: AC1.6
+    4300054: 'AC1.8 '
+    4300056: AC1.9
+    4300058: 'AC1.12 '
+    4300060: AC1.15
+    4300062: AC1.14
+    4300064: AC1.13
+    4300066: OAPU1.2
+    4300068: OAPU1.3
+    4300070: OAPU1.1
+    4300072: OAPU1.4
+    4300074: OAPU1.5
+    4300076: OAPU1.7
+    4300078: OAPU1.6
+    4300080: Line001
+    4300082: Box001
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: d87beac66a3dc4a7485f21c54d2a5540, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

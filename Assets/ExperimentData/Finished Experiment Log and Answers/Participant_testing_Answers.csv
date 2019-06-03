@@ -1,0 +1,31 @@
+Task,Answer,CompletionTime
+Training 1,United States,30.57201
+Training 2,Australia,24.26831
+Training 3,1998,42.92872
+Training 4,Food Consumption,28.7429
+1,France,42.68091
+2,Austria,59.22872
+3,France,59.51955
+4,Denmark,35.34477
+5,Not Sure,59.50277
+6,Not Sure,59.51685
+7,Total Health Expenditures,23.78947
+8,CO2 Emissions,26.35091
+Training 1,Norway,41.7383
+1,Australia,34.05357
+2,Austria,54.87324
+3,Belgium,37.12175
+4,Norway,54.71722
+5,1994,43.4864
+6,Not Sure,51.12514
+7,Electricity Consumption,25.8985
+8,External Debt Rates,18.33871
+Training 1,Norway,59.50537
+1,Belgium,28.57086
+2,Belgium,35.05274
+3,Belgium,23.77304
+4,Not Sure,51.47826
+5,1992,45.60892
+6,Not Sure,58.19411
+7,Gross Capital Formation,28.57578
+8,Electricity Consumption,27.77923
