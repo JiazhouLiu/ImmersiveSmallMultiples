@@ -90,15 +90,15 @@ namespace VRTK.GrabAttachMechanics
                 smms = GameObject.Find("SmallMultiplesManager").GetComponent<SmallMultiplesManagerScript>();
                 if (precisionGrab)
                 {
-                    if (!smms.indirectTouch)
-                    {
-                        givenJoint.anchor = obj.transform.InverseTransformPoint(controllerAttachPoint.position + controllerAttachPoint.transform.forward * smms.gain);
-                    }
-                    else
-                    {
+                    //if (!smms.indirectTouch)
+                    //{
+                    //    givenJoint.anchor = obj.transform.InverseTransformPoint(controllerAttachPoint.position + controllerAttachPoint.transform.forward * smms.gain);
+                    //}
+                    //else
+                    //{
                         //givenJoint.anchor = obj.transform.InverseTransformPoint(controllerAttachPoint.position + controllerAttachPoint.transform.forward * smms.gain);
                         givenJoint.anchor = obj.transform.InverseTransformPoint(controllerAttachPoint.position);
-                    }
+                    //}
                 }
             }
             else {

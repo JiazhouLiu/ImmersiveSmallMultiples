@@ -830,23 +830,13 @@ MonoBehaviour:
     type: 2}
   LRLabelPrefab: {fileID: 1995362171341216, guid: 02213a0e32e82164b84d7ce4d6e1e042,
     type: 2}
-  swipeToRotate: 1
-  faceToCurve: 0
-  indirectTouch: 1
-  indirectRayCast: 0
-  gain: 3
-  experiment: 1
-  hidePillarsAndBoards: 1
   fixedPosition: 1
-  fixedPositionCurved: 0
-  quarterCurved: 0
-  uniqueCenterZDelta: 0
+  circleLayout: 0
+  fullCircle: 0
   dataset: 1
-  smallMultiplesNumber: 48
+  smallMultiplesNumber: 36
   dateType: 0
   delta: 0.7
-  currentCurvature: 0
-  curveCenterPoint: {x: 0, y: 0, z: 0}
   taskID: 0
   taskArray: []
   trainingTaskArray: []

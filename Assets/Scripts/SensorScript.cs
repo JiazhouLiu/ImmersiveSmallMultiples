@@ -39,7 +39,7 @@ public class SensorScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        
 
         SmallMultiplesManagerScript smms = GameObject.Find("SmallMultiplesManager").GetComponent<SmallMultiplesManagerScript>();
         ToolTipPrefab = smms.tooltipPrefab;
@@ -73,11 +73,15 @@ public class SensorScript : MonoBehaviour
             Color lightGray = new Color();
             ColorUtility.TryParseHtmlString("#969696", out lightGray);
             this.GetComponent<Renderer>().material.color = lightGray;
-
+            this.gameObject.SetActive(false);
             this.transform.localScale = new Vector3(0.6f, 0.1f, 0.6f);
             this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 1, this.transform.localPosition.z);
             //Debug.Log(this.transform.localPosition);
+
         }
+        transform.localScale *= 2f;
+        transform.localPosition += Vector3.up * transform.localScale.y;
+        transform.localEulerAngles = Vector3.zero;
     }
 
     private void Awake()
@@ -182,7 +186,7 @@ public class SensorScript : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_OutlineColor", cl27);
 
                 this.transform.localScale = new Vector3(0.6f, 1f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.1f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.1f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 1.6f, 0);
                 sensorColorIndex = 9;
 
@@ -195,7 +199,7 @@ public class SensorScript : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_OutlineColor", cl26);
 
                 this.transform.localScale = new Vector3(0.6f, 0.9f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.2f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.2f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 1.8f, 0);
                 sensorColorIndex = 8;
             }
@@ -208,7 +212,7 @@ public class SensorScript : MonoBehaviour
 
 
                 this.transform.localScale = new Vector3(0.6f, 0.8f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.3f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.3f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 2.0f, 0);
                 sensorColorIndex = 7;
             }
@@ -220,7 +224,7 @@ public class SensorScript : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_OutlineColor", cl24);
 
                 this.transform.localScale = new Vector3(0.6f, 0.7f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.4f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.4f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 2.2f, 0);
                 sensorColorIndex = 6;
             }
@@ -232,7 +236,7 @@ public class SensorScript : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_OutlineColor", cl23);
 
                 this.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.5f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.5f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 2.4f, 0);
                 sensorColorIndex = 5;
             }
@@ -244,7 +248,7 @@ public class SensorScript : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_OutlineColor", cl22);
 
                 this.transform.localScale = new Vector3(0.6f, 0.5f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.6f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.6f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 2.6f, 0);
                 sensorColorIndex = 4;
             }
@@ -256,7 +260,7 @@ public class SensorScript : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_OutlineColor", cl21);
 
                 this.transform.localScale = new Vector3(0.6f, 0.4f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.7f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.7f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 2.8f, 0);
                 sensorColorIndex = 3;
             }
@@ -268,7 +272,7 @@ public class SensorScript : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_OutlineColor", cl20);
 
                 this.transform.localScale = new Vector3(0.6f, 0.3f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.8f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.8f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 3f, 0);
                 sensorColorIndex = 2;
             }
@@ -280,7 +284,7 @@ public class SensorScript : MonoBehaviour
                 this.GetComponent<Renderer>().material.SetColor("_OutlineColor", cl19);
 
                 this.transform.localScale = new Vector3(0.6f, 0.2f, 0.6f);
-                this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.9f, this.transform.localPosition.z);
+                //this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - 0.9f, this.transform.localPosition.z);
                 //tooltip.transform.localPosition = new Vector3(0, 3.2f, 0);
                 sensorColorIndex = 1;
             }

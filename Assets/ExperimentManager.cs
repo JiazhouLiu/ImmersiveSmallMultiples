@@ -170,18 +170,18 @@ public class ExperimentManager : MonoBehaviour {
 
                 switch (ExperimentSequence)
                 {
-                    case 1:
+                    case 1: 
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
@@ -189,11 +189,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         break;
                     case 2:
@@ -203,11 +203,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
@@ -215,11 +215,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         break;
                     case 3:
@@ -229,11 +229,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
@@ -241,11 +241,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         break;
                     case 4:
@@ -255,11 +255,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
@@ -267,17 +267,17 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         break;
                     case 5:
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
@@ -285,11 +285,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
@@ -297,13 +297,13 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         break;
                     case 6:
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
@@ -311,11 +311,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
@@ -323,17 +323,17 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         break;
                     case 7:
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
@@ -341,11 +341,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
@@ -355,11 +355,11 @@ public class ExperimentManager : MonoBehaviour {
                     case 8:
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
@@ -367,11 +367,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
@@ -381,7 +381,7 @@ public class ExperimentManager : MonoBehaviour {
                     case 9:
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
@@ -389,11 +389,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
@@ -401,13 +401,13 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         break;
                     case 10:
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
@@ -415,11 +415,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
@@ -427,17 +427,17 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         break;
                     case 11:
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
@@ -445,11 +445,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
@@ -459,11 +459,11 @@ public class ExperimentManager : MonoBehaviour {
                     case 12:
                         if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
                         {
@@ -471,11 +471,11 @@ public class ExperimentManager : MonoBehaviour {
                         }
                         if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                         }
                         else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                         }
                         else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
                         {
@@ -530,28 +530,28 @@ public class ExperimentManager : MonoBehaviour {
                                 SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                 break;
                             case 5:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                                 break;
                             case 6:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                 break;
                             case 7:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                                 break;
                             case 8:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                 break;
                             case 9:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                                 break;
                             case 10:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                 break;
                             case 11:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                                 break;
                             case 12:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                 break;
                             default:
                                 break;

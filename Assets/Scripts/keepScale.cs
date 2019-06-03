@@ -23,10 +23,10 @@ public class keepScale : MonoBehaviour {
             {
                 this.transform.parent.localScale = Vector3.one;
 
-                if (!mrs.indirectTouch)
-                {
-                    this.transform.parent.GetChild(1).localScale = new Vector3(0.002f, 0.002f, 0.002f);
-                }
+                //if (!mrs.indirectTouch)
+                //{
+                //    this.transform.parent.GetChild(1).localScale = new Vector3(0.002f, 0.002f, 0.002f);
+                //}
 
                 //this.transform.GetChild(0).gameObject.SetActive(true);
                 //this.transform.GetChild(1).gameObject.SetActive(true);
@@ -42,10 +42,10 @@ public class keepScale : MonoBehaviour {
                 //{
                 //    this.transform.parent.GetChild(1).localScale = Vector3.one;
                 //}
-                if (!mrs.indirectTouch)
-                {
-                    ////this.transform.parent.GetChild(1).GetChild(1).localScale = new Vector3(0.002f, 0.002f, 0.002f);
-                }
+                //if (!mrs.indirectTouch)
+                //{
+                //    ////this.transform.parent.GetChild(1).GetChild(1).localScale = new Vector3(0.002f, 0.002f, 0.002f);
+                //}
 
 
             }
@@ -54,10 +54,10 @@ public class keepScale : MonoBehaviour {
 
                 this.transform.parent.localScale = Vector3.one;
 
-                if (!mrs.indirectTouch)
-                {
-                    //this.transform.parent.GetChild(2).GetChild(1).localScale = new Vector3(0.002f, 0.002f, 0.002f);
-                }
+                //if (!mrs.indirectTouch)
+                //{
+                //    //this.transform.parent.GetChild(2).GetChild(1).localScale = new Vector3(0.002f, 0.002f, 0.002f);
+                //}
                 //this.transform.GetChild(0).gameObject.SetActive(true);
                 //this.transform.GetChild(1).gameObject.SetActive(true);
                 //this.transform.GetChild(2).gameObject.SetActive(true);

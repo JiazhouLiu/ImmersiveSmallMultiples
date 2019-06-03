@@ -70,7 +70,7 @@ public class BuildingScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        Floor1.transform.localPosition += Vector3.up * 3;
         play = false;
         isExploded = false;
         isMagnified = false;
@@ -130,18 +130,22 @@ public class BuildingScript : MonoBehaviour
         //Put down all the sensors
         foreach (KeyValuePair<string, GameObject> de in sensorsG)
         {
-            de.Value.transform.Translate(new Vector3(0, 0.02f, 0)); //-0.05
+            de.Value.transform.position = new Vector3(de.Value.transform.position.x, Ground.transform.Find("Plane001").position.y, de.Value.transform.position.z);
+
             if (de.Value.GetComponent<SensorScript>() == null)
             {
                 de.Value.transform.localPosition = new Vector3(de.Value.transform.localPosition.x, de.Value.transform.localPosition.y - 1, de.Value.transform.localPosition.z);
+                de.Value.SetActive(false);
             }
         }
         foreach (KeyValuePair<string, GameObject> de in sensorsF1)
         {
-            de.Value.transform.Translate(new Vector3(0, 0.025f, 0)); // -0.045
+            de.Value.transform.position = new Vector3(de.Value.transform.position.x, Floor1.transform.Find("Floor").position.y, de.Value.transform.position.z);
+
             if (de.Value.GetComponent<SensorScript>() == null)
             {
                 de.Value.transform.localPosition = new Vector3(de.Value.transform.localPosition.x, de.Value.transform.localPosition.y - 1, de.Value.transform.localPosition.z);
+                de.Value.SetActive(false);
             }
         }
 
@@ -149,7 +153,7 @@ public class BuildingScript : MonoBehaviour
         viveCamera = GameObject.Find("Camera (eye)");
     }
 
-
+    
 
     public Dictionary<string, GameObject> getSensorG()
     {
@@ -353,17 +357,66 @@ public class BuildingScript : MonoBehaviour
         currentTransCam = new Vector3(0, 0, 0);
     }
 
-    public void removeRoof()
-    {
-        Roof.SetActive(false);
+    private void GetWalls() {
+        IntWallList = new List<GameObject>();
+        ExtWallList = new List<GameObject>();
+
+        GameObject childFloor = Floor1.transform.Find("Floor").gameObject;
+        GameObject childChildFloor = childFloor.transform.Find("floor").gameObject;
+        childChildFloor.GetComponent<Renderer>().material.color = new Color(217f / 255f, 217f / 255f, 217f / 255f);
+
+        GameObject childFloorGround = Ground.transform.Find("Plane001").gameObject;
+        childFloorGround.GetComponent<Renderer>().material.color = new Color(82f / 255f, 82f / 255f, 82f / 255f);
+
+        wallIntF1_1 = Floor1.transform.Find("wallInt1").gameObject.transform.Find("Internal Wall 1").gameObject;
+        wallIntF1_2 = Floor1.transform.Find("wallInt2").gameObject.transform.Find("Internal Wall 2").gameObject;
+        wallIntG = Ground.transform.Find("wallInt").gameObject.transform.Find("Internal walls").gameObject;
+
+        IntWallList.Add(wallIntF1_1);
+        IntWallList.Add(wallIntF1_2);
+        IntWallList.Add(wallIntG);
+
+        wallExtF1 = Floor1.transform.Find("extWall").gameObject.transform.Find("External Wall").gameObject;
+        wallExtG = Ground.transform.Find("extWall").gameObject.transform.Find("External walls").gameObject;
+
+        ExtWallList.Add(wallExtF1);
+        ExtWallList.Add(wallExtG);
+
+        Color darkGray = new Color();
+        ColorUtility.TryParseHtmlString("#525252", out darkGray);
+
+        Color lightGray = new Color();
+        ColorUtility.TryParseHtmlString("#969696", out lightGray);
+
+
         foreach (GameObject wall in IntWallList)
         {
-            wall.transform.localScale = new Vector3(1f, 1f, 0.1f);
+            wall.GetComponent<Renderer>().material.color = lightGray;
         }
 
         foreach (GameObject wall in ExtWallList)
         {
-            wall.transform.localScale = new Vector3(1f, 1f, 0.1f);
+            wall.GetComponent<Renderer>().material.color = lightGray;
+        }
+    }
+
+    public void removeRoof()
+    {
+        GetWalls();
+        Roof.SetActive(false);
+        if (IntWallList != null) {
+            foreach (GameObject wall in IntWallList)
+            {
+                wall.transform.localScale = new Vector3(1f, 1f, 0.1f);
+            }
+        }
+
+        if (ExtWallList != null)
+        {
+            foreach (GameObject wall in ExtWallList)
+            {
+                wall.transform.localScale = new Vector3(1f, 1f, 0.1f);
+            }
         }
 
         GameObject childFloor = Floor1.transform.Find("Floor").gameObject;

@@ -238,7 +238,7 @@ public class SteamVR_TrackedController : MonoBehaviour
         GameObject viveCamera = GameObject.Find("Camera (eye)");
 
         Transform shelf = MultipleManager.transform.Find("Shelf");
-        mrs.MoveShelfToCenter();
+        //mrs.MoveShelfToCenter();
 
         shelf.transform.position = viveCamera.transform.position + (viveCamera.transform.forward * distance) - (viveCamera.transform.up * 0.4f);
 
@@ -449,17 +449,17 @@ public class SteamVR_TrackedController : MonoBehaviour
 
     }
 
-    void TouchNearestObject()
-    {
+    //void TouchNearestObject()
+    //{
 
-        GameObject nearestObject = mrs.CalculateNearestTouchPoint(this.transform);
+    //    GameObject nearestObject = mrs.CalculateNearestTouchPoint(this.transform);
 
-        if (nearestObject != null)
-        {
-            VRTK_InteractTouch IT = this.transform.GetChild(1).GetComponent<VRTK_InteractTouch>();
-            IT.ForceTouch(nearestObject);
-        }
-    }
+    //    if (nearestObject != null)
+    //    {
+    //        VRTK_InteractTouch IT = this.transform.GetChild(1).GetComponent<VRTK_InteractTouch>();
+    //        IT.ForceTouch(nearestObject);
+    //    }
+    //}
 
     
 
@@ -683,34 +683,34 @@ public class SteamVR_TrackedController : MonoBehaviour
         //this.uniqueCenterZDelta = mrs.uniqueCenterZDelta;
 
         // indirect touch find nearest point
-        if (!mrs.hidePillarsAndBoards)
-        {
-            if (mrs.indirectTouch)
-            {
-                TouchNearestObject();
-                indirectTouched = true;
-            }
-            else
-            {
-                if (indirectTouched)
-                {
-                    VRTK_InteractTouch IT = this.transform.GetChild(1).GetComponent<VRTK_InteractTouch>();
-                    IT.ForceStopTouching();
-                    indirectTouched = false;
-                }
+        //if (!mrs.hidePillarsAndBoards)
+        //{
+        //    if (mrs.indirectTouch)
+        //    {
+        //        TouchNearestObject();
+        //        indirectTouched = true;
+        //    }
+        //    else
+        //    {
+        //        if (indirectTouched)
+        //        {
+        //            VRTK_InteractTouch IT = this.transform.GetChild(1).GetComponent<VRTK_InteractTouch>();
+        //            IT.ForceStopTouching();
+        //            indirectTouched = false;
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
-        // reset facing
-        if (padPressed && !mrs.hidePillarsAndBoards)
-        {
-            if (this.name.Equals("Controller (right)"))
-            {
-                mrs.faceToCurve = true;
-                mrs.ToggleFaceCurve();
-            }
-        }
+        //// reset facing
+        //if (padPressed && !mrs.hidePillarsAndBoards)
+        //{
+        //    if (this.name.Equals("Controller (right)"))
+        //    {
+        //        mrs.faceToCurve = true;
+        //        mrs.ToggleFaceCurve();
+        //    }
+        //}
 
         var system = OpenVR.System;
         if (system != null && system.GetControllerState(controllerIndex, ref controllerState, (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VRControllerState_t))))

@@ -58,39 +58,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     public GameObject CuttingPlanePrefab;
     public GameObject cubeSelectionPrefab;
     public GameObject worldInMiniturePrefab;
-    //public GameObject PanelMenuForColorFilter;
     public GameObject LRLabelPrefab;
-    //public bool scaling = true;
 
     [HideInInspector]
-    public bool swipeToRotate = false;
-    [HideInInspector]
-    public bool faceToCurve = true;
-    //[HideInInspector]
-    public bool indirectTouch = false;
-    [HideInInspector]
-    public bool indirectRayCast = false;
-    //public bool realFocusPoint = false;
-    [HideInInspector]
-    public float gain = 2.0f;
-    [HideInInspector]
-    public bool experiment = true;
-    [HideInInspector]
-    public bool hidePillarsAndBoards = false;
-    [Header("Variables")]
     public bool fixedPosition = false;
-    public bool fixedPositionCurved = false;
-    public bool quarterCurved = false;
+    public bool circleLayout = false;
+    public bool fullCircle = false;
 
-    [HideInInspector]
-    // centerZDelta for curve
-    public float uniqueCenterZDelta = 0;
-
-    [HideInInspector]
     public int dataset = 1;
     [Header("Experiment")]
-    //public int ExperimentSequence = 1;
-    //public int ParticipantID = 1;
     public int smallMultiplesNumber;
     public DateType dateType;
     
@@ -100,22 +76,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     // Small multiples game object list
 	List<GameObject> dataSM;
-    List<GameObject> touchableObjects;
-    List<GameObject> grabbedObjects;
-    List<Vector3> grabbedObjectOldPosition;
 
     // shelf variables
     GameObject shelf;
-    GameObject roofBoard;
-	List<GameObject> shelfBoards;
-	List<GameObject> shelfPillars;
-	List<GameObject> curveRenderers;
-    List<GameObject> curveBoards; 
-    List<GameObject> pillarMiddleIOs; 
-	List<GameObject> pillarTopIOs;
     List<GameObject> taskBoards;
-    GameObject centroidGO;
-	GameObject controllBall;
 	GameObject colorScheme;
 
     // controller
@@ -123,87 +87,22 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     GameObject rightController;
 
 	int smLimit = 0;
-    int shelfRows = 0;
-    int tmpShelfRows = 0;
-	int shelfItemPerRow = 0;
+    int shelfRows = 3;
+    int shelfItemPerRow = 0;
 
     // shelf variables
     float baseVPosition = 0.8f;
-    public float delta = 0.7f; // 0.65f
-    float vDelta = 0.5f; // 0.4f
+    float delta = 0.7f; // 0.65f
+    float vDelta = 0.7f;
     float d1VerticalDiff = 0.5f;
     float d2Scale = 0.3f;
-    float d3Scale = 0.3f;
     // end shelf variables
-    
-
-    Vector3 oldLeftPosition;
-	Vector3 oldRightPosition;
-    float currentY;
-    float baseY; // store base y value
-    Vector3 currentPillarCenter;
-
-
-    // fix grabbing issue
-    Vector3 oldControlBallPosition;
-    Vector3 oldLeftMiddleIOPosition;
-    Vector3 oldRightMiddleIOPosition;
-    int oldRowNo = 1;
-   
-    
-
-    // pillar Interactive object variables
-    bool leftMiddleIOGrabbed = false;
-    bool rightMiddleIOGrabbed = false;
-    bool leftPillarToLeft = false;
-    bool leftPillarToRight = false;
-    bool rightPillarToLeft = false;
-    bool rightPillarToRight = false;
-    bool leftTopIOGrabbed = false;
-    bool rightTopIOGrabbed = false;
-    bool bothMiddleGrabbed = false;
-    bool controlBallGrabbed = false;
-    float lastIODistance = 0;
-	float currentVerticalDiff = 0;
-
-    // curve variables
-    [HideInInspector]
-    public float currentCurvature;
-    [HideInInspector]
-    public Vector3 curveCenterPoint = Vector3.zero;
-    float currentCurveRendererZ; // keep renderer object z value stable
-    float currentZDistance;
-    float currentBoardPositionZ;
-    float curvatureDelta;
-    float semiCircleCurvature = 146f;
-
-    bool canPush = true;
-    bool canPull = true;
-    // end curve variables
-
-
-    // offset variables
-    Vector3 shelfPositionoffset;
-	float boardPositionZDelta = 0f; // 0.005f
-    float curveScaleZDelta = 0f; // 0.01f
-    float curveRendererZDelta = 0.0025f;
 
     // string variables
     private char lineSeperater = '\n'; // It defines line seperate character
     private char fieldSeperator = ','; // It defines field seperate chracter
 
     string[] tempTagList;
-    bool finishAssignTag = false;
-
-    //magnify color scheme and hide control ball
-    bool CBHide = false;
-
-	// magnify building variable
-	Transform[] leftControllerMagnify;
-	Transform[] rightControllerMagnify;
-
-    bool controlBallRepositionSwitch = false;
-
 
     // task related
     [HideInInspector]
@@ -314,14 +213,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     GameObject worldInMiniture = null;
     bool creatingCube = false;
     bool creatingWorldInMiniture = false;
-    //int leftClicked = 0;
-    //int rightClicked = 0;
-    //float leftClicktime = 0;
-    //float rightClicktime = 0;
-    //float clickdelay = 1;
-    //public int leftPressedCount = 0;
-    //public int rightPressedCount = 0;
-
 
     // brushing for BIM
     [HideInInspector]
@@ -359,9 +250,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     public Vector2 leftFindHoveringV2FromCollisionBIM = new Vector2(-1, -1);
     private Vector2 leftFindHighlighedV2FromCollisionBIM = new Vector2(-1, -1);
     private Vector2 rightFindHighlighedV2FromCollisionBIM = new Vector2(-1, -1);
-
-    // small multiples scaling
-    //float oldControllersDistance;
 
     // Vector3 for rotation
     Vector3 oldV3FromLeftBtoRightB = Vector3.zero;
@@ -427,10 +315,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     Vector2 rawGazePositionOnScreen = Vector2.zero;
 
     // pilot configuration
-    float BIMScaleDelta = 0.606f;
-    float BIMPositionYDelta = -0.27f;
-    float BarScaleDelta = 0.59f;
-    float BarPositionYDelta = -0.38f;
+    //float BIMScaleDelta = 0.606f;
+    //float BIMPositionYDelta = -0.27f;
+    //float BarScaleDelta = 0.59f;
+    //float BarPositionYDelta = -0.38f;
 
     // Use this for initialization
     void Start () {
@@ -443,62 +331,63 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         switch (ExperimentManager.ExperimentSequence)
         {
             case 1:
-                if (dataset == 2 && !fixedPositionCurved)
+                if (dataset == 2 && !circleLayout)
                     newVisTraining = true;
                 break;
             case 2:
-                if (dataset == 1 && !fixedPositionCurved)
+                if (dataset == 1 && !circleLayout)
                     newVisTraining = true;
                 break;
             case 3:
-                if (dataset == 2 && !fixedPositionCurved)
+                if (dataset == 2 && !circleLayout)
                     newVisTraining = true;
                 break;
             case 4:
-                if (dataset == 1 && !fixedPositionCurved)
+                if (dataset == 1 && !circleLayout)
                     newVisTraining = true;
                 break;
             case 5:
-                if (dataset == 2 && fixedPositionCurved && quarterCurved)
+                if (dataset == 2 && circleLayout && fullCircle)
                     newVisTraining = true;
                 break;
             case 6:
-                if (dataset == 1 && fixedPositionCurved && quarterCurved)
+                if (dataset == 1 && circleLayout && fullCircle)
                     newVisTraining = true;
                 break;
             case 7:
-                if (dataset == 2 && fixedPositionCurved && quarterCurved)
+                if (dataset == 2 && circleLayout && fullCircle)
                     newVisTraining = true;
                 break;
             case 8:
-                if (dataset == 1 && fixedPositionCurved && quarterCurved)
+                if (dataset == 1 && circleLayout && fullCircle)
                     newVisTraining = true;
                 break;
             case 9:
-                if (dataset == 2 && fixedPositionCurved && !quarterCurved)
+                if (dataset == 2 && circleLayout && !fullCircle)
                     newVisTraining = true;
                 break;
             case 10:
-                if (dataset == 1 && fixedPositionCurved && !quarterCurved)
+                if (dataset == 1 && circleLayout && !fullCircle)
                     newVisTraining = true;
                 break;
             case 11:
-                if (dataset == 2 && fixedPositionCurved && !quarterCurved)
+                if (dataset == 2 && circleLayout && !fullCircle)
                     newVisTraining = true;
                 break;
             case 12:
-                if (dataset == 1 && fixedPositionCurved && !quarterCurved)
+                if (dataset == 1 && circleLayout && !fullCircle)
                     newVisTraining = true;
                 break;
             default:
                 break;
         }
+
         //Debug.Log(ExperimentManager.userHeight);
         //userHeight = 1.7f;
-
         //GameObject testingBall = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         //testingBall.transform.position = new Vector3(0.5f, userHeight, 0.9f);
         //testingBall.transform.localScale = Vector3.one * 0.05f;
+
         forceStopedTFCFromManager = ExperimentManager.forceStopTrainingForCombinition;
         ExperimentManager.forceStopTrainingForCombinition = false;
 
@@ -519,83 +408,23 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     smLimit = 52;
                 }
 
-                transform.localScale = userHeight * BIMScaleDelta * Vector3.one; ;
-                //if (BIMPositionYDelta * userHeight < -0.5f)
-                //{
-                    //transform.localPosition = new Vector3(transform.localPosition.x, -0.5f, transform.localPosition.z);
-                //}
-                //else {
-                    transform.localPosition = new Vector3(transform.localPosition.x, BIMPositionYDelta * userHeight, transform.localPosition.z);
-                //}
-                
-                //if (userHeight <= 1.3f)
-                //{
-                //    transform.localScale = Vector3.one * 0.9f;
-                //}
-                //else if (userHeight <= 1.4f)
-                //{
-                //    transform.localScale = Vector3.one * 0.95f;
-                //}
-                //else if (userHeight <= 1.5f)
-                //{
-                //    transform.localScale = Vector3.one * 1f;
-                //}
-                //else if (userHeight <= 1.6f)
-                //{
-                //    transform.localScale = Vector3.one * 1.05f;
-                //}
-                //else if (userHeight <= 1.7f)
-                //{
-                //    transform.localScale = Vector3.one * 1.1f;
-                //}
-                //else if (userHeight <= 1.8f)
-                //{
-                //    transform.localScale = Vector3.one * 1.15f;
-                //}
-                //else
-                //{
-                //    transform.localScale = Vector3.one * 1.2f;
-                //}
+                //transform.localScale = userHeight * BIMScaleDelta * Vector3.one;
+                //transform.localPosition = new Vector3(transform.localPosition.x, BIMPositionYDelta * userHeight, transform.localPosition.z);
+
             }
             else {
-                smLimit = 12;
+                smLimit = smallMultiplesNumber;
                 if (dataset == 2)
                 {
-                    transform.localScale = userHeight * BarScaleDelta * Vector3.one;
-                    //transform.localPosition = new Vector3(transform.localPosition.x, -0.5f, transform.localPosition.z);
-                   transform.localPosition = new Vector3(transform.localPosition.x, BarPositionYDelta *userHeight, transform.localPosition.z);
-                    //if (userHeight <= 1.3f)
-                    //{
-                    //    transform.localScale = Vector3.one * 0.8f;
-                    //}
-                    //else if (userHeight <= 1.4f)
-                    //{
-                    //    transform.localScale = Vector3.one * 0.85f;
-                    //}
-                    //else if (userHeight <= 1.5f)
-                    //{
-                    //    transform.localScale = Vector3.one * 0.9f;
-                    //}
-                    //else if (userHeight <= 1.6f)
-                    //{
-                    //    transform.localScale = Vector3.one * 0.95f;
-                    //}
-                    //else if (userHeight <= 1.7f)
-                    //{
-                    //    transform.localScale = Vector3.one * 1f;
-                    //}
-                    //else if (userHeight <= 1.8f)
-                    //{
-                    //    transform.localScale = Vector3.one * 1.05f;
-                    //}
-                    //else
-                    //{
-                    //    transform.localScale = Vector3.one * 1.1f;
-                    //}
+                    //transform.localScale = userHeight * BarScaleDelta * Vector3.one;
+                    //transform.localPosition = new Vector3(transform.localPosition.x, BarPositionYDelta *userHeight, transform.localPosition.z);
+
                 }
             }
+            transform.localScale = 0.6f * Vector3.one;
+            transform.localPosition = new Vector3(transform.localPosition.x, 0.62f / 1.69f * userHeight, transform.localPosition.z);
 
-			if (smallMultiplesNumber < 1)
+            if (smallMultiplesNumber < 1)
 			{
 				Debug.Log("Please enter a valid small multiples number");
 			}
@@ -607,26 +436,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 			{
                 ResetManagerPosition();
                 
-                
                 chessBoardPoints = new Dictionary<string, Dictionary<Vector2, Vector3>>();
                 sensorsInfoList = new Dictionary<string, HashSet<SensorReading>>();
 				dataSM = new List<GameObject>();
-				shelfBoards = new List<GameObject>();
-				shelfPillars = new List<GameObject>();
-				curveRenderers = new List<GameObject>();
-				curveBoards = new List<GameObject>();
-				pillarMiddleIOs = new List<GameObject>();
-				pillarTopIOs = new List<GameObject>();
 
                 taskBoards = new List<GameObject>();
                 taskArray = new string[taskNo];
                 highlightedSM = new Vector2[taskNo];
                 trainingTaskArray = new string[taskNo / 2];
                 highlightedTrainingSM = new Vector2[taskNo / 2];
-
-                touchableObjects = new List<GameObject>();
-                grabbedObjects = new List<GameObject>();
-                grabbedObjectOldPosition = new List<Vector3>();
 
                 rightYearFilters = new List<GameObject>();
                 leftYearFilters = new List<GameObject>();
@@ -669,17 +487,30 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
                 tempTagList = new string[smallMultiplesNumber];
 
-				leftControllerMagnify = new Transform[1];
-				rightControllerMagnify = new Transform[1];
-
                 shelf = new GameObject("Shelf");
 				shelf.transform.SetParent(this.transform);
 				shelf.transform.localPosition = Vector3.zero;
                 shelf.transform.localScale = Vector3.one;
-                //shelf.transform.eulerAngles = new Vector3(0, -90, 0);
-                // calculate curvature delta
+                shelf.transform.eulerAngles = new Vector3(0, 0, 0);
 
-                curvatureDelta = 1f;
+                colorScheme = (GameObject)Instantiate(colorSchemePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                colorScheme.transform.SetParent(shelf.transform);
+                colorScheme.transform.localPosition = new Vector3(0, 0.74f, -delta / 2);
+                colorScheme.transform.localScale = new Vector3(2, 2, 2);
+                colorScheme.name = "Color Scheme";
+
+                if (dataset == 2)
+                {
+                    colorScheme.SetActive(false);
+                }
+                else if(dataset == 1)
+                {
+                    colorScheme.transform.GetChild(1).Find("UITextFront").GetChild(1).gameObject.SetActive(false);
+                    colorScheme.transform.GetChild(1).Find("UITextReverse").GetChild(1).gameObject.SetActive(false);
+                }
+
+
+                // calculate curvature delta
 
                 if (dataset == 1)
                 {
@@ -719,14 +550,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     
                 }
 
-				CreateShelf();
-
-                shelf.transform.eulerAngles = new Vector3(0, 0, 0);
-
-                currentZDistance = delta;
-				currentBoardPositionZ = 0;
-				currentPillarCenter = Vector3.Lerp(shelfPillars[0].transform.position, shelfPillars[1].transform.position, 0.5f);
-
                 // add task boards to list
                 taskBoards.Add(GameObject.Find("TaskBoardLeft"));
                 taskBoardPositions[0] = GameObject.Find("TaskBoardLeft").transform.position;
@@ -751,6 +574,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
                 string writerHeadFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ExperimentManager.ParticipantID + "/Participant_" + ExperimentManager.ParticipantID + "_HeadPositionLog.csv";
                 writerHead = new StreamWriter(writerHeadFilePath, true);
+
+                if (smallMultiplesNumber % shelfRows == 0)
+                {
+                    shelfItemPerRow = smallMultiplesNumber / shelfRows;
+                }
+                else
+                {
+                    shelfItemPerRow = (smallMultiplesNumber + shelfRows - smallMultiplesNumber % shelfRows) / shelfRows;
+                }
 
                 // create small multiples
                 CreateSM();
@@ -789,20 +621,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     trainingCountringLeft = 1;
                 }
 
-                
-
                 SetupPreTaskEnvironment("none");
-                //if (dataset == 3)
-                //{
-                //    shelf.transform.eulerAngles = new Vector3(0, -90, 0);
-                //    controllBall.SetActive(false);
 
-                //    VRTK_ObjectTooltip ott = colorScheme.GetComponent<VRTK_ObjectTooltip>();
-                //    ott.alwaysFaceHeadset = false;
-                //    colorScheme.transform.localEulerAngles = new Vector3(-60f, 180, 0);
-                //    this.transform.position = new Vector3(-1f, -0.6f, 0);
-                //}
-                //GameObject.Find("Pupil Manager").transform.GetChild(2).gameObject.SetActive(false);
             }
         }
     }
@@ -811,8 +631,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         if (smallMultiplesNumber <= smLimit && smallMultiplesNumber >= 1)
         {
             GetGazeInfo();
-            //Debug.Log("leftBool: " + leftClickEmptySpace + " rightBool: " + rightClickEmptySpace);
             FixedPositionCondition();
+
             if (writer != null) {
                 if (writer.BaseStream != null)
                 {
@@ -820,31 +640,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 }
             }
 
-            //FindCenter();
-            
-            HideRoofBoard();
-            //CheckGrabbed();
-			//FollowBall ();
-            UpdatePillar();
-            UpdateBoards();
-            //UpdateSM();
-
-            if (dataset == 1)
-            {
-                ZoomFloor();
-                InputToggle();
-                FunctionToggle();
-            }
-            else {
-                InputToggle();
-            }
-            //FixGrabbing();
-            HidePandB();        
-            //ChangeTasks();
-            //DetectBothGripClicked();
             if (dataset == 2) {
                 DetectBarChartInteraction();
-                //FilterValueAxisFromCollision();
             } else if (dataset == 1) {
                 if (!colorFilterOn && !colorFilterSelected) {
                     DetectBIMInteraction();
@@ -853,61 +650,67 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             }
             CreateRangeBrushingBox();
 
-            if (trialState == TrialState.Answer)
+            FlyingFunction();
+        }
+
+        GetTrialNumber();
+
+        if (Input.GetKeyUp(KeyCode.C)) {
+            OpenPupilCamera();
+        }
+    }
+
+    private void FlyingFunction() {
+        if (trialState == TrialState.Answer)
+        {
+            if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
             {
-                if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+                if (GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().triggerPressed && answerConfirmed)
                 {
-                    //StartCoroutine(PerformFlying("left"));
-                    if (GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().triggerPressed && answerConfirmed)
+                    flyingFlag = true;
+                    if (flyingFlag)
                     {
-                        flyingFlag = true;
-                        if (flyingFlag)
-                        {
-                            StartCoroutine(PerformFlying("left"));
-                            flyingFlag = false;
-                        }
+                        StartCoroutine(PerformFlying("left"));
+                        flyingFlag = false;
+                    }
 
-                    }
-                    else if (GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().triggerPressed && answerConfirmed)
-                    {
-                        flyingFlag = true;
-                        if (flyingFlag)
-                        {
-                            StartCoroutine(PerformFlying("right"));
-                            flyingFlag = false;
-                        }
-                    }
                 }
-            }
-            else {
-                if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+                else if (GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().triggerPressed && answerConfirmed)
                 {
-                    //StartCoroutine(PerformFlying("left"));
-                    if (GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().padPressed)
+                    flyingFlag = true;
+                    if (flyingFlag)
                     {
-                        flyingFlag = true;
-                        if (flyingFlag)
-                        {
-                            StartCoroutine(PerformFlying("left"));
-                            flyingFlag = false;
-                        }
-
-                    }
-                    else if (GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().padPressed)
-                    {
-                        flyingFlag = true;
-                        if (flyingFlag)
-                        {
-                            StartCoroutine(PerformFlying("right"));
-                            flyingFlag = false;
-                        }
+                        StartCoroutine(PerformFlying("right"));
+                        flyingFlag = false;
                     }
                 }
             }
         }
-        GetTrialNumber();
-        if (Input.GetKeyUp(KeyCode.C)) {
-            OpenPupilCamera();
+        else
+        {
+            if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+            {
+                //StartCoroutine(PerformFlying("left"));
+                if (GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().padPressed)
+                {
+                    flyingFlag = true;
+                    if (flyingFlag)
+                    {
+                        StartCoroutine(PerformFlying("left"));
+                        flyingFlag = false;
+                    }
+
+                }
+                else if (GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().padPressed)
+                {
+                    flyingFlag = true;
+                    if (flyingFlag)
+                    {
+                        StartCoroutine(PerformFlying("right"));
+                        flyingFlag = false;
+                    }
+                }
+            }
         }
     }
 
@@ -934,21 +737,21 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     }
 
     private void ResetManagerPosition() {
-        if (fixedPositionCurved)
+        if (circleLayout)
         {
-            if (quarterCurved)
+            if (fullCircle)
             {
-                this.transform.position = new Vector3(0.15f, transform.position.y, 0.4f);
+                this.transform.position = new Vector3(0.25f, transform.position.y, 0f);
             }
             else
             {
-                this.transform.position = new Vector3(0.15f, transform.position.y, 0f);
+                this.transform.position = new Vector3(0.25f, transform.position.y, -0.5f);
             }
 
         }
         else
         {
-            this.transform.position = new Vector3(0.15f, transform.position.y, 0.8f);
+            this.transform.position = new Vector3(0.25f, transform.position.y, 0.8f);
         }
     }
 
@@ -1033,15 +836,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.Log("End writing exp 1");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.Log("End writing exp 2");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.Log("End writing exp 3");
                                 EndWritingFile(writer);
@@ -1051,15 +854,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.Log("End writing exp 4");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.Log("End writing exp 5");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 taskID = -1;
                                 fullTaskID = "All Finished";
@@ -1076,15 +879,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.Log("End writing exp 1");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.Log("End writing exp 2");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.Log("End writing exp 3");
                                 EndWritingFile(writer);
@@ -1094,15 +897,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.Log("End writing exp 4");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.Log("End writing exp 5");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 taskID = -1;
                                 fullTaskID = "All Finished";
@@ -1119,15 +922,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.Log("End writing exp 1");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.Log("End writing exp 2");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.Log("End writing exp 3");
                                 EndWritingFile(writer);
@@ -1137,15 +940,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.Log("End writing exp 4");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 taskID = -1;
                                 fullTaskID = "All Finished";
@@ -1162,15 +965,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
@@ -1180,15 +983,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 taskID = -1;
                                 fullTaskID = "All Finished";
@@ -1201,7 +1004,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             }
                             break;
                         case 5:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
@@ -1211,15 +1014,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
@@ -1229,9 +1032,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 taskID = -1;
                                 fullTaskID = "All Finished";
@@ -1244,7 +1047,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             }
                             break;
                         case 6:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
@@ -1254,15 +1057,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
@@ -1272,9 +1075,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 taskID = -1;
                                 fullTaskID = "All Finished";
@@ -1287,13 +1090,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             }
                             break;
                         case 7:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
@@ -1303,15 +1106,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
@@ -1330,13 +1133,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             }
                             break;
                         case 8:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
@@ -1346,15 +1149,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
@@ -1373,7 +1176,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             }
                             break;
                         case 9:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
@@ -1383,15 +1186,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
@@ -1401,9 +1204,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 taskID = -1;
                                 fullTaskID = "All Finished";
@@ -1416,7 +1219,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             }
                             break;
                         case 10:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
@@ -1426,15 +1229,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
@@ -1444,9 +1247,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 taskID = -1;
                                 fullTaskID = "All Finished";
@@ -1459,13 +1262,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             }
                             break;
                         case 11:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
@@ -1475,15 +1278,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
@@ -1502,13 +1305,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             }
                             break;
                         case 12: // testing sequence
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Curved")
+                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                             {
                                 //Debug.log("End writing exp 1");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                             {
                                 //Debug.log("End writing exp 2");
                                 EndWritingFile(writer);
@@ -1518,15 +1321,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             {
                                 //Debug.log("End writing exp 3");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Half Circle")
                             {
                                 //Debug.log("End writing exp 4");
                                 EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Quarter Curved");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
                             }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Quarter Curved")
+                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 1 - Full Circle")
                             {
                                 //Debug.log("End writing exp 5");
                                 EndWritingFile(writer);
@@ -1598,17 +1401,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         if (dataset == 1)
         {
             RefreshDataSet1();
-            foreach (GameObject go in shelfBoards)
-            {
-                go.transform.GetChild(0).GetComponent<Bezier3PointCurve>().FaceToCurve();
-            }
         }
         else if (dataset == 2) {
             RefreshDataSet2();
-            foreach (GameObject go in shelfBoards)
-            {
-                go.transform.GetChild(0).GetComponent<Bezier3PointCurve>().FaceToCurve();
-            }
         }
         for (int i = 0; i < smToolTips.Count; i++)
         {
@@ -2349,9 +2144,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         string layout;
         if (dataset != 3)
         {
-            if (fixedPositionCurved)
+            if (circleLayout)
             {
-                if (quarterCurved)
+                if (fullCircle)
                 {
                     layout = "Quarter-Circle";
                 }
@@ -2391,313 +2186,313 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
         switch (ExperimentManager.ExperimentSequence) {
             case 1:
-                if (!fixedPositionCurved && dataset == 1) // F
+                if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if(fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if(circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 2:
-                if (!fixedPositionCurved && dataset == 2) // F
+                if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 3:
-                if (!fixedPositionCurved && dataset == 1) // F
+                if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 4:
-                if (!fixedPositionCurved && dataset == 2) // F
+                if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 5:
-                if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 6:
-                if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 7:
-                if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 8:
-                if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 9:
-                if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 10:
-                if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 11:
-                if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                else if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
                 break;
             case 12:
-                if (fixedPositionCurved && !quarterCurved && dataset == 2) // H
+                if (circleLayout && !fullCircle && dataset == 2) // H
                 {
                     baseDeltaTrialNumber = 0 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 2) // Q
+                else if (circleLayout && fullCircle && dataset == 2) // Q
                 {
                     baseDeltaTrialNumber = 1 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 2) // F
+                else if (!circleLayout && dataset == 2) // F
                 {
                     baseDeltaTrialNumber = 2 * taskNo;
                 }
-                else if (fixedPositionCurved && !quarterCurved && dataset == 1) // H
+                else if (circleLayout && !fullCircle && dataset == 1) // H
                 {
                     baseDeltaTrialNumber = 3 * taskNo;
                 }
-                else if (fixedPositionCurved && quarterCurved && dataset == 1) // Q
+                else if (circleLayout && fullCircle && dataset == 1) // Q
                 {
                     baseDeltaTrialNumber = 4 * taskNo;
                 }
-                else if (!fixedPositionCurved && dataset == 1) // F
+                else if (!circleLayout && dataset == 1) // F
                 {
                     baseDeltaTrialNumber = 5 * taskNo;
                 }
@@ -2734,80 +2529,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
                 }
             }
-            //Debug.Log(shelfRows);
-            // adjust display row number
-            //if (shelfRows > 0)
-            //{
-            //    if (shelfRows < 3)
-            //    {
-            //        IncreaseRow();
-            //        //Debug.Log("++");
-            //    }
-            //    else if (shelfRows > 3)
-            //    {
-            //        DecreaseRow();
-            //        //Debug.Log("--");
-            //    }
-            //}
-
-            if (shelfRows == 3)
-            {                
-                if (dataset == 1)
-                {
-                    foreach (GameObject go in dataSM)
-                    {
-                        BuildingScript bs = go.transform.GetChild(0).gameObject.GetComponent<BuildingScript>();
-                        go.transform.localEulerAngles = new Vector3(0, go.transform.localEulerAngles.y, 0);
-                        if (!bs.IsExploded())
-                        {
-                            bs.explode();
-                        }
-                    }
-                    currentVerticalDiff = d1VerticalDiff;
-
-                    VRTK_ObjectTooltip ott = colorScheme.GetComponent<VRTK_ObjectTooltip>();
-                    ott.alwaysFaceHeadset = false;
-                    colorScheme.transform.localEulerAngles = new Vector3(-60f, 180, 0);
-
-                }
-                else if (dataset == 2) {
-                    GetChessBoardDic();
-                }
- 
-                if (fixedPositionCurved)
-                {
-                    //GameObject.Find("PreferableStand").transform.position = new Vector3(0.15f, 0.01f, 0);
-                    //Debug.Log(currentCurvature);
-                    //if(currentCurvature < 73)
-                    PushShelf();
-                    //SetUniqueCenterZDelta(1.1f);
-                    if (quarterCurved)
-                    {
-                        colorScheme.transform.localPosition = shelfBoards[0].transform.localPosition - Vector3.up * 0.13f;
-                    }
-                    else {
-                        colorScheme.transform.localPosition = shelfBoards[0].transform.localPosition + Vector3.forward * 0.4f - Vector3.up * 0.13f;
-                    }
-                    
-                }
-                else
-                {
-                    //GameObject.Find("PreferableStand").transform.position = new Vector3(0.15f, 0.01f, -0.5f);
-                    PullShelf();
-                    colorScheme.transform.localPosition = shelfBoards[0].transform.localPosition + Vector3.back * 0.5f - Vector3.up * 0.13f;
-                }
-
-                if (dataset == 3)
-                {
-                    //if(shelfBoards[0].transform.GetChild(0).GetComponent<Bezier3PointCurve>().poin)
-                    Vector3 legendPosition = shelf.transform.InverseTransformPoint(shelfBoards[0].transform.GetChild(0).GetComponent<Bezier3PointCurve>().point2.position);
-                    colorScheme.transform.localPosition = legendPosition + Vector3.back * 0.6f - Vector3.up * 0.13f;
-                }
-
-
-                hidePillarsAndBoards = true;
-                //GameObject.Find("Environment").transform.GetChild(0).gameObject.SetActive(true);
-            }
         }
         else
         {
@@ -2820,456 +2541,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 GameObject.Find("Controller (right)").transform.Find("Model").GetComponent<ControllerColor>().fixedPosition = false;
             }
-
-            if (dataset == 3) {
-
-                if (currentCurvature >= 0 && currentCurvature <= semiCircleCurvature)
-                {
-                    GameObject.Find("PreferableStand").transform.position = new Vector3(currentCurvature / semiCircleCurvature * -1f, 0.01f, 0);
-                }
-            }
         }
-    }
-
-    void HidePandB() {
-        if (hidePillarsAndBoards)
-        {
-            //Debug.Log(Time.timeSinceLevelLoad);
-            if (Time.timeSinceLevelLoad > 1f) {
-                if (!lastFaceToCenter)
-                {
-                    foreach (GameObject go in shelfBoards)
-                    {
-                        go.transform.GetChild(0).GetComponent<Bezier3PointCurve>().FaceToCurve();
-                        lastFaceToCenter = true;
-                    }
-                }
-            }
-            //Debug.Log(Time.timeSinceLevelLoad);
-            if (Time.timeSinceLevelLoad > 3) {
-                finishInitialised = true;
-            }
-            //if (!finishInitialised)
-            //{
-            //    //Debug.Log(dataSM[11].transform.position == oldSMPosition);
-            //    if (dataSM[11].transform.position == oldSMPosition)
-            //    {
-            //        finishInitialised = true;
-            //    }
-            //}
-
-            //oldSMPosition = dataSM[11].transform.position;
-            //foreach (GameObject go in shelfBoards)
-            //{
-            //    Debug.Log(go.transform.GetChild(0).GetComponent<Bezier3PointCurve>().canUpdate);
-            //}
-
-            if (finishInitialised)
-            {
-                foreach (GameObject go in shelfBoards)
-                {
-
-                    go.transform.GetChild(0).GetComponent<Bezier3PointCurve>().canUpdate = false;
-                    //go.SetActive(false);
-                    //go.transform.GetChild(0).GetComponent<Bezier3PointCurve>().enabled = false;
-                }
-            }
-
-            foreach (GameObject go in shelfBoards)
-            {
-                //go.SetActive(false);
-                GameObject boardPieces;
-                if (GameObject.Find(go.name + " Pieces") != null)
-                {
-                    boardPieces = GameObject.Find(go.name + " Pieces");
-                    boardPieces.SetActive(false);
-                    //foreach (Transform t in boardPieces.transform)
-                    //{
-                    //    t.gameObject.SetActive(false);
-                    //}
-                }
-                //go.SetActive(false);
-            }
-            foreach (GameObject go in shelfPillars)
-            {
-                go.SetActive(false);
-            }
-            foreach (GameObject go in pillarTopIOs)
-            {
-                go.SetActive(false);
-            }
-            foreach (GameObject go in pillarMiddleIOs)
-            {
-                go.SetActive(false);
-            }
-            controllBall.SetActive(false);
-            roofBoard.SetActive(false);
-
-            leftController = GameObject.Find("LeftController");
-            rightController = GameObject.Find("RightController");
-            //if (leftController != null)
-            //{
-            //    Transform leftControllerTooltip = leftController.transform.GetChild(0);
-            //    VRTK_ControllerTooltips ctt = leftControllerTooltip.GetComponent<VRTK_ControllerTooltips>();
-                
-            //    foreach (Transform t in leftControllerTooltip)
-            //    {
-            //        if (t.gameObject.name != "GripTooltip" && t.gameObject.name != "TouchpadTooltip" && t.gameObject.name != "ButtonTwoTooltip" && t.gameObject.name != "TriggerTooltip")
-            //        {
-                        
-            //            t.gameObject.SetActive(false);
-            //        }
-            //    }
-            //    ctt.hideWhenNotInView = false;
-            //}
-
-            //if (rightController != null)
-            //{
-            //    Transform rightControllerTooltip = rightController.transform.GetChild(0);
-            //    VRTK_ControllerTooltips ctt = rightControllerTooltip.GetComponent<VRTK_ControllerTooltips>();
-            //    ctt.hideWhenNotInView = false;
-            //    foreach (Transform t in rightControllerTooltip)
-            //    {
-            //        if (t.gameObject.name != "GripTooltip" && t.gameObject.name != "TriggerTooltip")
-            //        {
-            //            t.gameObject.SetActive(false);
-            //        }
-            //    }
-
-            //    if (dataset == 2)
-            //    {
-            //        Transform rightControllerRadialMenu = rightController.transform.GetChild(1);
-            //        rightControllerRadialMenu.gameObject.SetActive(true);
-
-            //        foreach (Transform t in rightControllerTooltip)
-            //        {
-            //            if (t.gameObject.name == "TouchpadTooltip")
-            //            {
-            //                t.gameObject.SetActive(true);
-            //            }
-            //        }
-            //    }
-            //    else {
-            //        Transform rightControllerRadialMenu = rightController.transform.GetChild(1);
-            //        rightControllerRadialMenu.gameObject.SetActive(false);
-            //    }
-                
-            //}
-        }
-        else
-        {
-
-           
-            foreach (GameObject go in shelfBoards)
-            {
-                //go.SetActive(true);
-                GameObject boardPieces;
-                if (GameObject.Find(go.name + " Pieces") != null)
-                {
-                    boardPieces = GameObject.Find(go.name + " Pieces");
-                    foreach (Transform t in boardPieces.transform)
-                    {
-                        t.gameObject.SetActive(true);
-                    }
-                }
-            }
-            foreach (GameObject go in shelfPillars)
-            {
-                go.SetActive(true);
-            }
-            foreach (GameObject go in pillarTopIOs)
-            {
-                go.SetActive(false);
-            }
-            foreach (GameObject go in pillarMiddleIOs)
-            {
-                go.SetActive(true);
-            }
-            //controllBall.SetActive(true);
-            //roofBoard.SetActive(true);
-
-            leftController = GameObject.Find("LeftController");
-            rightController = GameObject.Find("RightController");
-
-
-            if (leftController != null)
-            {
-                Transform leftControllerTooltip = leftController.transform.GetChild(0);
-                VRTK_ControllerTooltips ctt = leftControllerTooltip.GetComponent<VRTK_ControllerTooltips>();
-                ctt.hideWhenNotInView = true;              
-            }
-
-            if (rightController != null)
-            {
-                Transform rightControllerTooltip = rightController.transform.GetChild(0);
-                VRTK_ControllerTooltips ctt = rightControllerTooltip.GetComponent<VRTK_ControllerTooltips>();
-                ctt.hideWhenNotInView = true;
-
-                Transform rightControllerRadialMenu = rightController.transform.GetChild(1);
-                rightControllerRadialMenu.gameObject.SetActive(true);
-            }
-        }
-    }
-
-    public void SetUniqueCenterZDelta(float centerZDelta) {
-        this.uniqueCenterZDelta = centerZDelta;
-    }
-
-
-    void CheckBuildingMagnify(){
-		foreach (GameObject go in dataSM) {
-			BuildingScript bs = go.transform.GetChild (0).gameObject.GetComponent<BuildingScript> ();
-			if (bs.IsExploded())
-			{
-				indirectRayCast = true;
-                MagnifyBuilding(go.transform.GetChild(0));
-                if (!bs.IsMagnified()) {
-					go.transform.localScale = Vector3.one;
-				}
-				//Debug.Log(Vector3.Distance(Camera.main.transform.position, this.transform.position));
-				
-			}
-			else {
-				indirectRayCast = false;
-				go.transform.localScale = Vector3.one;
-			}
-		}
-    }
-
-    void HideRoofBoard() {
-        if (canPull)
-        {
-            roofBoard.SetActive(false);
-        }
-        else
-        {
-            roofBoard.SetActive(true);
-        }
-    }
-
-	void MagnifyBuilding(Transform building)
-	{
-		GameObject leftController = GameObject.Find("Controller (left)");
-		GameObject rightController = GameObject.Find("Controller (right)");
-        if (leftController != null && rightController != null) {
-            SteamVR_TrackedController lstc = leftController.GetComponent<SteamVR_TrackedController>();
-            SteamVR_TrackedController rstc = rightController.GetComponent<SteamVR_TrackedController>();
-
-            Vector3 leftControllerDir = leftController.transform.forward;
-            Vector3 rightControllerDir = rightController.transform.forward;
-
-            Vector3 leftControllerObjectV = building.parent.position - leftController.transform.position;
-            Vector3 rightControllerObjectV = building.parent.position - rightController.transform.position;
-
-            BuildingScript bs = building.gameObject.GetComponent<BuildingScript>();
-            if (!lstc.gripped && !rstc.gripped)
-            {
-                if (Vector3.Angle(leftControllerDir, leftControllerObjectV) < 5)
-                {
-                    if (!bs.IsMagnified())
-                    {
-                        if (leftControllerMagnify[0] == null)
-                        {
-                            leftControllerMagnify[0] = building;
-                            building.parent.localScale = new Vector3(building.parent.localScale.x * 2, building.parent.localScale.y * 2, building.parent.localScale.z * 2);
-                            bs.SetMagnify(true);
-                        }
-
-                    }
-                }
-                else
-                {
-                    if (bs.IsMagnified())
-                    {
-                        if (leftControllerMagnify[0] == building)
-                        {
-                            leftControllerMagnify = new Transform[1];
-                            building.parent.localScale = new Vector3(building.parent.localScale.x / 2, building.parent.localScale.y / 2, building.parent.localScale.z / 2);
-                            bs.SetMagnify(false);
-                        }
-                        else
-                        {
-                            //Debug.Log ("BUGBUG");
-                        }
-
-                    }
-                }
-
-                if (Vector3.Angle(rightControllerDir, rightControllerObjectV) < 10)
-                {
-                    if (!bs.IsMagnified())
-                    {
-                        if (rightControllerMagnify[0] == null)
-                        {
-                            rightControllerMagnify[0] = building;
-                            building.parent.localScale = new Vector3(building.parent.localScale.x * 2, building.parent.localScale.y * 2, building.parent.localScale.z * 2);
-                            bs.SetMagnify(true);
-                        }
-                    }
-                }
-                else
-                {
-                    if (bs.IsMagnified())
-                    {
-                        if (rightControllerMagnify[0] == building)
-                        {
-                            rightControllerMagnify = new Transform[1];
-                            building.parent.localScale = new Vector3(building.parent.localScale.x / 2, building.parent.localScale.y / 2, building.parent.localScale.z / 2);
-                            bs.SetMagnify(false);
-                        }
-                        else
-                        {
-                            //Debug.Log("BUGBUG");
-                        }
-                    }
-                }
-            }
-                
-        }
-		
-			
-	}
-
-    void HideCB() {
-        GameObject leftController = GameObject.Find("Controller (left)");
-        GameObject rightController = GameObject.Find("Controller (right)");
-		if (leftController != null && rightController != null) {
-			Vector3 leftControllerDir = leftController.transform.forward;
-			Vector3 rightControllerDir = rightController.transform.forward;
-
-			Vector3 leftControllerCBV = controllBall.transform.position - leftController.transform.position;
-			Vector3 rightControllerCBV= controllBall.transform.position - rightController.transform.position;
-
-			//Vector3 leftControllerCSV = colorScheme.transform.position - leftController.transform.position;
-			//Vector3 rightControllerCSV = colorScheme.transform.position - rightController.transform.position;
-
-
-
-//			if (Vector3.Angle(leftControllerDir, leftControllerCSV) < 5 || Vector3.Angle(rightControllerDir, rightControllerCSV) < 5)
-//			{
-//				if (!CSMagnified)
-//				{
-//					colorScheme.transform.localScale = new Vector3(colorScheme.transform.localScale.x * 2, colorScheme.transform.localScale.y * 2, colorScheme.transform.localScale.z * 2);
-//					CSMagnified = true;
-//				}
-//			}
-//			else
-//			{
-//				if (CSMagnified)
-//				{
-//					colorScheme.transform.localScale = new Vector3(colorScheme.transform.localScale.x / 2, colorScheme.transform.localScale.y / 2, colorScheme.transform.localScale.z / 2);
-//					CSMagnified = false;
-//				}
-//			}
-			float angleDelta = 10;
-
-            if (dataset == 1) {
-                BuildingScript bs = dataSM[0].transform.GetChild(0).GetComponent<BuildingScript>();
-                if (bs.IsExploded())
-                {
-                    angleDelta = 3;
-                }
-                else
-                {
-                    angleDelta = 10;
-                }
-            }
-			
-
-			VRTK_InteractableObject controllBallIO = controllBall.GetComponent<VRTK_InteractableObject>();
-			if (Vector3.Angle(leftControllerDir, leftControllerCBV) < angleDelta || Vector3.Angle(rightControllerDir, rightControllerCBV) < angleDelta)
-			{
-				if (CBHide)
-				{        
-					touchableObjects.Add(controllBall);
-                    Color color = controllBall.GetComponent<MeshRenderer>().material.color;
-                    color.a = 1;
-                    controllBall.GetComponent<MeshRenderer>().material.color = color;
-                    //controllBall.SetActive(true);
-					CBHide = false;
-				}
-			}
-			else
-			{
-				if (!CBHide && !controllBallIO.IsGrabbed())
-				{
-					touchableObjects.Remove(controllBall);
-                    //Color color = controllBall.GetComponent<MeshRenderer>().material.color;
-                    //color.a = 0;
-                    //controllBall.GetComponent<MeshRenderer>().material.color = color;
-                    //controllBall.SetActive(false);
-                    CBHide = true;
-				}
-                Color color = controllBall.GetComponent<MeshRenderer>().material.color;
-                color.a = 0.1f;
-                controllBall.GetComponent<MeshRenderer>().material.color = color;
-            }
-		
-		}
-        
-    }
-
-    void InputToggle() {
-        if (indirectTouch)
-        {
-            IndirectSelection();
-        }
-        else
-        {
-            ChangeToDirectSelection();
-        }
-    }
-
-	void FunctionToggle(){
-		
-		// check row number changed
-		if (shelfRows != oldRowNo) {
-            
-            faceToCurve = true;
-			ToggleFaceCurve();
-		}
-		oldRowNo = shelfRows;
-
-		// check if assign temp tag
-		//if (!finishAssignTag && dateType != DateType.Monthly) {
-		//	if (tempTagList != null && !tempTagList[0].Equals(""))
-		//	{
-		//		for (int i = 0; i < smallMultiplesNumber; i++)
-		//		{
-		//			string tooltipText = tempTagList[i];
-
-		//			Transform tooltip = dataSM[i].transform.GetChild(1);
-		//			VRTK_ObjectTooltip ot = tooltip.GetComponent<VRTK_ObjectTooltip>();
-		//			ot.displayText = tooltipText;
-		//		}
-		//		finishAssignTag = true;
-		//	}
-		//}
-	}
-
-    void GrabGain() {
-        if (grabbedObjects.Count > 0 && grabbedObjectOldPosition.Count == grabbedObjects.Count)
-        {
-            
-
-            for (int i = 0; i < grabbedObjects.Count; i++) {
-                Debug.Log("Yes, " + grabbedObjects[i] + " " + grabbedObjectOldPosition[i]);
-                Vector3 velocity = grabbedObjects[i].transform.position - grabbedObjectOldPosition[i];
-                grabbedObjects[i].transform.position += 5 * velocity;
-            }
-        }
-    }
-
-    void RecordOldGrabPosition() {
-
-        grabbedObjectOldPosition.Clear();
-        if (grabbedObjects.Count > 0) {
-            foreach (GameObject go in grabbedObjects)
-            {
-                grabbedObjectOldPosition.Add(go.transform.position);
-            }
-        }
-        
     }
 
     public void AssignTempTag( string[] tempTagList) {
@@ -3277,1523 +2549,178 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     }
 
     /// <summary>
-    /// IndirectSelection method to enable controllers to touch indirectly
+    /// draw flat, half circle and full circle
     /// </summary>
-    void IndirectSelection() {
-        leftController = GameObject.Find("LeftController");
-        rightController = GameObject.Find("RightController");
-        if (leftController != null && rightController != null) {
-            if (indirectRayCast)
+    private Vector3 AssignSMPositionBasedOnLayout(int index) {
+        float xValue = 0;
+        float yValue = 0;
+        float zValue = 0;
+
+        if (!circleLayout) // flat
+        {
+            zValue = 0;
+            if (index < shelfItemPerRow) // top row
             {
-                leftController.GetComponent<VRTK_InteractUse>().enabled = false;
-                leftController.GetComponent<VRTK_Pointer>().enabled = true;
-                leftController.GetComponent<VRTK_StraightPointerRenderer>().enabled = true;
-
-                VRTK_Pointer leftPointer = leftController.GetComponent<VRTK_Pointer>();
-                leftPointer.activationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
-                leftPointer.activateOnEnable = true;
-                leftPointer.holdButtonToActivate = false;
-                leftPointer.selectOnPress = false;
-                leftPointer.interactWithObjects = false;
-                leftPointer.grabToPointerTip = false;
-                VRTK_StraightPointerRenderer leftPRenderer = leftController.GetComponent<VRTK_StraightPointerRenderer>();
-                leftPRenderer.cursorScaleMultiplier = 1;
-
-
-                rightController.GetComponent<VRTK_InteractUse>().enabled = false;
-                rightController.GetComponent<VRTK_Pointer>().enabled = true;
-                rightController.GetComponent<VRTK_StraightPointerRenderer>().enabled = true;
-                VRTK_Pointer rightPointer = rightController.GetComponent<VRTK_Pointer>();
-                rightPointer.activationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
-                rightPointer.activateOnEnable = true;
-                rightPointer.holdButtonToActivate = false;
-                rightPointer.selectOnPress = false;
-                rightPointer.interactWithObjects = false;
-                rightPointer.grabToPointerTip = false;
-                VRTK_StraightPointerRenderer rightPRenderer = rightController.GetComponent<VRTK_StraightPointerRenderer>();
-                rightPRenderer.cursorScaleMultiplier = 1;
+                yValue = (shelfRows - 1) * vDelta;
+                if (shelfItemPerRow % 2 == 0) // even number
+                {
+                    xValue = (index - (shelfItemPerRow / 2 - 0.5f)) * delta;
+                }
+                else { // odd number
+                    // TODO
+                }
             }
             else {
-                leftController.GetComponent<VRTK_InteractUse>().enabled = false;
-                leftController.GetComponent<VRTK_Pointer>().enabled = false;
-                leftController.GetComponent<VRTK_StraightPointerRenderer>().enabled = false;
-
-                rightController.GetComponent<VRTK_InteractUse>().enabled = false;
-                rightController.GetComponent<VRTK_Pointer>().enabled = false;
-                rightController.GetComponent<VRTK_StraightPointerRenderer>().enabled = false;
-            }
-            Transform tooltipCanvas = leftController.transform.GetChild(0).GetChild(0).Find("TooltipCanvas");
-
-            Text frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-            Text backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-            frontText.text = "Interact with touch point";
-            backText.text = "Interact with touch point";
-
-            tooltipCanvas = rightController.transform.GetChild(0).GetChild(0).Find("TooltipCanvas");
-
-            frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-            backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-            frontText.text = "Interact with touch point";
-            backText.text = "Interact with touch point";
-        }
-    }
-
-    void ChangeToDirectSelection()
-    {
-        leftController = GameObject.Find("LeftController");
-        rightController = GameObject.Find("RightController");
-
-        if (leftController != null && rightController != null)
-        {
-            if (!indirectRayCast)
-            {
-                leftController.GetComponent<VRTK_Pointer>().enabled = true;
-                leftController.GetComponent<VRTK_StraightPointerRenderer>().enabled = true;
-
-                rightController.GetComponent<VRTK_Pointer>().enabled = true;
-                rightController.GetComponent<VRTK_StraightPointerRenderer>().enabled = true;
-            }
-
-            indirectRayCast = false;
-
-            leftController.GetComponent<VRTK_InteractUse>().enabled = true;
-            VRTK_Pointer leftPointer = leftController.GetComponent<VRTK_Pointer>();
-            leftPointer.activationButton = VRTK_ControllerEvents.ButtonAlias.TriggerTouch;
-            leftPointer.activateOnEnable = false;
-            leftPointer.holdButtonToActivate = true;
-            leftPointer.selectOnPress = true;
-            leftPointer.interactWithObjects = true;
-            leftPointer.grabToPointerTip = true;
-            VRTK_StraightPointerRenderer leftPRenderer = leftController.GetComponent<VRTK_StraightPointerRenderer>();
-            leftPRenderer.cursorScaleMultiplier = 25;
-
-
-            rightController.GetComponent<VRTK_InteractUse>().enabled = true;
-            VRTK_Pointer rightPointer = rightController.GetComponent<VRTK_Pointer>();
-            rightPointer.activationButton = VRTK_ControllerEvents.ButtonAlias.TriggerTouch;
-            rightPointer.activateOnEnable = false;
-            rightPointer.holdButtonToActivate = true;
-            rightPointer.selectOnPress = true;
-            rightPointer.interactWithObjects = true;
-            rightPointer.grabToPointerTip = true;
-            VRTK_StraightPointerRenderer rightPRenderer = rightController.GetComponent<VRTK_StraightPointerRenderer>();
-            rightPRenderer.cursorScaleMultiplier = 25;
-
-            
-
-            Transform tooltipCanvas = leftController.transform.GetChild(0).GetChild(0).Find("TooltipCanvas");
-
-            Text frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-            Text backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-            frontText.text = "Interact with Data";
-            backText.text = "Interact with Data";
-
-            tooltipCanvas = rightController.transform.GetChild(0).GetChild(0).Find("TooltipCanvas");
-
-            frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-            backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-            frontText.text = "Interact with Data";
-            backText.text = "Interact with Data";
-        }
-    }
-
-    public GameObject CalculateNearestTouchPoint(Transform controllerT) {
-        Vector3 controllerDir = controllerT.forward;
-        float smallestAngle = 180;
-        GameObject nearestObject = touchableObjects[0];
-        
-        foreach (GameObject touchableobject in touchableObjects) {
-            Vector3 controllerObjectV = touchableobject.transform.position - controllerT.position;
-
-            if (Vector3.Angle(controllerDir, controllerObjectV) < smallestAngle) {
-                nearestObject = touchableobject;
-                smallestAngle = Vector3.Angle(controllerDir, controllerObjectV);
-            }
-        }
-
-        foreach (GameObject go in touchableObjects) {
-            VRTK_InteractableObject vio = go.GetComponent<VRTK_InteractableObject>();
-            if (vio.IsGrabbed() && vio.GetGrabbingObject() == controllerT.gameObject) {
-                return null;
-            }
-        }
-
-        return nearestObject;
-
-    }
-
-    void ToggleLight(GameObject go, bool lightOn) {
-        GameObject haloLight = go.transform.Find("Halo Light").gameObject;
-        if (lightOn)
-        {
-            haloLight.SetActive(true);
-            Color grabColor = go.GetComponent<Renderer>().material.color;
-            haloLight.GetComponent<Light>().color = grabColor;
-        }
-        else {
-            haloLight.SetActive(false);
-        }
-    }
-
-
-    // update functions
-
-    void CheckGrabbed(){
-
-        // check middle IO 
-        VRTK_InteractableObject leftIO = pillarMiddleIOs[0].GetComponent<VRTK_InteractableObject>();
-        VRTK_InteractableObject rightIO = pillarMiddleIOs[1].GetComponent<VRTK_InteractableObject>();
-
-        if (leftIO.IsGrabbed())
-        {
-            leftMiddleIOGrabbed = true;
-            grabbedObjects.Add(pillarMiddleIOs[0]);
-            faceToCurve = true;
-            ToggleFaceCurve();
-            
-            ToggleLight(pillarMiddleIOs[0], true);
-        }
-        else
-        {
-            if (leftMiddleIOGrabbed) {
-                grabbedObjects.Remove(pillarMiddleIOs[0]);
-                faceToCurve = true;
-                ToggleFaceCurve();
-                
-                ToggleLight(pillarMiddleIOs[0], false);
-            }
-            leftMiddleIOGrabbed = false;
-        }
-        if (rightIO.IsGrabbed())
-        {
-            rightMiddleIOGrabbed = true;
-            grabbedObjects.Add(pillarMiddleIOs[1]);
-            faceToCurve = true;
-            ToggleFaceCurve();
-            
-            ToggleLight(pillarMiddleIOs[1], true);
-        }
-        else
-        {
-            if (rightMiddleIOGrabbed)
-            {
-                grabbedObjects.Remove(pillarMiddleIOs[1]);
-                faceToCurve = true;
-                ToggleFaceCurve();
-                
-                ToggleLight(pillarMiddleIOs[1], false);
-            }
-            rightMiddleIOGrabbed = false;
-        }
-
-        // check if top IO can be grabbed
-        VRTK_InteractableObject leftTopIO = pillarTopIOs[0].GetComponent<VRTK_InteractableObject>();
-        VRTK_InteractableObject rightTopIO = pillarTopIOs[1].GetComponent<VRTK_InteractableObject>();
-
-        
-        
-        if (leftTopIO.IsGrabbed())
-        {
-            leftTopIOGrabbed = true;
-            grabbedObjects.Add(pillarTopIOs[0]);
-            ToggleLight(pillarTopIOs[0], true);
-        }
-        else
-        {
-            if (leftTopIOGrabbed) {
-                grabbedObjects.Remove(pillarTopIOs[0]);
-                ToggleLight(pillarTopIOs[0], false);
-            }
-            leftTopIOGrabbed = false;
-        }
-        if (rightTopIO.IsGrabbed())
-        {
-            rightTopIOGrabbed = true;
-            grabbedObjects.Add(pillarTopIOs[1]);
-            ToggleLight(pillarTopIOs[1], true);
-        }
-        else
-        {
-            if (rightTopIOGrabbed) {
-                grabbedObjects.Remove(pillarTopIOs[1]);
-                ToggleLight(pillarTopIOs[1], false);
-            }
-            rightTopIOGrabbed = false;
-        }
-
-        //if (dataset == 1)
-        //{
-        //    BuildingScript bs = dataSM[0].transform.GetChild(0).GetComponent<BuildingScript>();
-
-        //    if (bs.IsExploded())
-        //    {
-        //        // add top pillar to touchable list
-
-        //        if (!touchableObjects.Contains(pillarTopIOs[0]))
-        //        {
-        //            touchableObjects.Add(pillarTopIOs[0]);
-        //        }
-        //        if (!touchableObjects.Contains(pillarTopIOs[1]))
-        //        {
-        //            touchableObjects.Add(pillarTopIOs[1]);
-        //        }
-
-
-        //        leftTopIO.isGrabbable = true;
-        //        rightTopIO.isGrabbable = true;
-
-        //        //colorScheme.SetActive(true);
-
-        //        leftController = GameObject.Find("LeftController");
-        //        // get left controller and find grip tooltip
-        //        if (leftController != null)
-        //        {
-        //            Transform tooltipCanvas = leftController.transform.GetChild(0).GetChild(2).Find("TooltipCanvas");
-
-        //            Text frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-        //            Text backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-        //            frontText.text = "Switch explosion level";
-        //            backText.text = "Switch explosion level";
-        //        }
-
-        //        foreach (GameObject pIO in pillarTopIOs)
-        //        {
-
-        //            Transform objectTT = pIO.transform.GetChild(0);
-        //            objectTT.gameObject.SetActive(true);
-
-        //            Transform tooltipCanvas = objectTT.Find("TooltipCanvas");
-
-        //            RectTransform rt = tooltipCanvas.GetComponent<RectTransform>();
-        //            RectTransform rtContainer = tooltipCanvas.Find("UIContainer").GetComponent<RectTransform>();
-
-        //            rt.sizeDelta = new Vector2(170, 30);
-        //            rtContainer.sizeDelta = new Vector2(170, 30);
-
-        //            if (pIO.name.Equals("Left Pillar Top IO"))
-        //            {
-        //                pIO.transform.GetChild(0).Find("LineStart").localPosition = new Vector3(-0.085f, 0, 0);
-        //            }
-        //            else if (pIO.name.Equals("Right Pillar Top IO"))
-        //            {
-        //                pIO.transform.GetChild(0).Find("LineStart").localPosition = new Vector3(0.085f, 0, 0);
-        //            }
-
-        //            Text frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-        //            Text backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-        //            frontText.text = "Increase Floor Height";
-        //            backText.text = "Increase Floor Height";
-        //        }
-        //    }
-        //    else
-        //    {
-        //        VRTK_InteractableObject leftTopPillarIO = pillarTopIOs[0].GetComponent<VRTK_InteractableObject>();
-        //        VRTK_InteractableObject rightTopPillarIO = pillarTopIOs[1].GetComponent<VRTK_InteractableObject>();
-
-        //        leftTopPillarIO.ForceStopInteracting();
-        //        rightTopPillarIO.ForceStopInteracting();
-        //        // remove top pillar ios from list
-        //        // add top pillar to touchable list
-        //        if (touchableObjects.Contains(pillarTopIOs[0]))
-        //        {
-        //            touchableObjects.Remove(pillarTopIOs[0]);
-        //        }
-        //        if (touchableObjects.Contains(pillarTopIOs[1]))
-        //        {
-        //            touchableObjects.Remove(pillarTopIOs[1]);
-        //        }
-
-
-        //        leftTopIO.isGrabbable = false;
-        //        rightTopIO.isGrabbable = false;
-
-
-        //        // get left controller and find grip tooltip
-        //        if (leftController != null)
-        //        {
-        //            Transform tooltipCanvas = leftController.transform.GetChild(0).GetChild(2).Find("TooltipCanvas");
-
-        //            Text frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-        //            Text backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-        //            frontText.text = "Switch explosion level";
-        //            backText.text = "Switch explosion level";
-        //        }
-
-        //        foreach (GameObject pIO in pillarTopIOs)
-        //        {
-        //            Transform objectTT = pIO.transform.GetChild(0);
-        //            objectTT.gameObject.SetActive(false);
-        //        }
-
-        //        //colorScheme.SetActive(false);
-        //        //reset vertical difference
-        //        currentVerticalDiff = 0;
-        //    }
-        //}
-        //else {
-        //    foreach (GameObject pIO in pillarTopIOs)
-        //    {
-
-        //        Transform objectTT = pIO.transform.GetChild(0);
-        //        objectTT.gameObject.SetActive(false);
-
-                
-        //    }
-        //}
-
-        // indirect touch check control ball touched
-        //bool cbLeftTouched = false;
-        //bool cbRightTouched = false;
-
-        //leftController = GameObject.Find("LeftController");
-        //rightController = GameObject.Find("RightController");
-
-        //if (leftController != null) {
-        //    SteamVR_TrackedController ltc = leftController.transform.parent.GetComponent<SteamVR_TrackedController>();
-        //    cbLeftTouched = ltc.controlBallTouched;
-        //}
-        //if (rightController != null) {
-        //    SteamVR_TrackedController rtc = rightController.transform.parent.GetComponent<SteamVR_TrackedController>();
-        //    cbRightTouched = rtc.controlBallTouched;
-        //}
-
-        //VRTK_InteractableObject controllBallIO = controllBall.GetComponent<VRTK_InteractableObject>();
-        
-        //if (cbLeftTouched || cbRightTouched || controllBallIO.IsGrabbed())
-        //{
-        //    controllBall.SetActive(true);
-        //}
-        //else {
-        //    controllBall.SetActive(false);
-        //}
-        
-    }
-
-
-    // shelf scaling control
-
-
-    public void ToggleFaceCurve() {
-        
-        if (faceToCurve)
-        {
-            foreach (GameObject board in shelfBoards) {
-                Bezier3PointCurve bpc = board.transform.GetChild(0).gameObject.GetComponent<Bezier3PointCurve>();
-                bpc.FaceToCurve();
-            }
-            
-            //rotationReset = false;
-            faceToCurve = false;
-        }
-        else {
-            //if (!rotationReset) {
-                foreach (GameObject sm in dataSM)
+                if (index < shelfItemPerRow * 2) // second row
                 {
-                    sm.transform.localRotation = Quaternion.identity;
-                }
-
-            foreach (GameObject board in shelfBoards)
-            {
-                Bezier3PointCurve bpc = board.transform.GetChild(0).gameObject.GetComponent<Bezier3PointCurve>();
-                bpc.BoardPieceToNormal();
-            }
-            // rotationReset = true;
-            //}
-            faceToCurve = true;
-        }
-    }
-
-    void FollowBall(){
-        VRTK_InteractableObject controllBallIO = controllBall.GetComponent<VRTK_InteractableObject>();
-
-        if (controllBallIO.IsGrabbed())
-        {
-            if (!controlBallGrabbed) {
-                shelf.transform.position += shelfPositionoffset;
-                //Debug.Log("pressed: " + controllBall.transform.position);
-            }
-            
-            controlBallGrabbed = true;
-            grabbedObjects.Add(controllBall);
-            ToggleLight(controllBall, true);
-            // fix grabbing
-            if (Vector3.Distance(oldControlBallPosition, controllBall.transform.position) > 2)
-            {
-                Debug.Log("Bug!!!");
-                controllBall.transform.position = oldControlBallPosition;
-                controllBallIO.ForceStopInteracting();
-            }
-            else
-            {
-                foreach (GameObject sm in dataSM) {
-                    PositionLocalConstraints plc = sm.GetComponent<PositionLocalConstraints>();
-                    plc.UpdateZ (sm.transform.localPosition.z);
-                    plc.z = true;
-                }
-
-                
-                
-
-
-                if (!indirectTouch)
-                {
-                    if (leftController != null)
+                    yValue = (shelfRows - 2) * vDelta;
+                    if (shelfItemPerRow % 2 == 0) // even number
                     {
-                        GameObject lbugObj = GameObject.Find("[VRTK][AUTOGEN][LeftController][StraightPointerRenderer_Container]");
-                        if (lbugObj.transform.GetChild(1).gameObject.activeSelf)
-                        {
-                            lbugObj.transform.GetChild(1).position -= Vector3.forward * 2;
-                        }
+                        xValue = (index - shelfItemPerRow - (shelfItemPerRow / 2 - 0.5f)) * delta;
                     }
-                    if (rightController != null)
-                    {
-                        GameObject rbugObj = GameObject.Find("[VRTK][AUTOGEN][RightController][StraightPointerRenderer_Container]");
-                        if (rbugObj.transform.GetChild(1).gameObject.activeSelf)
-                        {
-                            rbugObj.transform.GetChild(1).position -= Vector3.forward * 2;
-                        }
+                    else
+                    { // odd number
+                      // TODO
                     }
-
-                }
-                MoveShelfToCenter();
-                shelf.transform.position = controllBall.transform.position;
-                
-
-
-                foreach (GameObject sm in dataSM)
-                {
-                    PositionLocalConstraints plc = sm.GetComponent<PositionLocalConstraints>();
-                    plc.UpdateZ(sm.transform.localPosition.z);
-                    plc.z = false;
-                }
-
-                GameObject viveCamera = GameObject.Find("Camera (eye)");
-                Vector3 camPos = viveCamera.transform.position;
-                Vector3 finalPos = new Vector3(camPos.x, shelf.transform.position.y, camPos.z);
-                Vector3 offset = shelf.transform.position - finalPos;
-                shelf.transform.LookAt(shelf.transform.position + offset);
-
-
-
-            }
-        }
-        else
-        {
-            if (controlBallGrabbed)
-            {
-                controlBallRepositionSwitch = true;
-                shelf.transform.position = controllBall.transform.position;
-                //Debug.Log("released: " + controllBall.transform.position);
-                //Debug.Log("offset: " + shelfPositionoffset);
-                grabbedObjects.Remove(controllBall);
-                //float zDiff = shelf.transform.localPosition.z - controllBall.transform.localPosition.z;
-                //Debug.Log("zDiff: " + zDiff);
-                //shelf.transform.position += shelfPositionoffset;
-                ToggleLight(controllBall, false);
-            }
-            controlBallGrabbed = false;
-
-
-            foreach (GameObject sm in dataSM)
-            {
-                if (dataset == 1) {
-                    PositionLocalConstraints plc = sm.GetComponent<PositionLocalConstraints>();
-                    plc.z = false;
-                }
-                
-            }
-
-            controllBall.transform.position = centroidGO.transform.position;
-
-            
-            
-
-            if (shelf.transform.localPosition != Vector3.zero)
-            {
-                shelfPositionoffset = shelf.transform.position - controllBall.transform.position;
-            }
-            else
-            {
-                shelfPositionoffset = Vector3.zero;
-            }
-
-        }
-        oldControlBallPosition = controllBall.transform.position;
-
-        Vector3 diff = shelf.transform.localPosition - controllBall.transform.localPosition;
-        if (controlBallRepositionSwitch) {
-            shelf.transform.localPosition += diff;
-            controlBallRepositionSwitch = false;
-        }
-    }
-
-    void UpdatePillar()
-    {
-        currentY = baseY + currentVerticalDiff / 2;
-
-        VRTK_InteractableObject leftIO = pillarMiddleIOs[0].GetComponent<VRTK_InteractableObject>();
-        VRTK_InteractableObject rightIO = pillarMiddleIOs[1].GetComponent<VRTK_InteractableObject>();
-
-        if (leftMiddleIOGrabbed && rightMiddleIOGrabbed)
-        {
-
-            //if (Vector3.Distance(pillarMiddleIOs[0].transform.position, oldLeftMiddleIOPosition) < 1 && Vector3.Distance(pillarMiddleIOs[1].transform.position, oldRightMiddleIOPosition) < 1)
-            //{
-                bothMiddleGrabbed = true;
-
-                // change canvas text
-                foreach (GameObject pIO in pillarMiddleIOs)
-                {
-                    Transform tooltipCanvas = pIO.transform.GetChild(0).Find("TooltipCanvas");
-
-                    RectTransform rt = tooltipCanvas.GetComponent<RectTransform>();
-                    RectTransform rtContainer = tooltipCanvas.Find("UIContainer").GetComponent<RectTransform>();
-
-                    rt.sizeDelta = new Vector2(150, 30);
-                    rtContainer.sizeDelta = new Vector2(150, 30);
-
-                    if (pIO.name.Equals("Left Pillar Middle IO"))
-                    {
-                        pIO.transform.GetChild(0).Find("LineStart").localPosition = new Vector3(-0.075f, 0, 0);
-                    }
-                    else if (pIO.name.Equals("Right Pillar Middle IO"))
-                    {
-                        pIO.transform.GetChild(0).Find("LineStart").localPosition = new Vector3(0.075f, 0, 0);
-                    }
-
-                    Text frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-                    Text backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-                    frontText.text = "Change Curvature";
-                    backText.text = "Change Curvature";
-                }
-
-            // interactive change curvature
-            GameObject leftController = GameObject.Find("Controller (left)");
-            GameObject rightController = GameObject.Find("Controller (right)");
-            if (leftController != null && rightController != null)
-            {
-                Vector3 leftControllerDir = leftController.transform.forward;
-                Vector3 rightControllerDir = rightController.transform.forward;
-
-                float currentAngle = Vector3.Angle(leftControllerDir, rightControllerDir);
-
-                if (currentAngle < lastIODistance)
-                {
-                    PushShelf();
                 }
                 else {
-                    PullShelf();
-                }
-             }       
-
-                //float currentIODistance = Mathf.Abs(pillarMiddleIOs[0].transform.localPosition.x - pillarMiddleIOs[1].transform.localPosition.x);
-                //if (currentIODistance - lastIODistance > 0.01f)
-                //{
-                //    PullShelf();
-                //}
-                //else if (lastIODistance - currentIODistance > 0.01f)
-                //{
-                //    PushShelf();
-                //}
-            //}
-            //else {
-            //    leftIO.ForceStopInteracting();
-            //    rightIO.ForceStopInteracting();
-            //}
-        }
-        else
-        {
-            // change canvas text
-            foreach (GameObject pIO in pillarMiddleIOs)
-            {
-                Transform tooltipCanvas = pIO.transform.GetChild(0).Find("TooltipCanvas");
-
-                RectTransform rt = tooltipCanvas.GetComponent<RectTransform>();
-                RectTransform rtContainer = tooltipCanvas.Find("UIContainer").GetComponent<RectTransform>();
-
-                rt.sizeDelta = new Vector2(100, 30);
-                rtContainer.sizeDelta = new Vector2(100, 30);
-
-                if (pIO.name.Equals("Left Pillar Middle IO"))
-                {
-                    pIO.transform.GetChild(0).Find("LineStart").localPosition = new Vector3(-0.05f, 0, 0);
-                }
-                else if (pIO.name.Equals("Right Pillar Middle IO"))
-                {
-                    pIO.transform.GetChild(0).Find("LineStart").localPosition = new Vector3(0.05f, 0, 0);
-                }
-
-                Text frontText = tooltipCanvas.Find("UITextFront").GetComponent<Text>();
-                Text backText = tooltipCanvas.Find("UITextReverse").GetComponent<Text>();
-                frontText.text = "Grab to Move";
-                backText.text = "Grab to Move";
-            }
-
-            // stop interaction to stop pillar movement
-            if (bothMiddleGrabbed)
-            {
-                bothMiddleGrabbed = false;
-                leftIO.ForceStopInteracting();
-                rightIO.ForceStopInteracting();
-            }
-            else
-            {
-                // move pillar
-                if (leftMiddleIOGrabbed)
-                {
-                    if (Vector3.Distance(pillarMiddleIOs[0].transform.position, oldLeftMiddleIOPosition) < 1)
+                    if (index < shelfItemPerRow * 3) // third row
                     {
-                        if (shelfPillars[0].transform.localPosition.x < pillarMiddleIOs[0].transform.localPosition.x)
+                        yValue = (shelfRows - 3) * vDelta;
+                        if (shelfItemPerRow % 2 == 0) // even number
                         {
-                            leftPillarToRight = true;
-                            leftPillarToLeft = false;
+                            xValue = (index - (2 * shelfItemPerRow) - (shelfItemPerRow / 2 - 0.5f)) * delta;
                         }
-                        else if(shelfPillars[0].transform.localPosition.x > pillarMiddleIOs[0].transform.localPosition.x){
-                            leftPillarToRight = false;
-                            leftPillarToLeft = true;
+                        else
+                        { // odd number
+                          // TODO
                         }
-                        shelfPillars[0].transform.position = pillarMiddleIOs[0].transform.position;
                     }
-                    else {
-                        Debug.Log("Left Bug");
-                        leftIO.ForceStopInteracting();
-                    }
-
-                    
-                }
-                if (rightMiddleIOGrabbed)
-                {
-                    if (Vector3.Distance(pillarMiddleIOs[1].transform.position, oldRightMiddleIOPosition) < 1)
+                    else // fourth row
                     {
-                        if (shelfPillars[1].transform.localPosition.x < pillarMiddleIOs[1].transform.localPosition.x)
-                        {
-                            rightPillarToRight = true;
-                            rightPillarToLeft = false;
-                        }
-                        else if (shelfPillars[1].transform.localPosition.x > pillarMiddleIOs[1].transform.localPosition.x)
-                        {
-                            rightPillarToRight = false;
-                            rightPillarToLeft = true;
-                        }
-                        shelfPillars[1].transform.position = pillarMiddleIOs[1].transform.position;
-                    }
-                    else {
-                        rightIO.ForceStopInteracting();
+                        // TODO
                     }
                 }
             }
-        }
-
-        if (!leftMiddleIOGrabbed && !rightMiddleIOGrabbed) {
-            leftPillarToRight = false;
-            leftPillarToLeft = false;
-            rightPillarToRight = false;
-            rightPillarToLeft = false;
-        }
-        //lastIODistance = Mathf.Abs(pillarMiddleIOs[0].transform.localPosition.x - pillarMiddleIOs[1].transform.localPosition.x);
-        
-        if (leftController != null && rightController != null)
-        {
-            Vector3 leftControllerDir = leftController.transform.forward;
-            Vector3 rightControllerDir = rightController.transform.forward;
-            lastIODistance = Vector3.Angle(leftControllerDir, rightControllerDir);
-        }
-
-        // change height of the shelf
-        if (leftTopIOGrabbed)
-        {
-            currentVerticalDiff = pillarTopIOs[0].transform.localPosition.y - shelfBoards[0].transform.localPosition.y - vDelta * shelfRows;
-        }
-        if (rightTopIOGrabbed)
-        {
-            currentVerticalDiff = pillarTopIOs[1].transform.localPosition.y - shelfBoards[0].transform.localPosition.y - vDelta * shelfRows;
-        }
-
-        if (currentVerticalDiff >= 0)
-        {
-            if (currentVerticalDiff <= 2f)
-            {
-                shelfPillars[0].transform.localScale = new Vector3(shelfPillars[0].transform.localScale.x, vDelta / 2 * shelfRows + currentVerticalDiff / 2, shelfPillars[0].transform.localScale.z);
-                shelfPillars[1].transform.localScale = new Vector3(shelfPillars[1].transform.localScale.x, vDelta / 2 * shelfRows + currentVerticalDiff / 2, shelfPillars[1].transform.localScale.z);
-            }
-            else
-            {
-                currentVerticalDiff = 2f;
-            }
-        }
-        else
-        {
-            currentVerticalDiff = 0;
-        }
-
-        Vector3 leftPillarPosition = shelfPillars[0].transform.localPosition;
-        Vector3 rightPillarPosition = shelfPillars[1].transform.localPosition;
-        //oldPillarY = shelfPillars [2].transform.localPosition.y;
-        float distance = rightPillarPosition.x - leftPillarPosition.x;
-
-        if (distance < delta)
-        {
-            if (oldLeftPosition != leftPillarPosition)
-            {
-                shelfPillars[0].transform.localPosition = rightPillarPosition - Vector3.right * delta;
-            }
-            else if (oldRightPosition != rightPillarPosition)
-            {
-                shelfPillars[1].transform.localPosition = leftPillarPosition + Vector3.right * delta;
-            }
-            else
-            {
-                shelfPillars[0].transform.localPosition = rightPillarPosition - Vector3.right * delta;
-            }
-
-            GameObject leftController = GameObject.Find("Controller (left)");
-            if (leftController != null) {
-                SteamVR_TrackedController ltc = leftController.GetComponent<SteamVR_TrackedController>();
-                SteamVR_Controller.Input((int)ltc.controllerIndex).TriggerHapticPulse(500);
-            }
- 
-            GameObject rightController = GameObject.Find("Controller (right)");
-            if (rightController != null)
-            {
-                SteamVR_TrackedController rtc = rightController.GetComponent<SteamVR_TrackedController>();
-                SteamVR_Controller.Input((int)rtc.controllerIndex).TriggerHapticPulse(500);
-            }
-        }
-        else if (distance > smallMultiplesNumber * delta * 1.5f)
-        {
-
-            shelfPillars[0].transform.localPosition = oldLeftPosition;
-            shelfPillars[1].transform.localPosition = oldRightPosition;
-        }
-        oldLeftPosition = shelfPillars[0].transform.localPosition;
-        oldRightPosition = shelfPillars[1].transform.localPosition;
-
-        if (pillarMiddleIOs[0].transform.position != shelfPillars[0].transform.position)
-        {
-            pillarMiddleIOs[0].transform.position = shelfPillars[0].transform.position;
-        }
-        if (pillarMiddleIOs[1].transform.position != shelfPillars[1].transform.position)
-        {
-            pillarMiddleIOs[1].transform.position = shelfPillars[1].transform.position;
-        }
-
-
-        // keep back pillars same as front pillars
-        shelfPillars[2].transform.localPosition = shelfPillars[0].transform.localPosition + Vector3.forward * delta;
-        shelfPillars[3].transform.localPosition = shelfPillars[1].transform.localPosition + Vector3.forward * delta;
-
-        shelfPillars[2].transform.localScale = shelfPillars[0].transform.localScale;
-        shelfPillars[3].transform.localScale = shelfPillars[1].transform.localScale;
-
-        foreach (GameObject pillar in shelfPillars)
-        {
-            
-            pillar.transform.localPosition = new Vector3(pillar.transform.localPosition.x, currentY, pillar.transform.localPosition.z);
-        }
-        if (dataset == 1 || dataset == 2)
-        {
-            if (shelfPillars[0].transform.localPosition.x != -(smallMultiplesNumber / 6f) * delta)
-            {
-                shelfPillars[0].transform.localPosition = new Vector3(-(smallMultiplesNumber / 6f) * delta, shelfPillars[0].transform.localPosition.y, shelfPillars[0].transform.localPosition.z);
-            }
-            if (shelfPillars[1].transform.localPosition.x != (smallMultiplesNumber / 6f) * delta)
-            {
-                shelfPillars[1].transform.localPosition = new Vector3((smallMultiplesNumber / 6f) * delta, shelfPillars[1].transform.localPosition.y, shelfPillars[1].transform.localPosition.z);
-            }
-
-        }
-        currentPillarCenter = Vector3.Lerp(shelfPillars[0].transform.position, shelfPillars[1].transform.position, 0.5f);
-
-        //Vector3 bottomBoardPoint2 = shelfBoards[0].transform.GetChild(0).GetChild(1).position;
-
-        oldLeftMiddleIOPosition = pillarMiddleIOs[0].transform.position;
-        oldRightMiddleIOPosition = pillarMiddleIOs[1].transform.position;
-    }
-
-    
-
-    void UpdateBoards()
-    {
-        GameObject leftPillar = shelfPillars[0];
-        GameObject rightPillar = shelfPillars[1];
-
-        float newPositionX = (leftPillar.transform.localPosition.x + rightPillar.transform.localPosition.x) / 2;
-        float newScaleX = Mathf.Abs(rightPillar.transform.localPosition.x - leftPillar.transform.localPosition.x);
-        float newScaleZ = shelfBoards[0].transform.localScale.z;
-        Quaternion newRotation = shelfBoards[0].transform.localRotation;
-
-        float division = newScaleX / delta;
-        int newShelfItemPerRow = (int)division;
-
-
-        if (newShelfItemPerRow > 0)
-        {
-            if (newShelfItemPerRow != shelfItemPerRow)
-            {
-                shelfItemPerRow = newShelfItemPerRow;
-            }
-        }
-        else
-        {
-            if (newShelfItemPerRow != shelfItemPerRow)
-            {
-                shelfItemPerRow = 1;
-            }
-        }
-
-
-        int reminder = smallMultiplesNumber % shelfItemPerRow;
-        int newShelfRow;
-        if (reminder != 0)
-        {
-            newShelfRow = smallMultiplesNumber / shelfItemPerRow + 1;
-        }
-        else
-        {
-            newShelfRow = smallMultiplesNumber / shelfItemPerRow;
-        }
-        bool rowChanged = false;
-        while (newShelfRow != shelfRows)
-        {
-            if (newShelfRow > shelfRows && newShelfRow <= smallMultiplesNumber)
-            {
-                GameObject board;
-
-                board = (GameObject)Instantiate(shelfBoardPrefab, new Vector3(0, 0, 0), newRotation);
-
-                board.transform.SetParent(shelf.transform);
-                board.transform.localScale = new Vector3(newScaleX, 0.003f, newScaleZ);
-                board.transform.localRotation = newRotation;
-                board.transform.localPosition = new Vector3(newPositionX, shelfBoards[shelfRows - 1].transform.localPosition.y + vDelta, shelfBoards[shelfRows - 1].transform.localPosition.z);
-
-                board.name = "ShelfRow " + (shelfBoards.Count + 1);
-                shelfBoards.Add(board);
-                shelfRows++;
-
-                GameObject curveRenderer = (GameObject)Instantiate(curveRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                curveRenderer.transform.SetParent(board.transform);
-                curveRenderer.name = "Top Curve Renderer";
-                curveRenderer.transform.localPosition = new Vector3(0, 0, 0);
-                curveRenderer.transform.localRotation = Quaternion.identity;
-                curveRenderer.transform.localScale = new Vector3(1, 1, 1);
-                curveRenderers.Add(curveRenderer);
-
-                baseY += vDelta / 2;
-
-                foreach (GameObject pillar in shelfPillars)
-                {
-                    pillar.transform.localPosition += Vector3.up * vDelta / 2;
-                    pillar.transform.localScale += Vector3.up * vDelta / 2;
-                }
-
-
-                roofBoard.transform.localPosition = new Vector3(newPositionX, roofBoard.transform.localPosition.y + vDelta, shelfBoards[shelfRows - 1].transform.localPosition.z);
-
-                roofBoard.transform.localScale = new Vector3(newScaleX, 0.003f, newScaleZ);
-
-                rowChanged = true;
-            }
-
-            if (newShelfRow < shelfRows && newShelfRow > 0)
-            {
-                GameObject lastBoard = shelfBoards[shelfBoards.Count - 1];
-                
-                GameObject toBeDestroyedBoardPieces = GameObject.Find(lastBoard.name + " Pieces");
-
-                
-                Destroy(lastBoard);
-
-                shelfBoards.RemoveAt(shelfBoards.Count - 1);
-                shelfRows--;
-
-                //Debug.Log(curveRenderers[shelfBoards.Count].name);
-                Destroy(curveRenderers[shelfBoards.Count].GetComponent<Bezier3PointCurve>().emptyParent);
-
-                curveRenderers.RemoveAt(shelfBoards.Count);
-                if (toBeDestroyedBoardPieces != null)
-                {
-                    //Debug.Log(toBeDestroyedBoardPieces.name);
-                    Destroy(toBeDestroyedBoardPieces);
-                    toBeDestroyedBoardPieces = GameObject.Find(lastBoard.name + " Pieces");
-                }
-                baseY -= vDelta / 2;
-
-                foreach (GameObject pillar in shelfPillars)
-                {
-                    pillar.transform.localPosition -= Vector3.up * vDelta / 2;
-                    pillar.transform.localScale -= Vector3.up * vDelta / 2;
-                }
-
-                roofBoard.transform.localPosition = new Vector3(newPositionX, roofBoard.transform.localPosition.y - vDelta, shelfBoards[shelfRows - 1].transform.localPosition.z);
-
-                roofBoard.transform.localScale = new Vector3(newScaleX, 0.003f, newScaleZ);
-
-                rowChanged = true;
-            }
-        }
-
-        // update pillar middle IO local y
-        pillarMiddleIOs[0].transform.localPosition = new Vector3(pillarMiddleIOs[0].transform.localPosition.x, currentY, pillarMiddleIOs[0].transform.localPosition.z);
-        pillarMiddleIOs[1].transform.localPosition = new Vector3(pillarMiddleIOs[1].transform.localPosition.x, currentY, pillarMiddleIOs[1].transform.localPosition.z);
-
-        pillarTopIOs[0].transform.localPosition = new Vector3(pillarMiddleIOs[0].transform.localPosition.x, baseY + vDelta / 2 * shelfRows + currentVerticalDiff, pillarMiddleIOs[0].transform.localPosition.z);
-        pillarTopIOs[1].transform.localPosition = new Vector3(pillarMiddleIOs[1].transform.localPosition.x, baseY + vDelta / 2 * shelfRows + currentVerticalDiff, pillarMiddleIOs[1].transform.localPosition.z);
-
-        for (int i = 0; i < shelfBoards.Count; i++)
-        {
-
-            shelfBoards[i].transform.localPosition = new Vector3(newPositionX, shelfBoards[0].transform.localPosition.y + vDelta * i, currentBoardPositionZ);
-
-            shelfBoards[i].transform.localScale = new Vector3(newScaleX, shelfBoards[i].transform.localScale.y, shelfBoards[i].transform.localScale.z);
-
-            Transform renderer = shelfBoards[i].transform.GetChild(0);
-            //renderer.localPosition = new Vector3(renderer.localPosition.x, renderer.localPosition.y, currentCurveRendererZ); ;
-            Bezier3PointCurve bpc = renderer.GetComponent<Bezier3PointCurve>();
-            if (i != 0)
-            {
-                bpc.SetCenterZDelta(uniqueCenterZDelta);
-            }
-            curveCenterPoint = bpc.centerPoint;
-
-            if (rowChanged)
-            {
-                //Debug.Log("row changed");
-
-                faceToCurve = true;
-                ToggleFaceCurve();
-            }
-
-            Transform point1 = shelfBoards[i].transform.GetChild(0).Find("Point1");
-            Transform point2 = shelfBoards[i].transform.GetChild(0).Find("Point2");
-            Transform point3 = shelfBoards[i].transform.GetChild(0).Find("Point3");
-            // recalculate point2 position
-            float middleX = (point1.localPosition.x + point3.localPosition.x) / 2;
-        }
-
-
-        //roofBoard.transform.localPosition = new Vector3(newPositionX, pillarTopIOs[0].transform.localPosition.y, currentBoardPositionZ);
-        //roofBoard.transform.localScale = new Vector3(newScaleX, roofBoard.transform.localScale.y, roofBoard.transform.localScale.z);
-    }
-
-    void UpdateSM (){
-		GameObject leftPillar = shelfPillars [0];
-		float newLeftMostItemX = leftPillar.transform.localPosition.x + (delta / 2);
-		float newTopMostItemY = shelfBoards [shelfBoards.Count - 1].transform.localPosition.y;
-		int i = 0;
-		for(int j = 0; j < shelfBoards.Count; j ++){
-			int k = 0;
-			while (k < shelfItemPerRow) {
-				if (i >= smallMultiplesNumber) {
-					break;
-				}
-                Vector3 targetPosition = new Vector3(newLeftMostItemX + (k * delta), newTopMostItemY - (j * (vDelta + currentVerticalDiff / shelfRows)), dataSM[i].transform.localPosition.z);
-
-                //dataSM[i].transform.localPosition = Vector3.MoveTowards(dataSM[i].transform.localPosition, targetPosition, Time.deltaTime * 2);
-                
-
-                if (dataset == 1)
-                {
-                    //dataSM[i].transform.GetChild(1).localPosition = new Vector3(0, 0.3f + currentVerticalDiff / 5, 0);
-                }
-                
-
-                k++;
-				i++;
-			}
-		}
-    }
-
-    void FindCenter()
-    {
-        Vector3 centroid = Vector3.zero;
-        if (shelf.transform.childCount > 0)
-        {
-            Transform[] transforms;
-            transforms = shelf.GetComponentsInChildren<Transform>();
-            foreach (Transform t in transforms)
-            {
-                centroid += t.position;
-            }
-            centroid /= transforms.Length;
-
-            Vector3 leftPillar = shelfPillars[0].transform.localPosition;
-            Vector3 rightPillar = shelfPillars[1].transform.localPosition;
-
-            GameObject pillarCenter = new GameObject();
-            pillarCenter.transform.SetParent(shelf.transform);
-
-            GameObject outerPillarCenter = new GameObject();
-            outerPillarCenter.transform.SetParent(this.transform);
-
-            pillarCenter.transform.localPosition = (leftPillar + rightPillar) / 2;
-            //Debug.Log(pillarCenter.transform.localPosition + " " + leftPillar + " " + rightPillar);
-            outerPillarCenter.transform.localRotation = shelf.transform.localRotation;
-            outerPillarCenter.transform.position = pillarCenter.transform.position;
-
-            
-            centroidGO.transform.localRotation = shelf.transform.localRotation;
-            
-            centroidGO.transform.localPosition = new Vector3(outerPillarCenter.transform.localPosition.x, centroidGO.transform.localPosition.y, centroidGO.transform.localPosition.z);
-            centroidGO.transform.position = centroid;
-            //centroidGO.transform.localPosition = new Vector3(outerPillarCenter.transform.localPosition.x, centroidGO.transform.localPosition.y, shelf.transform.localPosition.z);
-            //Debug.Log(centroidGO.transform.localPosition.x + " " + outerPillarCenter.transform.localPosition.x);
-            Destroy(pillarCenter);
-            Destroy(outerPillarCenter);
-        }
-    }
-
-    void ZoomFloor()
-    {
-        foreach (GameObject building in dataSM)
-        {
-            Transform firstFloor = building.transform.GetChild(0).GetChild(2);
-            firstFloor.localPosition = new Vector3(0, currentVerticalDiff * 5, 0);
-        }
-    }
-
-    void FixGrabbing()
-    {
-        GameObject lbugObj = GameObject.Find("[VRTK][AUTOGEN][LeftController][StraightPointerRenderer_Container]");
-        if (lbugObj != null && !lbugObj.transform.GetChild(1).gameObject.activeSelf)
-        {
-            lbugObj.transform.GetChild(1).position = new Vector3(-100, -100, -100);
-        }
-        GameObject rbugObj = GameObject.Find("[VRTK][AUTOGEN][RightController][StraightPointerRenderer_Container]");
-        if (rbugObj != null && !rbugObj.transform.GetChild(1).gameObject.activeSelf)
-        {
-            rbugObj.transform.GetChild(1).position = new Vector3(-100, -100, -100);
-        }
-    }
-
-    // general functions
-
-    public void IncreaseRow()
-    {
-        if (shelfRows < smallMultiplesNumber)
-        {
-            int newMaxNoItemPerRow = 0;
-
-            tmpShelfRows = shelfRows + 1;
-            
-            int tmpItemPerRow = shelfItemPerRow - 1;
-
-            while (tmpShelfRows * tmpItemPerRow < smallMultiplesNumber) {
-                tmpShelfRows++;
-            }
-            
-
-            if (smallMultiplesNumber % tmpShelfRows != 0)
-            {
-                newMaxNoItemPerRow = smallMultiplesNumber / tmpShelfRows + 1;
-            }
-            else
-            {
-                newMaxNoItemPerRow = smallMultiplesNumber / tmpShelfRows;
-            }
-            
-            if (newMaxNoItemPerRow > 0)
-            {
-                shelfPillars[0].transform.localPosition = new Vector3(-newMaxNoItemPerRow * delta / 2, shelfPillars[0].transform.localPosition.y, shelfPillars[0].transform.localPosition.z);
-                shelfPillars[1].transform.localPosition = new Vector3(newMaxNoItemPerRow * delta / 2 + 0.1f, shelfPillars[1].transform.localPosition.y, shelfPillars[1].transform.localPosition.z);
-            }
-            //shelfRows++;
-        }
-    }
-
-    public void DecreaseRow()
-    {
-        if (shelfRows > 1)
-        {
-            int newMaxNoItemPerRow = 0;
-            if (smallMultiplesNumber % (shelfRows - 1) != 0)
-            {
-                newMaxNoItemPerRow = smallMultiplesNumber / (shelfRows - 1) + 1;
-            }
-            else
-            {
-                newMaxNoItemPerRow = smallMultiplesNumber / (shelfRows - 1);
-            }
-            Debug.Log(newMaxNoItemPerRow);
-            if (newMaxNoItemPerRow > 0)
-            {
-                shelfPillars[0].transform.localPosition = new Vector3(-newMaxNoItemPerRow * delta / 2, shelfPillars[0].transform.localPosition.y, shelfPillars[0].transform.localPosition.z);
-                shelfPillars[1].transform.localPosition = new Vector3(newMaxNoItemPerRow * delta / 2 + 0.1f, shelfPillars[1].transform.localPosition.y, shelfPillars[1].transform.localPosition.z);
-            }
-            //shelfRows--;
-        }
-    }
-
-    //public void increasepointerlength()
-    //{
-    //    vrtk_straightpointerrenderer vsp = gameobject.find("leftcontroller").getcomponent<vrtk_straightpointerrenderer>();
-    //    vrtk_pointer vp = gameobject.find("leftcontroller").getcomponent<vrtk_pointer>();
-
-    //    float currentlength = vsp.getdestinationhit().distance;
-    //    float newlength = currentlength + 0.5f;
-    //    vsp.changebeamlength(newlength);
-
-
-    //}
-
-    //public void decreasepointerlength()
-    //{
-    //    vrtk_straightpointerrenderer vsp = gameobject.find("leftcontroller").getcomponent<vrtk_straightpointerrenderer>();
-    //    vrtk_pointer vp = gameobject.find("leftcontroller").getcomponent<vrtk_pointer>();
-
-    //    float currentlength = vsp.getdestinationhit().distance;
-    //    float newlength = currentlength - 0.5f;
-    //    vsp.changebeamlength(newlength);
-    //}
-
-    public void MoveShelfToCenter()
-    {
-        Vector3 centrePosition = centroidGO.transform.position;
-        GameObject tmp = new GameObject();
-        tmp.transform.SetParent(this.transform);
-        tmp.transform.position = shelf.transform.position;
-        int childrenLength = shelf.transform.childCount;
-        for (int i = 0; i < childrenLength; i++)
-        {
-            shelf.transform.GetChild(0).SetParent(tmp.transform);
-        }
-        if (shelf.transform.childCount == 0) {
-            shelf.transform.position = centrePosition;
-        }
-        
-        for (int i = 0; i < childrenLength; i++)
-        {
-            tmp.transform.GetChild(0).SetParent(shelf.transform);
-        }
-        baseY = shelfBoards[0].transform.localPosition.y + vDelta / 2 * shelfRows;
-
-        Destroy(tmp);
-    }
-
-    public void MoveShelfToPillarCenter()
-    {
-        Vector3 centrePosition = currentPillarCenter;
-        GameObject tmp = new GameObject();
-        tmp.transform.SetParent(this.transform);
-        tmp.transform.localPosition = shelf.transform.localPosition;
-        int childrenLength = shelf.transform.childCount;
-        for (int i = 0; i < childrenLength; i++)
-        {
-            shelf.transform.GetChild(0).SetParent(tmp.transform);
-
-        }
-        Vector3 tmpLocalPosition = shelf.transform.localPosition;
-        shelf.transform.position = centrePosition;
-        shelf.transform.localPosition = new Vector3(shelf.transform.localPosition.x, tmpLocalPosition.y, tmpLocalPosition.z);
-        for (int i = 0; i < childrenLength; i++)
-        {
-            tmp.transform.GetChild(0).SetParent(shelf.transform);
-        }
-
-        baseY = shelfPillars[0].transform.localPosition.y;
-
-        Destroy(tmp);
-    }
-
-    public void CanPush(bool changeFlag) {
-        canPush = changeFlag;
-    }
-    public void CanPull(bool changeFlag)
-    {
-        canPull = changeFlag;
-    }
-
-    //public void PushShelfButtonPressed() {
-    //    RTTopBtn = true;
-    //}
-
-    //public void PullShelfButtonPressed()
-    //{
-    //    RTBtmBtn = true;
-    //}
-
-    public void PushShelf() {       
-        if (canPush)
-        {
-            ExpandShelf();
-        }
-    }
-
-    public void PullShelf() {
-        if (canPull)
-        {
-            ShrinkShelf();
-        }
-    }
-
-    void ExpandShelf() {
-		Transform leftTransform = shelfPillars[2].transform;
-		PositionLocalConstraints plcl = shelfPillars[2].gameObject.GetComponent<PositionLocalConstraints>();
-
-		Transform rightTransform = shelfPillars[3].transform;
-		PositionLocalConstraints plcr = shelfPillars[3].gameObject.GetComponent<PositionLocalConstraints>();
-
-		plcl.UpdateZ(leftTransform.localPosition.z + curveScaleZDelta);
-		plcr.UpdateZ(rightTransform.localPosition.z + curveScaleZDelta);
-
-		currentBoardPositionZ += boardPositionZDelta;
-        //curveFlagFloat++;
-        if (currentCurvature < 146) {
-            currentCurvature += curvatureDelta;
-        }
-        
-		foreach (GameObject go in shelfBoards) {
-			Bezier3PointCurve bpc = go.transform.GetChild(0).GetComponent<Bezier3PointCurve>();
-			if (bpc != null) {
-				bpc.ShelfPushed ();
-			}
-		}
-
-		currentCurveRendererZ -= curveRendererZDelta;
-
-		foreach (GameObject board in shelfBoards) {
-			Transform boardTransform = board.transform;
-            //boardTransform.localScale += Vector3.forward * curveScaleZDelta;
-        }
-
-        Transform roofBoardTran = roofBoard.transform;
-        //roofBoardTran.localScale += Vector3.forward * curveScaleZDelta;
-    }
-
-    void ShrinkShelf() {
-		Transform leftTransform = shelfPillars [2].transform;
-		PositionLocalConstraints plcl = shelfPillars [2].gameObject.GetComponent<PositionLocalConstraints> ();
-
-		Transform rightTransform = shelfPillars [3].transform;
-		PositionLocalConstraints plcr = shelfPillars [3].gameObject.GetComponent<PositionLocalConstraints> ();
-
-		plcl.UpdateZ (leftTransform.localPosition.z - curveScaleZDelta);
-		plcr.UpdateZ (rightTransform.localPosition.z - curveScaleZDelta);
-
-		currentBoardPositionZ -= boardPositionZDelta;
-        //curveFlagFloat--;
-        if (currentCurvature > 0) {
-            currentCurvature -= curvatureDelta;
-        }
-        
-
-		foreach (GameObject go in shelfBoards) {
-			Bezier3PointCurve bpc = go.transform.GetChild(0).GetComponent<Bezier3PointCurve>();
-			if (bpc != null) {
-				bpc.ShelfPulled ();
-			}
-		}
-
-		currentCurveRendererZ += curveRendererZDelta;
-
-		foreach (GameObject board in shelfBoards) {
-			Transform boardTransform = board.transform;
-            //boardTransform.localScale -= Vector3.forward * curveScaleZDelta;
-        }
-
-        Transform roofBoardTran = roofBoard.transform;
-        //roofBoardTran.localScale -= Vector3.forward * curveScaleZDelta;
-    }
-
-    // create objects
-
-    void CreateShelf()
-    {
-        float iniLeftx = -(delta * smallMultiplesNumber / 2);
-        float iniRightx = delta * smallMultiplesNumber / 2 + 0.1f;
-        float iniy = baseVPosition + vDelta / 2; //1.3f
-
-        float iniFrontz = -delta / 2;
-        float iniBackz = delta / 2;
-
-        GameObject pillar = (GameObject)Instantiate(frontPillarPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        pillar.transform.SetParent(shelf.transform);
-        pillar.transform.localScale = new Vector3(0.05f, 0.2f, 0.05f);
-        pillar.transform.localPosition = new Vector3(iniLeftx, iniy, iniFrontz);
-        oldLeftPosition = pillar.transform.localPosition;
-        pillar.name = "Left Pillar";
-        shelfPillars.Add(pillar);
-        //GameObject bezierPointLocaterLeft = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        //bezierPointLocaterLeft.SetActive(false);
-        //bezierPointLocaterLeft.transform.SetParent(pillar.transform);
-        //bezierPointLocaterLeft.transform.localPosition = new Vector3(delta * 10, 0, delta * 10);
-
-        GameObject pillarIO = (GameObject)Instantiate(pillarIOPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        pillarIO.transform.SetParent(shelf.transform);
-        pillarIO.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        pillarIO.transform.localPosition = pillar.transform.localPosition;
-        pillarIO.name = "Left Pillar Middle IO";
-        pillarIO.transform.Find("ObjectTooltip").localPosition = Vector3.left * 5;
-        pillarIO.transform.GetChild(0).Find("LineStart").localPosition = Vector3.left * 0.05f;
-        pillarMiddleIOs.Add(pillarIO);
-
-
-        touchableObjects.Add(pillarIO);
-
-        pillarIO = (GameObject)Instantiate(pillarIOPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        pillarIO.transform.SetParent(shelf.transform);
-        pillarIO.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        pillarIO.transform.localPosition = pillar.transform.localPosition + Vector3.up * pillar.transform.localScale.y;
-        pillarIO.name = "Left Pillar Top IO";
-        pillarIO.transform.Find("ObjectTooltip").localPosition = Vector3.left * 6;
-        pillarIO.transform.GetChild(0).Find("LineStart").localPosition = Vector3.left * 0.06f;
-        pillarTopIOs.Add(pillarIO);
-
-        pillar = (GameObject)Instantiate(frontPillarPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        pillar.transform.SetParent(shelf.transform);
-        pillar.transform.localScale = new Vector3(0.05f, 0.2f, 0.05f);
-        pillar.transform.localPosition = new Vector3(iniRightx, iniy, iniFrontz);
-        oldRightPosition = pillar.transform.localPosition;
-        pillar.name = "Right Pillar";
-        shelfPillars.Add(pillar);
-
-        pillar.transform.GetChild(0).localPosition = new Vector3(-delta * 10, 0, pillar.transform.GetChild(0).localPosition.z);
-        PositionLocalConstraints plc = pillar.transform.GetChild(0).gameObject.GetComponent<PositionLocalConstraints>();
-        plc.UpdateX(-delta * 10);
-
-        //GameObject bezierPointLocaterRight = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        //bezierPointLocaterRight.SetActive(false);
-        //bezierPointLocaterRight.transform.SetParent(pillar.transform);
-        //bezierPointLocaterRight.transform.localPosition = new Vector3(-delta * 10, 0, delta * 10);
-
-        pillarIO = (GameObject)Instantiate(pillarIOPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        pillarIO.transform.SetParent(shelf.transform);
-        pillarIO.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        pillarIO.transform.localPosition = pillar.transform.localPosition;
-        pillarIO.name = "Right Pillar Middle IO";
-        pillarIO.transform.Find("ObjectTooltip").localPosition = -Vector3.left * 5;
-        pillarIO.transform.GetChild(0).Find("LineStart").localPosition = -Vector3.left * 0.05f;
-        pillarMiddleIOs.Add(pillarIO);
-
-        touchableObjects.Add(pillarIO);
-
-        pillarIO = (GameObject)Instantiate(pillarIOPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        pillarIO.transform.SetParent(shelf.transform);
-        pillarIO.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        pillarIO.transform.localPosition = pillar.transform.localPosition + Vector3.up * pillar.transform.localScale.y;
-        pillarIO.name = "Right Pillar Top IO";
-        pillarIO.transform.Find("ObjectTooltip").localPosition = -Vector3.left * 6;
-        pillarIO.transform.GetChild(0).Find("LineStart").localPosition = -Vector3.left * 0.06f;
-        pillarTopIOs.Add(pillarIO);
-
-        foreach (GameObject topIO in pillarTopIOs)
-        {
-            Physics.IgnoreCollision(topIO.GetComponent<Collider>(), shelfPillars[0].GetComponent<Collider>());
-            Physics.IgnoreCollision(topIO.GetComponent<Collider>(), shelfPillars[1].GetComponent<Collider>());
-            foreach (GameObject middleIO in pillarMiddleIOs)
-            {
-                Physics.IgnoreCollision(middleIO.GetComponent<Collider>(), topIO.GetComponent<Collider>());
-                Physics.IgnoreCollision(middleIO.GetComponent<Collider>(), shelfPillars[0].GetComponent<Collider>());
-                Physics.IgnoreCollision(middleIO.GetComponent<Collider>(), shelfPillars[1].GetComponent<Collider>());
-            }
-        }
-
-
-
-        pillar = (GameObject)Instantiate(BpillarPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        pillar.transform.SetParent(shelf.transform);
-        pillar.transform.localScale = new Vector3(0.05f, 0.2f, 0.05f);
-        pillar.transform.localPosition = new Vector3(iniLeftx, iniy, iniBackz);
-        pillar.name = "Left Back Pillar ";
-        shelfPillars.Add(pillar);
-
-        pillar = (GameObject)Instantiate(BpillarPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        pillar.transform.SetParent(shelf.transform);
-        pillar.transform.localScale = new Vector3(0.05f, 0.2f, 0.05f);
-        pillar.transform.localPosition = new Vector3(iniRightx, iniy, iniBackz);
-        pillar.name = "Right Back Pillar";
-        shelfPillars.Add(pillar);
-
-        baseY = iniy;
-        currentY = iniy;
-
-        controllBall = (GameObject)Instantiate(controlBallPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        controllBall.transform.SetParent(this.transform);
-        controllBall.transform.position = shelf.transform.position;
-        controllBall.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-        controllBall.name = "Control Ball";
-
-        touchableObjects.Add(controllBall);
-
-        colorScheme = (GameObject)Instantiate(colorSchemePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        colorScheme.transform.SetParent(shelf.transform);
-        colorScheme.transform.localPosition = new Vector3(0, 0.74f, -delta / 2);
-		colorScheme.transform.localScale = new Vector3 (2, 2, 2);
-        colorScheme.name = "Color Scheme";
-
-        if (dataset == 2)
-        {
-            colorScheme.SetActive(false);
         }
         else {
-            if (dataset == 1)
+            if (!fullCircle) // half circle
             {
-                //colorScheme.transform.Find("UITextFront").GetChild(0).gameObject.SetActive(true);
-                //colorScheme.transform.Find("UITextReverse").GetChild(0).gameObject.SetActive(true);
-                colorScheme.transform.GetChild(1).Find("UITextFront").GetChild(1).gameObject.SetActive(false);
-                colorScheme.transform.GetChild(1).Find("UITextReverse").GetChild(1).gameObject.SetActive(false);
+                if (index < shelfItemPerRow) // top row
+                {
+                    yValue = (shelfRows - 1) * vDelta;
+                    zValue = Mathf.Sin(index * Mathf.PI / (shelfItemPerRow - 1)) * ((shelfItemPerRow - 1) * delta / Mathf.PI);
+                    xValue = -Mathf.Cos(index * Mathf.PI / (shelfItemPerRow - 1)) * ((shelfItemPerRow - 1) * delta / Mathf.PI);
+                }
+                else
+                {
+                    if (index < shelfItemPerRow * 2) // second row
+                    {
+                        yValue = (shelfRows - 2) * vDelta;
+                        zValue = Mathf.Sin((index - shelfItemPerRow) * Mathf.PI / (shelfItemPerRow - 1)) * ((shelfItemPerRow - 1) * delta / Mathf.PI);
+                        xValue = -Mathf.Cos((index - shelfItemPerRow) * Mathf.PI / (shelfItemPerRow - 1)) * ((shelfItemPerRow - 1) * delta / Mathf.PI);
+                    }
+                    else
+                    {
+                        if (index < shelfItemPerRow * 3) // third row
+                        {
+                            yValue = (shelfRows - 3) * vDelta;
+                            zValue = Mathf.Sin((index - 2 * shelfItemPerRow) * Mathf.PI / (shelfItemPerRow - 1)) * ((shelfItemPerRow - 1) * delta / Mathf.PI);
+                            xValue = -Mathf.Cos((index - 2 * shelfItemPerRow) * Mathf.PI / (shelfItemPerRow - 1)) * ((shelfItemPerRow - 1) * delta / Mathf.PI);
+                        }
+                        else // fourth row
+                        {
+                            // TODO
+                        }
+                    }
+                }
             }
-            else if(dataset == 3){
-                colorScheme.transform.GetChild(1).Find("UITextFront").GetChild(0).gameObject.SetActive(false);
-                colorScheme.transform.GetChild(1).Find("UITextReverse").GetChild(0).gameObject.SetActive(false);
-                //colorScheme.transform.Find("UITextFront").GetChild(1).gameObject.SetActive(true);
-                //colorScheme.transform.Find("UITextReverse").GetChild(1).gameObject.SetActive(true);
+            else { // full circle
+                if (index < shelfItemPerRow) // top row
+                {
+                    yValue = (shelfRows - 1) * vDelta;
+                    zValue = Mathf.Sin(index * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
+                    xValue = -Mathf.Cos(index * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
+                }
+                else
+                {
+                    if (index < shelfItemPerRow * 2) // second row
+                    {
+                        yValue = (shelfRows - 2) * vDelta;
+                        zValue = Mathf.Sin((index - shelfItemPerRow) * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
+                        xValue = -Mathf.Cos((index - shelfItemPerRow) * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
+                    }
+                    else
+                    {
+                        if (index < shelfItemPerRow * 3) // third row
+                        {
+                            yValue = (shelfRows - 3) * vDelta;
+                            zValue = Mathf.Sin((index - 2 * shelfItemPerRow) * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
+                            xValue = -Mathf.Cos((index - 2 * shelfItemPerRow) * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
+                        }
+                        else // fourth row
+                        {
+                            // TODO
+                        }
+                    }
+                }
             }
         }
-
-        
-
-        GameObject board;
-
-        board = (GameObject)Instantiate(shelfBoardPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-
-        board.transform.SetParent(shelf.transform);
-        board.transform.localScale = new Vector3(delta * smallMultiplesNumber + 0.1f, 0.003f, delta);
-        board.transform.localPosition = new Vector3(0, baseVPosition, 0);
-        board.name = "Bottom Board";
-        shelfBoards.Add(board);
-
- 
-        GameObject curveRenderer = (GameObject)Instantiate(curveRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        curveRenderer.transform.SetParent(board.transform);
-        curveRenderer.transform.localPosition = new Vector3(0, 0, 0);
-        curveRenderer.transform.localScale = new Vector3(1, 1, 1);
-        curveRenderer.name = "Bottom Curve Renderer";
-        curveRenderers.Add(curveRenderer);
-
-
-        roofBoard = (GameObject)Instantiate(shelfBoardPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        roofBoard.transform.SetParent(shelf.transform);
-        roofBoard.transform.localScale = new Vector3(delta * smallMultiplesNumber + 0.1f, 0.003f, delta);
-        roofBoard.transform.localPosition = new Vector3(0, baseVPosition + vDelta, 0);
-
-        roofBoard.name = "Roof Board";
-
-        shelfRows = 1;
-        shelfItemPerRow = smallMultiplesNumber;
-
-        centroidGO = (GameObject)Instantiate(centroidPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        centroidGO.name = "Centroid";
-        centroidGO.transform.SetParent(this.transform);
-        centroidGO.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        return new Vector3(xValue, yValue, zValue);
     }
 
+
+    // create objects
     void CreateSM()
     {
-        GameObject bottomBoard = shelfBoards[0];
-        float iniLeftEdge = shelfPillars[0].transform.localPosition.x;
-        float iniLeftMostItemX = iniLeftEdge + (delta / 2);
-        float iniItemY = bottomBoard.transform.localPosition.y;
-
         if (dataset == 1) {
             for (int i = 0; i < smallMultiplesNumber; i++)
             {
-                GameObject dataObj; ;
+                GameObject dataObj;
 
                 dataObj = (GameObject)Instantiate(DataPrefab, new Vector3(0, 0, 0), Quaternion.identity);
                 dataObj.name = "Small Multiples " + (i + 1);
 
                 dataObj.transform.SetParent(shelf.transform);
-                dataObj.transform.localPosition = new Vector3(iniLeftMostItemX + (i * delta), iniItemY, 0);
+
+                dataObj.transform.localPosition = AssignSMPositionBasedOnLayout(i);
+                dataObj.transform.localEulerAngles = new Vector3(0, dataObj.transform.localEulerAngles.y, 0);
+
+                if (circleLayout) {
+                    GameObject centerP1 = new GameObject();
+                    centerP1.transform.SetParent(shelf.transform);
+                    centerP1.transform.localPosition = Vector3.zero;
+
+                    GameObject centerP2 = new GameObject();
+                    centerP2.transform.SetParent(shelf.transform);
+                    centerP2.transform.localPosition = Vector3.zero + Vector3.up * delta;
+
+                    GameObject centerP3 = new GameObject();
+                    centerP3.transform.SetParent(shelf.transform);
+                    centerP3.transform.localPosition = Vector3.zero + Vector3.up * delta * 2;
+
+                    if (i < shelfItemPerRow)
+                    {
+                        dataObj.transform.LookAt(centerP3.transform.position);
+                    }
+                    else
+                    {
+                        if (i < shelfItemPerRow * 2)
+                        {
+                            dataObj.transform.LookAt(centerP2.transform.position);
+                        }
+                        else
+                        {
+                            dataObj.transform.LookAt(centerP1.transform.position);
+                        }
+                    }
+                    dataObj.transform.localEulerAngles += Vector3.up * 180;
+                    Destroy(centerP1);
+                    Destroy(centerP2);
+                    Destroy(centerP3);
+                }
+                
+
                 dataSM.Add(dataObj);
 
                 dataObj.transform.localScale = Vector3.one * 0.8f;
@@ -4819,26 +2746,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 VRTK_ObjectTooltip ot = tooltip.GetComponent<VRTK_ObjectTooltip>();
                 ot.displayText = tooltipText;
 
-
-                Collider[] colliders = dataObj.GetComponentsInChildren<Collider>();
-
-                foreach (Collider collider in colliders)
-                {
-                    Physics.IgnoreCollision(controllBall.GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarTopIOs[0].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarTopIOs[1].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarMiddleIOs[0].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarMiddleIOs[1].GetComponent<Collider>(), collider);
-                }
-
-                foreach (Collider collider in colliders)
-                {
-                    foreach (GameObject pillar in shelfPillars)
-                    {
-                        Physics.IgnoreCollision(collider, pillar.GetComponent<Collider>());
-                    }
-                }
-
                 minXFilters.Add(dataObj.transform.GetChild(1).GetChild(1).GetChild(2).gameObject);
                 minXFilters.Add(dataObj.transform.GetChild(4).GetChild(1).GetChild(2).gameObject);
 
@@ -4857,7 +2764,33 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 maxYFilters.Add(dataObj.transform.GetChild(2).GetChild(1).GetChild(3).gameObject);
                 maxYFilters.Add(dataObj.transform.GetChild(5).GetChild(1).GetChild(3).gameObject);
             }
+            VRTK_ObjectTooltip ott = colorScheme.GetComponent<VRTK_ObjectTooltip>();
+            ott.alwaysFaceHeadset = false;
+            colorScheme.transform.localEulerAngles = new Vector3(-60f, 180, 0);
 
+            if (circleLayout)
+            {
+                if (fullCircle)
+                {
+                    colorScheme.transform.localPosition = Vector3.zero - Vector3.up * 0.13f + Vector3.forward * 0.66f;
+                }
+                else
+                {
+                    colorScheme.transform.localPosition = Vector3.zero + Vector3.forward * 2f - Vector3.up * 0.13f;
+                }
+            }
+            else
+            {
+                colorScheme.transform.localPosition = Vector3.zero + Vector3.back * 0.5f - Vector3.up * 0.13f;
+            }
+
+            foreach (GameObject go in dataSM) {
+                BuildingScript bs = go.transform.GetChild(0).gameObject.GetComponent<BuildingScript>();
+                if (!bs.IsExploded())
+                {
+                    bs.explode();
+                }
+            }
         }
        
         if (dataset == 2) {
@@ -4892,7 +2825,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
 
                 dataObj.transform.SetParent(shelf.transform);
-                dataObj.transform.localPosition = new Vector3(iniLeftMostItemX + (i * delta), iniItemY, 0);
+                dataObj.transform.localPosition = AssignSMPositionBasedOnLayout(i);
                 dataSM.Add(dataObj);
 
                 GameObject leftCountryFilter = (GameObject)Instantiate(FilterPrefab, new Vector3(0, 0, 0), Quaternion.identity);
@@ -5024,121 +2957,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 rightValuePlane.transform.localScale = Vector3.one;
                 rightValuePlane.transform.localEulerAngles = Vector3.zero;
                 rightValuePlanes.Add(rightValuePlane);
-
-                Collider[] colliders = dataObj.GetComponentsInChildren<Collider>();
-
-                foreach (Collider collider in colliders)
-                {
-                    Physics.IgnoreCollision(controllBall.GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarTopIOs[0].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarTopIOs[1].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarMiddleIOs[0].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarMiddleIOs[1].GetComponent<Collider>(), collider);
-                }
-
-                foreach (Collider collider in colliders)
-                {
-                    foreach (GameObject pillar in shelfPillars)
-                    {
-                        Physics.IgnoreCollision(collider, pillar.GetComponent<Collider>());
-                    }
-                }
             }
-        }
 
-        if (dataset == 3)
-        {
-
-            for (int i = 0; i < smallMultiplesNumber; i++)
-            {
-                GameObject dataObj = (GameObject)Instantiate(TrajectoriesPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-
-                // Assign Data
-                TextAsset file = (TextAsset)Resources.Load("tData" + (i + 1));
-                CSVDataSource ds = dataObj.transform.GetChild(0).GetComponent<CSVDataSource>();
-                ds.load(file.text, null);
-
-                // adjust max size
-                Visualisation v = dataObj.transform.GetChild(1).GetComponent<Visualisation>();
-                v.dataSource = ds;
-                v.geometry = AbstractVisualisation.GeometryType.Lines;
-
-
-
-                Gradient gradient = new Gradient();
-
-                // Populate the color keys at the relative time 0 and 1 (0 and 100%)
-                GradientColorKey[] colorKey = new GradientColorKey[2];
-                colorKey[0].color = Color.blue;
-                colorKey[0].time = 0.0f;
-                colorKey[1].color = Color.green;
-                colorKey[1].time = 1.0f;
-
-                // Populate the alpha  keys at relative time 0 and 1  (0 and 100%)
-                GradientAlphaKey[] alphaKey = new GradientAlphaKey[2];
-                alphaKey[0].alpha = 1.0f;
-                alphaKey[0].time = 0.0f;
-                alphaKey[1].alpha = 1.0f;
-                alphaKey[1].time = 1.0f;
-
-                gradient.SetKeys(colorKey, alphaKey);
-
-                v.dimensionColour = gradient;
-                v.updateView(AbstractVisualisation.PropertyType.GeometryType);
-
-                foreach (Transform t in v.transform) {
-                    if (t.gameObject.name.Contains("axis")) {
-                        Transform axisLabels = t.Find("AxisLabels");
-                        foreach (Transform axisLabel in axisLabels) {
-                            TextMeshPro tmp = axisLabel.GetComponent<TextMeshPro>();
-                            tmp.fontSize = 0.8f;
-                        }
-                    }
-                }
-
-                dataObj.name = "Small Multiples " + (i + 1);
-                dataObj.transform.localScale = new Vector3(d3Scale, d3Scale, d3Scale);
-                dataObj.transform.GetChild(0).localPosition = new Vector3(-0.5f, 0.4f, -0.5f);
-                dataObj.transform.GetChild(1).localPosition = new Vector3(-0.5f, 0.4f, -0.5f);
-                dataObj.AddComponent<PositionLocalConstraints>();
-
-                //setup tooltip
-                GameObject tooltip = (GameObject)Instantiate(tooltipPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                tooltip.transform.SetParent(dataObj.transform);
-                tooltip.transform.localPosition = new Vector3(-1.1f, 0.8f, 0);
-                tooltip.transform.localEulerAngles = new Vector3(0, 0, 90);
-
-                VRTK_ObjectTooltip tt = tooltip.GetComponent<VRTK_ObjectTooltip>();
-                tt.containerSize = new Vector2(300, 60);
-                tt.fontSize = 24;
-                tt.displayText = GetTChartName(i + 1);
-                tt.alwaysFaceHeadset = false;
-
-                dataObj.transform.SetParent(shelf.transform);
-                dataObj.transform.localPosition = new Vector3(iniLeftMostItemX + (i * delta), iniItemY, 0);
-                dataSM.Add(dataObj);
-
-                
-
-                Collider[] colliders = dataObj.GetComponentsInChildren<Collider>();
-
-                foreach (Collider collider in colliders)
-                {
-                    Physics.IgnoreCollision(controllBall.GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarTopIOs[0].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarTopIOs[1].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarMiddleIOs[0].GetComponent<Collider>(), collider);
-                    Physics.IgnoreCollision(pillarMiddleIOs[1].GetComponent<Collider>(), collider);
-                }
-
-                foreach (Collider collider in colliders)
-                {
-                    foreach (GameObject pillar in shelfPillars)
-                    {
-                        Physics.IgnoreCollision(collider, pillar.GetComponent<Collider>());
-                    }
-                }
-            }
+            GetChessBoardDic();
         }
     }
 
@@ -6563,7 +4384,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             //if (!scaling)
                             //{
                                 rotationDelta -= Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up);
-                                if (fixedPositionCurved)
+                                if (circleLayout)
                                 {
                                     //GameObject tmp = new GameObject();
                                     //tmp.transform.SetParent(worldInMiniture.transform.parent);
@@ -6640,7 +4461,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             //        scaleDown = true;
                             //    }
 
-                            //    if (fixedPositionCurved)
+                            //    if (circleLayout)
                             //    {
                             //        //GameObject tmp = new GameObject();
                             //        //tmp.transform.SetParent(worldInMiniture.transform.parent);
@@ -6676,14 +4497,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 antiClockRotation = false;
                 scaleUp = false;
                 scaleDown = false;
-                if (finishInitialised) {
-                    foreach (GameObject go in shelfBoards)
-                    {
-                        go.transform.GetChild(0).GetComponent<Bezier3PointCurve>().canUpdate = false;
-                        //go.SetActive(false);
-                        //go.transform.GetChild(0).GetComponent<Bezier3PointCurve>().enabled = false;
-                    }
-                }
                 
                 controllerShelfDeltaSetup = false;
                 if (cubeSelectionCube != null)
@@ -7248,7 +5061,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
         if (dataset == 1 || dataset == 2)
         {
-            //if (!fixedPositionCurved)
+            //if (!circleLayout)
             //{
                 if (!controllerShelfDeltaSetup)
                 {
@@ -8678,13 +6491,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         string[] lines = new string[(taskNo / 2 + 1)];
         if (dataset == 1)
         {
-            if (!fixedPositionCurved) // F
+            if (!circleLayout) // F
             {
                 lines = BIMFltQsTFile.text.Split(lineSeperater);
             }
             else
             {
-                if (quarterCurved) // Q
+                if (fullCircle) // Q
                 {
                     lines = BIMQCurQsTFile.text.Split(lineSeperater);
                 }
@@ -8696,13 +6509,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         }
         else if (dataset == 2)
         {
-            if (!fixedPositionCurved)
+            if (!circleLayout)
             {
                 lines = BarFltQsTFile.text.Split(lineSeperater);
             }
             else
             {
-                if (quarterCurved) // Q
+                if (fullCircle) // Q
                 {
                     lines = BarQCurQsTFile.text.Split(lineSeperater);
                 }
@@ -8725,13 +6538,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         string[] lines = new string[taskNo + 1];
         if (dataset == 1)
         {
-            if (!fixedPositionCurved) // F
+            if (!circleLayout) // F
             {
                 lines = BIMFltQsFile.text.Split(lineSeperater);
             }
             else
             {
-                if (quarterCurved) // Q
+                if (fullCircle) // Q
                 {
                     lines = BIMQCurQsFile.text.Split(lineSeperater);
                 }
@@ -8744,13 +6557,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         }
         else if (dataset == 2)
         {
-            if (!fixedPositionCurved) // F
+            if (!circleLayout) // F
             {
                 lines = BarFltQsFile.text.Split(lineSeperater);
             }
             else
             {
-                if (quarterCurved) // Q
+                if (fullCircle) // Q
                 {
                     lines = BarQCurQsFile.text.Split(lineSeperater);
                 }
@@ -8790,7 +6603,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 Debug.Log("Task ID == 0!!!");
                 //if (dataset == 1)
                 //{
-                //    if (fixedPositionCurved)
+                //    if (circleLayout)
                 //    {
                 //        ChangeTaskText("There will be four questions in this section. Please tell me the answer of each question when you are ready. " +
                 //            "You can rotate the small multiples using <color=red>grip</color> button and change questions using <color=green>touchpad</color> buttons.", 0);
@@ -8803,7 +6616,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 //}
                 //else if (dataset == 2)
                 //{
-                //    if (fixedPositionCurved)
+                //    if (circleLayout)
                 //    {
                 //        ChangeTaskText("There will be four questions in this section. Please tell me the answer of each question when you are ready. " +
                 //            "You can rotate the small multiples using <color=red>grip</color> button, change questions using <color=green>touchpad</color> buttons and brush any data using <color=blue>touchpad</color> buttons.", 0);
@@ -8977,14 +6790,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 		}
 
 		return extension;
-	}
-
-	public Vector3 FindLeftPoint(){
-		return new Vector3 (shelfPillars[0].transform.localPosition.x, shelfBoards[0].transform.localPosition.y, shelfPillars[0].transform.localPosition.z + delta / 2);
-	}
-
-	public Vector3 FindRightPoint(){
-		return new Vector3 (shelfPillars[1].transform.localPosition.x, shelfBoards[0].transform.localPosition.y, shelfPillars[1].transform.localPosition.z + delta / 2);
 	}
 
 	public List<GameObject> GetSMList(){
