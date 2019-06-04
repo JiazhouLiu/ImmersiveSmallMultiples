@@ -92,7 +92,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     // shelf variables
     float baseVPosition = 0.8f;
-    float delta = 0.7f; // 0.65f
+    float delta = 0.8f; // 0.65f
     float vDelta = 0.7f;
     float d1VerticalDiff = 0.5f;
     float d2Scale = 0.3f;
@@ -320,6 +320,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     //float BarScaleDelta = 0.59f;
     //float BarPositionYDelta = -0.38f;
 
+    // optimising
+    List<string> oldRelatedSensors;
+
     // Use this for initialization
     void Start () {
         QualitySettings.vSyncCount = 1;
@@ -439,6 +442,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 chessBoardPoints = new Dictionary<string, Dictionary<Vector2, Vector3>>();
                 sensorsInfoList = new Dictionary<string, HashSet<SensorReading>>();
 				dataSM = new List<GameObject>();
+
+                oldRelatedSensors = new List<string>();
 
                 taskBoards = new List<GameObject>();
                 taskArray = new string[taskNo];
@@ -741,17 +746,17 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         {
             if (fullCircle)
             {
-                this.transform.position = new Vector3(0.25f, transform.position.y, 0f);
+                this.transform.position = new Vector3(0, transform.position.y, 0f);
             }
             else
             {
-                this.transform.position = new Vector3(0.25f, transform.position.y, -0.5f);
+                this.transform.position = new Vector3(0, transform.position.y, -0.6f);
             }
 
         }
         else
         {
-            this.transform.position = new Vector3(0.25f, transform.position.y, 0.8f);
+            this.transform.position = new Vector3(0, transform.position.y, 0.8f);
         }
     }
 
@@ -1912,33 +1917,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 Ray ray = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>().ViewportPointToRay(viewportPoint);
 
-                //Debug.DrawRay(ray.origin, ray.direction, Color.green);
-
-                //RaycastHit[] hits;
-                //hits = Physics.RaycastAll(ray, 100f);
-
-                //if (hits.Length == 0)
-                //{
-                //    finalResult = "NA";
-                //    GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at nothing";
-                //}
-                //else {
-                //    for (int i = 0; i < hits.Length; i++)
-                //    {
-                //        RaycastHit hit = hits[i];
-                //        if (hit.transform.name.Contains("Small Multiples"))
-                //        {
-                //            finalResult = hit.transform.name;
-                //            GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;
-                //            return finalResult;
-                //        }
-                //        else
-                //        {
-                //            GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;
-                //            finalResult = "NA";
-                //        }
-                //    }
-                //}
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -1968,9 +1946,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     public void OpenMainCamera()
     {
-        //PupilSettings.Instance.currentCamera.gameObject.SetActive(false);
-        //GameObject.Find("Pupil Manager").transform.GetChild(0).gameObject.SetActive(false);
-        //PupilSettings.Instance.currentCamera = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>();
         GameObject.Find("[CameraRig]").transform.GetChild(2).gameObject.SetActive(true);
         PupilSettings.Instance.currentCamera = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>();
 
@@ -1987,8 +1962,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         if (GameObject.Find("[CameraRig]") != null && GameObject.Find("[CameraRig]").transform.GetChild(2) != null)
         {
             GameObject.Find("[CameraRig]").transform.GetChild(2).gameObject.SetActive(false);
-            //GameObject.Find("Pupil Manager").transform.GetChild(0).gameObject.SetActive(true);
-            //GameObject.Find("Pupil Manager").transform.GetChild(2).gameObject.SetActive(true);
             PupilSettings.Instance.currentCamera = GameObject.Find("Pupil Manager").transform.GetChild(2).GetComponent<Camera>();
             //GameObject.Find("EnvironmentForUserStudy").transform.Find("Canvas").GetComponent<Canvas>().worldCamera = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>();
             afterCalibration = false;
@@ -2020,61 +1993,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             //Debug.Log(rawGazePositionOnScreen);
             Vector2 gazePointCenter = PupilData._2D.GazePosition;
             rawGazePositionOnScreen = PupilData._2D.GazePosition;
-            //Vector3 viewportPoint = new Vector3(gazePointCenter.x, gazePointCenter.y, 1f);
-            //if (GameObject.Find("[CameraRig]") != null && GameObject.Find("[CameraRig]").transform.GetChild(2) != null && GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>() != null) {
-            //    Ray ray = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>().ViewportPointToRay(viewportPoint);
-            //    //Debug.DrawRay(ray.origin, ray.direction, Color.green);
-            //    RaycastHit hit;
-            //    if (Physics.Raycast(ray, out hit))
-            //    {
-            //        GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;
-            //    }
-            //    else
-            //    {
-            //        GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at nothing";
-            //    }
-            //}
-        }
-        else {
-            //Debug.Log(PupilTools.IsConnected + " " + PupilTools.IsGazing + " " + afterCalibration);
         }
     }
-
-    /*
-    private string GetSMPosition() {
-        string finalResult = "";
-        if (dataSM.Count <= 0) {
-            return ",,,,,,,,,,,,";
-        }
-
-        foreach (GameObject sm in dataSM) {
-            finalResult += "(" + sm.transform.position.x + ";" + sm.transform.position.y + ";" + sm.transform.position.z + "),";
-        }
-
-        return finalResult;
-    }
-
-    private string GetSMRotation() {
-        string finalResult = "";
-
-        if (dataSM.Count <= 0)
-        {
-            return ",,,,,,,,,,,";
-        }
-
-        for (int i = 0; i <= 11; i++) {
-            if (i != 11)
-            {
-                finalResult += "(" + dataSM[i].transform.eulerAngles.x + ";" + dataSM[i].transform.eulerAngles.y + ";" + dataSM[i].transform.eulerAngles.z + "),";
-            }
-            else {
-                finalResult += "(" + dataSM[i].transform.eulerAngles.x + ";" + dataSM[i].transform.eulerAngles.y + ";" + dataSM[i].transform.eulerAngles.z + ")";
-            }
-        }
-
-        return finalResult;
-    }
-    */
 
     float GetFixedTime()
     {
@@ -2638,7 +2558,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             else { // full circle
                 if (index < shelfItemPerRow) // top row
                 {
-                    yValue = (shelfRows - 1) * vDelta;
+                    //yValue = (shelfRows - 1) * vDelta;
+                    yValue = (shelfRows - 2) * vDelta + (shelfItemPerRow - index) * vDelta / shelfItemPerRow;
                     zValue = Mathf.Sin(index * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
                     xValue = -Mathf.Cos(index * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
                 }
@@ -2646,7 +2567,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 {
                     if (index < shelfItemPerRow * 2) // second row
                     {
-                        yValue = (shelfRows - 2) * vDelta;
+                        //yValue = (shelfRows - 2) * vDelta;
+                        yValue = (shelfRows - 3) * vDelta + (2 * shelfItemPerRow - index) * vDelta / shelfItemPerRow;
                         zValue = Mathf.Sin((index - shelfItemPerRow) * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
                         xValue = -Mathf.Cos((index - shelfItemPerRow) * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
                     }
@@ -2654,7 +2576,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     {
                         if (index < shelfItemPerRow * 3) // third row
                         {
-                            yValue = (shelfRows - 3) * vDelta;
+                            //yValue = (shelfRows - 3) * vDelta;
+                            yValue = (shelfRows - 4) * vDelta + (3 * shelfItemPerRow - index) * vDelta / shelfItemPerRow;
                             zValue = Mathf.Sin((index - 2 * shelfItemPerRow) * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
                             xValue = -Mathf.Cos((index - 2 * shelfItemPerRow) * Mathf.PI / (shelfItemPerRow / 2)) * ((shelfItemPerRow - 1) * delta / (2 * Mathf.PI));
                         }
@@ -2687,37 +2610,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 dataObj.transform.localEulerAngles = new Vector3(0, dataObj.transform.localEulerAngles.y, 0);
 
                 if (circleLayout) {
-                    GameObject centerP1 = new GameObject();
-                    centerP1.transform.SetParent(shelf.transform);
-                    centerP1.transform.localPosition = Vector3.zero;
+                    GameObject center = new GameObject();
+                    center.transform.SetParent(shelf.transform);
+                    center.transform.localPosition = dataObj.transform.localPosition;
+                    center.transform.localPosition = new Vector3(0, center.transform.localPosition.y, 0);
+                   
+                    dataObj.transform.LookAt(center.transform.position);
 
-                    GameObject centerP2 = new GameObject();
-                    centerP2.transform.SetParent(shelf.transform);
-                    centerP2.transform.localPosition = Vector3.zero + Vector3.up * delta;
-
-                    GameObject centerP3 = new GameObject();
-                    centerP3.transform.SetParent(shelf.transform);
-                    centerP3.transform.localPosition = Vector3.zero + Vector3.up * delta * 2;
-
-                    if (i < shelfItemPerRow)
-                    {
-                        dataObj.transform.LookAt(centerP3.transform.position);
-                    }
-                    else
-                    {
-                        if (i < shelfItemPerRow * 2)
-                        {
-                            dataObj.transform.LookAt(centerP2.transform.position);
-                        }
-                        else
-                        {
-                            dataObj.transform.LookAt(centerP1.transform.position);
-                        }
-                    }
                     dataObj.transform.localEulerAngles += Vector3.up * 180;
-                    Destroy(centerP1);
-                    Destroy(centerP2);
-                    Destroy(centerP3);
+                    Destroy(center);
                 }
                 
 
@@ -2772,11 +2673,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 if (fullCircle)
                 {
-                    colorScheme.transform.localPosition = Vector3.zero - Vector3.up * 0.13f + Vector3.forward * 0.66f;
+                    //colorScheme.transform.localPosition = Vector3.zero - Vector3.up * 0.13f + Vector3.forward * 0.66f;
+                    colorScheme.transform.localPosition = Vector3.zero - Vector3.up * 0.5f + Vector3.forward * 0.66f;
                 }
                 else
                 {
-                    colorScheme.transform.localPosition = Vector3.zero + Vector3.forward * 2f - Vector3.up * 0.13f;
+                    colorScheme.transform.localPosition = Vector3.zero + Vector3.forward * 2.4f - Vector3.up * 0.13f;
                 }
             }
             else
@@ -4383,50 +4285,53 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                         {
                             //if (!scaling)
                             //{
-                                rotationDelta -= Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up);
-                                if (circleLayout)
-                                {
-                                    //GameObject tmp = new GameObject();
-                                    //tmp.transform.SetParent(worldInMiniture.transform.parent);
-                                    //tmp.transform.localPosition = worldInMiniture.transform.localPosition;
-                                    //tmp.transform.LookAt(Camera.main.transform.position);
-                                    worldInMiniture.transform.localEulerAngles = new Vector3(0, rotationDelta, 0);
-                                    //Destroy(tmp);
-                                }
-                                else
-                                {
-                                    worldInMiniture.transform.rotation = currentRotation;
-                                }
+                            rotationDelta -= Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up);
+                            if (circleLayout)
+                            {
+                                //GameObject tmp = new GameObject();
+                                //tmp.transform.SetParent(worldInMiniture.transform.parent);
+                                //tmp.transform.localPosition = worldInMiniture.transform.localPosition;
+                                //tmp.transform.LookAt(Camera.main.transform.position);
+                                worldInMiniture.transform.LookAt(Camera.main.transform.position);
+                                worldInMiniture.transform.localEulerAngles = new Vector3(0, worldInMiniture.transform.localEulerAngles.y + 180 + rotationDelta, 0);
+                                //Destroy(tmp);
+                            }
+                            else
+                            {
+                                worldInMiniture.transform.rotation = currentRotation;
+                            }
 
-                                // log the rotation
-                                clockRotation = false;
-                                antiClockRotation = false;
-                                if (Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up) > 0) {
-                                    antiClockRotation = true;
-                                }else if (Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up) < 0)
-                                {
-                                    clockRotation = true;
-                                }
+                            // log the rotation
+                            clockRotation = false;
+                            antiClockRotation = false;
+                            if (Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up) > 0)
+                            {
+                                antiClockRotation = true;
+                            }
+                            else if (Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up) < 0)
+                            {
+                                clockRotation = true;
+                            }
 
-                                foreach (GameObject go in dataSM)
-                                {
-                                    go.transform.localEulerAngles -= Vector3.up * Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up);
-                                }
-                                SMRotationDiff -= Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up);
-                                //worldInMiniture.transform.localEulerAngles = Vector3.zero;
-                                //worldInMiniture.transform.localScale = currentScale;
-                                //if ((Vector3.Distance(leftB.position, rightB.position) / Mathf.Sqrt(3)) <= currentScale.x)
-                                //{
-                                //    worldInMiniture.transform.localScale = Vector3.one * (Vector3.Distance(leftB.position, rightB.position) / Mathf.Sqrt(3));
-                                //}
-                                //else
-                                //{
-                                Color oldColor = worldInMiniture.GetComponent<MeshRenderer>().material.color;
-                                oldColor.a = 1f;
-                                worldInMiniture.GetComponent<MeshRenderer>().material.color = oldColor;
-                                worldInMiniture.transform.localScale = currentScale / 3;
-                                //}
-                                worldInMiniture.transform.position = (leftB.position + rightB.position) / 2;
+                            foreach (GameObject go in dataSM)
+                            {
+                                go.transform.localEulerAngles -= Vector3.up * Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up);
+                            }
+                            SMRotationDiff -= Vector3.SignedAngle(rightB.position - leftB.position, oldV3FromLeftBtoRightB, Vector3.up);
+                            //worldInMiniture.transform.localEulerAngles = Vector3.zero;
+                            //worldInMiniture.transform.localScale = currentScale;
+                            //if ((Vector3.Distance(leftB.position, rightB.position) / Mathf.Sqrt(3)) <= currentScale.x)
+                            //{
+                            //    worldInMiniture.transform.localScale = Vector3.one * (Vector3.Distance(leftB.position, rightB.position) / Mathf.Sqrt(3));
+                            //}
+                            //else
+                            //{
+                            Color oldColor = worldInMiniture.GetComponent<MeshRenderer>().material.color;
+                            oldColor.a = 1f;
+                            worldInMiniture.GetComponent<MeshRenderer>().material.color = oldColor;
+                            worldInMiniture.transform.localScale = currentScale / 2;
+                            //}
+                            worldInMiniture.transform.position = (leftB.position + rightB.position) / 2;
                             //}
                             //else {
                             //    scaleUp = false;
@@ -4484,7 +4389,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             //    ShelfMovement(worldInMiniture.transform);
 
                             //}
-                            
+
                         }
                     }
                     
@@ -4607,9 +4512,19 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     }
 
+    private List<string> GameObjectToString(List<GameObject> gameObjects) {
+        List<string> gameobjectToString = new List<string>();
+        foreach (GameObject sensor in gameObjects)
+        {
+            gameobjectToString.Add(sensor.name);
+        }
+        return gameobjectToString;
+    }
+
     public void CubeHoveringBIM(List<GameObject> collidedSensors) {
         //Debug.Log("HAHA");
-        FindAndHighlightAllRelatedSensors(collidedSensors);
+        
+        FindAndHighlightAllRelatedSensors(GameObjectToString(collidedSensors));
     }
 
     private void CubeHovering(Transform barChart) {
@@ -5222,7 +5137,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             else {
                 Debug.Log("wrong logic for single hovering");
             }
-            FindAndHighlightAllRelatedSensors(highlightedHoveringSensors);
+            FindAndHighlightAllRelatedSensors(GameObjectToString(highlightedHoveringSensors));
         }
         else if (leftFindHighlighedAxisFromCollision || rightFindHighlighedAxisFromCollision)
         { // next priority to show axis highlighted sensors (hovering)
@@ -5249,7 +5164,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     highlightedHoveringSensors = CalculateBIMAxisBrushing(new Vector4(-1, rightFindHoveringV2FromCollisionBIM.x, -1, rightFindHoveringV2FromCollisionBIM.y));
                 }
             }
-            FindAndHighlightAllRelatedSensors(highlightedHoveringSensors);
+            FindAndHighlightAllRelatedSensors(GameObjectToString(highlightedHoveringSensors));
         }
         else { // nothing for hovering, check highlighted
             CalculateFinalHighlightedSensors();
@@ -5826,13 +5741,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             } 
         }
             
-        FindAndHighlightAllRelatedSensors(highlightedSensorsFromMovingFilters);
+        FindAndHighlightAllRelatedSensors(GameObjectToString(highlightedSensorsFromMovingFilters));
     }
 
     private void CalculateFinalHighlightedSensors() {
        
         finalHighlightedSensors = new List<GameObject>();
-
         if (leftHighlighed || rightHighlighed) { // single brushing
             if (leftHighlighed)
             {
@@ -5870,7 +5784,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         }
 
         if (finalHighlightedSensors.Count != 0) {
-            FindAndHighlightAllRelatedSensors(finalHighlightedSensors);
+            FindAndHighlightAllRelatedSensors(GameObjectToString(finalHighlightedSensors));
         }   
     }
 
@@ -6319,84 +6233,102 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         }
     }
 
-    private void FindAndHighlightAllRelatedSensors(List<GameObject> sensors) {
-       
-        if (sensors.Count == 0)
-        {
-            foreach (GameObject go in dataSM)
+    private void FindAndHighlightAllRelatedSensors(List<string> sensors) {
+        bool equalList = true;
+
+        if (sensors.Count != oldRelatedSensors.Count)
+            equalList = false;
+        else {
+            for (var i = 0; i < sensors.Count; i++)
             {
-
-                BuildingScript bs = go.transform.GetChild(0).GetComponent<BuildingScript>();
-                foreach (KeyValuePair<string, GameObject> de in bs.sensorsG)
+                if (sensors[i] != oldRelatedSensors[i])
                 {
-                    SetColorForSensor(de.Value, 0.1f);
-                }
-
-                foreach (KeyValuePair<string, GameObject> de in bs.sensorsF1)
-                {
-
-                    SetColorForSensor(de.Value, 0.1f);
+                    equalList = false;
                 }
             }
         }
-        else {
-            
-            List<GameObject> tmp = new List<GameObject>();
-            List<GameObject> tmpAll = new List<GameObject>();
-
-            foreach (GameObject go in dataSM)
+        if (!equalList) {
+            if (sensors.Count == 0)
             {
-
-                BuildingScript bs = go.transform.GetChild(0).GetComponent<BuildingScript>();
-                foreach (KeyValuePair<string, GameObject> de in bs.sensorsG)
+                foreach (GameObject go in dataSM)
                 {
-                    if (de.Key.Contains("ACG") && int.Parse(de.Key.Substring(4)) <= 4 && int.Parse(de.Key.Substring(4)) >= 1)
-                    {
-                        foreach (GameObject sensor in sensors)
-                        {
-                            if (sensor.name == de.Key)
-                            {
-                                tmp.Add(de.Value);
-                            }
-                        }
-                        tmpAll.Add(de.Value);
-                    }
-                    
-                }
 
-                foreach (KeyValuePair<string, GameObject> de in bs.sensorsF1)
-                {
-                    if (de.Key.Contains("AC1") && ((int.Parse(de.Key.Substring(4)) <= 9 && int.Parse(de.Key.Substring(4)) >= 3) || int.Parse(de.Key.Substring(4)) == 12))
+                    BuildingScript bs = go.transform.GetChild(0).GetComponent<BuildingScript>();
+                    foreach (KeyValuePair<string, GameObject> de in bs.sensorsG)
                     {
-                        foreach (GameObject sensor in sensors)
-                        {
-
-                            if (sensor.name.Trim().Equals(de.Key.Trim()))
-                            {
-                                tmp.Add(de.Value);
-                            }
-                        }
-                        tmpAll.Add(de.Value);
+                        SetColorForSensor(de.Value, 0.1f);
                     }
-                    
+
+                    foreach (KeyValuePair<string, GameObject> de in bs.sensorsF1)
+                    {
+
+                        SetColorForSensor(de.Value, 0.1f);
+                    }
                 }
             }
+            else
+            {
 
-            //foreach (GameObject go in tmp)
-            //{
-            //    SetColorForSensor(go, 1f);
-            //}
-            foreach (GameObject go in tmpAll) {
-                if (tmp.Contains(go))
+                List<GameObject> tmp = new List<GameObject>();
+                List<GameObject> tmpAll = new List<GameObject>();
+
+                foreach (GameObject go in dataSM)
                 {
-                    SetColorForSensor(go, 1f);
+
+                    BuildingScript bs = go.transform.GetChild(0).GetComponent<BuildingScript>();
+                    foreach (KeyValuePair<string, GameObject> de in bs.sensorsG)
+                    {
+                        if (de.Key.Contains("ACG") && int.Parse(de.Key.Substring(4)) <= 4 && int.Parse(de.Key.Substring(4)) >= 1)
+                        {
+                            foreach (string sensor in sensors)
+                            {
+                                if (sensor == de.Key)
+                                {
+                                    tmp.Add(de.Value);
+                                }
+                            }
+                            tmpAll.Add(de.Value);
+                        }
+
+                    }
+
+                    foreach (KeyValuePair<string, GameObject> de in bs.sensorsF1)
+                    {
+                        if (de.Key.Contains("AC1") && ((int.Parse(de.Key.Substring(4)) <= 9 && int.Parse(de.Key.Substring(4)) >= 3) || int.Parse(de.Key.Substring(4)) == 12))
+                        {
+                            foreach (string sensor in sensors)
+                            {
+
+                                if (sensor.Trim().Equals(de.Key.Trim()))
+                                {
+                                    tmp.Add(de.Value);
+                                }
+                            }
+                            tmpAll.Add(de.Value);
+                        }
+
+                    }
                 }
-                else {
-                    SetColorForSensor(go, 0.1f);
+
+                //foreach (GameObject go in tmp)
+                //{
+                //    SetColorForSensor(go, 1f);
+                //}
+                foreach (GameObject go in tmpAll)
+                {
+                    if (tmp.Contains(go))
+                    {
+                        SetColorForSensor(go, 1f);
+                    }
+                    else
+                    {
+                        SetColorForSensor(go, 0.1f);
+                    }
                 }
             }
         }
         
+        oldRelatedSensors = sensors;
     }
 
     private void ResetHighlightForBIM() {

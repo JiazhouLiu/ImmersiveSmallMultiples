@@ -122,10 +122,9 @@ public class CollisionDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
         if (smms.dataset == 1)
         {
-            if (!smms.colorFilterOn)
+            if (!smms.colorFilterOn && other.transform.parent.name.Equals("Sensor"))
             {
                 SensorCollisionEnter(other);
             }
@@ -201,7 +200,6 @@ public class CollisionDetection : MonoBehaviour
 
         if (other.name.Contains("Filter"))
         {
-
             if (draggedFilter == null)
             {
                 draggedFilter = other.gameObject;
@@ -264,20 +262,24 @@ public class CollisionDetection : MonoBehaviour
     {
         if (smms.dataset == 1)
         {
-            if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-            {
-                if (keepLeftHighlightGO != null) {
-                    smms.RegisterCollidedSensorFromLeft(null);
-                }
-                
-            }
-            else
-            {
-                if (keepRightHighlightGO != null)
+            if (other.transform.parent.name.Equals("Sensor")) {
+                if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
                 {
-                    smms.RegisterCollidedSensorFromRight(null);
+                    if (keepLeftHighlightGO != null)
+                    {
+                        smms.RegisterCollidedSensorFromLeft(null);
+                    }
+
+                }
+                else
+                {
+                    if (keepRightHighlightGO != null)
+                    {
+                        smms.RegisterCollidedSensorFromRight(null);
+                    }
                 }
             }
+            
             if ((transform.parent.parent.parent.parent.parent.name == "Controller (right)" && smms.trialState == TrialState.OnTask) || (smms.trialState == TrialState.PreTask && smms.interactionTrainingCount == 6))
             {
                 if (other.transform.parent.name.Contains("PanelItem"))
@@ -427,14 +429,31 @@ public class CollisionDetection : MonoBehaviour
                 rightGroundSensor = 0;
             }
         }
+
         if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
         {
             smms.RegisterCollidedSensorFromLeft(FindLeftHighlight());
+            //if (currentLeftHighlight != null) {
+            //    smms.RegisterCollidedSensorFromLeft(currentLeftHighlight);
+            //}
+            //else
+            //{
+            //    smms.RegisterCollidedSensorFromLeft(null);
+            //}
         }
-        else
+        
+
+        if (transform.parent.parent.parent.parent.parent.name == "Controller (right)")
         {
             smms.RegisterCollidedSensorFromRight(FindRightHighlight());
-        }
+            //if (currentRightHighlight != null) { 
+            //    smms.RegisterCollidedSensorFromRight(currentRightHighlight);
+            //}
+            //else
+            //{
+            //    smms.RegisterCollidedSensorFromRight(null);
+            //}  
+        }  
     }
 
 
@@ -442,28 +461,28 @@ public class CollisionDetection : MonoBehaviour
     {
         if (currentLeftHighlight != null)
         {
-            foreach (GameObject go in sm)
+            //foreach (GameObject go in sm)
+            //{
+            GameObject sensorObj = null;
+            //BuildingScript bs = sm[0].transform.GetChild(0).GetComponent<BuildingScript>();
+            //bs.ResetHighlightSensor();
+            if (leftGroundSensor == 1)
             {
-                GameObject sensorObj = null;
-                BuildingScript bs = go.transform.GetChild(0).GetComponent<BuildingScript>();
-                bs.ResetHighlightSensor();
-                if (leftGroundSensor == 1)
-                {
-                    sensorObj = go.transform.GetChild(0).Find("GroundFloor").Find("Sensor").Find(currentLeftHighlight.name).gameObject;
-                }
-                else if (leftGroundSensor == 2)
-                {
-                    sensorObj = go.transform.GetChild(0).Find("Floor1").Find("Sensor").Find(currentLeftHighlight.name).gameObject;
-                }
-
-                if (sensorObj != null)
-                {                    
-                    keepLeftHighlightGO = currentLeftHighlight;
-                }
-                else {
-                    keepLeftHighlightGO = null;
-                }
+                sensorObj = sm[0].transform.GetChild(0).Find("GroundFloor").Find("Sensor").Find(currentLeftHighlight.name).gameObject;
             }
+            else if (leftGroundSensor == 2)
+            {
+                sensorObj = sm[0].transform.GetChild(0).Find("Floor1").Find("Sensor").Find(currentLeftHighlight.name).gameObject;
+            }
+
+            if (sensorObj != null)
+            {                    
+                keepLeftHighlightGO = currentLeftHighlight;
+            }
+            else {
+                keepLeftHighlightGO = null;
+            }
+            //}
             return keepLeftHighlightGO;
         }
         else
@@ -476,18 +495,18 @@ public class CollisionDetection : MonoBehaviour
     {
         if (currentRightHighlight != null)
         {
-            foreach (GameObject go in sm)
-            {
+            //foreach (GameObject go in sm)
+            //{
                 GameObject sensorObj = null;
-                BuildingScript bs = go.transform.GetChild(0).GetComponent<BuildingScript>();
-                bs.ResetHighlightSensor();
+                //BuildingScript bs = sm[0].transform.GetChild(0).GetComponent<BuildingScript>();
+                //bs.ResetHighlightSensor();
                 if (rightGroundSensor == 1)
                 {
-                    sensorObj = go.transform.GetChild(0).Find("GroundFloor").Find("Sensor").Find(currentRightHighlight.name).gameObject;
+                    sensorObj = sm[0].transform.GetChild(0).Find("GroundFloor").Find("Sensor").Find(currentRightHighlight.name).gameObject;
                 }
                 else if (rightGroundSensor == 2)
                 {
-                    sensorObj = go.transform.GetChild(0).Find("Floor1").Find("Sensor").Find(currentRightHighlight.name).gameObject;
+                    sensorObj = sm[0].transform.GetChild(0).Find("Floor1").Find("Sensor").Find(currentRightHighlight.name).gameObject;
                 }
 
                 if (sensorObj != null)
@@ -498,8 +517,7 @@ public class CollisionDetection : MonoBehaviour
                 {
                     keepRightHighlightGO = null;
                 }
-            }
-            //Debug.Log(keepRightHighlightGO.name);
+            //}
             return keepRightHighlightGO;
         }
         else
