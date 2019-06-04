@@ -23,7 +23,7 @@ public class BarChartCreator : MonoBehaviour {
     SmallMultiplesManagerScript smms;
 
     // brushing
-    bool[] chessBoardBrushingBool = new bool[100];
+    bool[] chessBoardBrushingBool = new bool[25];
 
     // Use this for initialization
     void Awake()
@@ -86,26 +86,36 @@ public class BarChartCreator : MonoBehaviour {
 
         switch (id)
         {
+            //case 0:
+            //    return new Color(215f / fc, 48f / fc, 39f / fc); 
+            //case 1:
+            //    return new Color(244f / fc, 109f / fc, 67f / fc);
+            //case 2:
+            //    return new Color(253f / fc, 174f / fc, 97f / fc); 
+            //case 3:
+            //    return new Color(254f / fc, 224f / fc, 144f / fc);
+            //case 4:
+            //    return new Color(255f / fc, 255f / fc, 191f / fc);
+            //case 5:
+            //    return new Color(224f / fc, 243f / fc, 248f / fc); 
+            //case 6:
+            //    return new Color(171f / fc, 217f / fc, 233f / fc); 
+            //case 7:
+            //    return new Color(116f / fc, 173f / fc, 209f / fc); 
+            //case 8:
+            //    return new Color(69f / fc, 117f / fc, 180f / fc); 
+            //case 9:
+            //    return new Color(49f / fc, 54f / fc, 149f / fc);
             case 0:
-                return new Color(215f / fc, 48f / fc, 39f / fc); 
+                return new Color(228f / fc, 26f / fc, 28f / fc);
             case 1:
-                return new Color(244f / fc, 109f / fc, 67f / fc);
+                return new Color(55f / fc, 126f / fc, 184f / fc);
             case 2:
-                return new Color(253f / fc, 174f / fc, 97f / fc); 
+                return new Color(77f / fc, 175f / fc, 74f / fc);
             case 3:
-                return new Color(254f / fc, 224f / fc, 144f / fc);
+                return new Color(152f / fc, 78f / fc, 163f / fc);
             case 4:
-                return new Color(255f / fc, 255f / fc, 191f / fc);
-            case 5:
-                return new Color(224f / fc, 243f / fc, 248f / fc); 
-            case 6:
-                return new Color(171f / fc, 217f / fc, 233f / fc); 
-            case 7:
-                return new Color(116f / fc, 173f / fc, 209f / fc); 
-            case 8:
-                return new Color(69f / fc, 117f / fc, 180f / fc); 
-            case 9:
-                return new Color(49f / fc, 54f / fc, 149f / fc);
+                return new Color(255f / fc, 127f / fc, 0f / fc);
             default:
                 return Color.white;
         }
@@ -122,9 +132,9 @@ public class BarChartCreator : MonoBehaviour {
         gck[1] = new GradientColorKey(Color.red, 1);
         g.colorKeys = gck;
 
-        Color[] colourPalette = new Color[10];
+        Color[] colourPalette = new Color[5];
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             colourPalette[i] = ColorTransform(i);
         }
 
@@ -141,8 +151,8 @@ public class BarChartCreator : MonoBehaviour {
 
         //Enumerable.Repeat(1f, dataSource[0].Data.Length).ToArray()
         Material mt = IATKUtil.GetMaterialFromTopology(AbstractVisualisation.GeometryType.Bars);
-        mt.SetFloat("_MinSize", 1.7f); //0.01f
-        mt.SetFloat("_MaxSize", 1.7f); //0.05f
+        mt.SetFloat("_MinSize", 4.5f); //0.01f
+        mt.SetFloat("_MaxSize", 4.5f); //0.05f
 
 
         View v = vb.updateView().apply(go, mt);
@@ -175,22 +185,22 @@ public class BarChartCreator : MonoBehaviour {
         Vector3 posx = Vector3.zero;
         posx.x = -0f;
         posx.y = -0.05f;
-        posx.z = -0.15f;
+        posx.z = -0.2f;
         DimensionFilter xDimension = new DimensionFilter { Attribute = "Country" };
         GameObject X_AXIS = CreateAxis(AbstractVisualisation.PropertyType.X, xDimension, posx, new Vector3(0f, 0f, 0f), globalScale, 0, csvds, visualisation, go);
         axisList.Add(X_AXIS);
 
         Vector3 posy = Vector3.zero;
-        posy.x = -0.1f;
-        posy.z = -0.1f;
+        posy.x = -0.2f;
+        posy.z = -0.2f;
         DimensionFilter yDimension = new DimensionFilter { Attribute = "Value" };
         GameObject Y_AXIS = CreateAxis(AbstractVisualisation.PropertyType.Y, yDimension, posy, new Vector3(0f, 0f, 0f), globalScale, 1, csvds, visualisation, go);
-        Y_AXIS.transform.localScale = new Vector3(1, 1.056f, 1);
+        Y_AXIS.transform.localScale = new Vector3(1, 1.25f, 1);
         axisList.Add(Y_AXIS);
         Y_AXIS.transform.Find("AxisLabels").localEulerAngles = new Vector3(0, -30, 0);
 
         Vector3 posz = Vector3.zero;
-        posz.x = -0.15f;
+        posz.x = -0.2f;
         posz.y = -0.05f;
         posz.y = -0.05f;
         DimensionFilter zDimension = new DimensionFilter { Attribute = "Year" };
@@ -199,20 +209,20 @@ public class BarChartCreator : MonoBehaviour {
 
         // testing new axises
         posx.y = -0.05f;
-        posx.z = 1.15f;
+        posx.z = 1.2f;
         xDimension = new DimensionFilter { Attribute = "Country" };
         X_AXIS = CreateAxis(AbstractVisualisation.PropertyType.X, xDimension, posx, new Vector3(0f, 0f, 0f), globalScale, 3, csvds, visualisation, go);
         axisList.Add(X_AXIS);
 
-        posy.x = 1.1f;
-        posy.z = 1.1f;
+        posy.x = 1.2f;
+        posy.z = 1.2f;
         yDimension = new DimensionFilter { Attribute = "Value" };
         Y_AXIS = CreateAxis(AbstractVisualisation.PropertyType.Y, yDimension, posy, new Vector3(0f, 0f, 0f), globalScale, 4, csvds, visualisation, go);
-        Y_AXIS.transform.localScale = new Vector3(1, 1.056f, 1);
+        Y_AXIS.transform.localScale = new Vector3(1, 1.25f, 1);
         axisList.Add(Y_AXIS);
         Y_AXIS.transform.Find("AxisLabels").localEulerAngles = new Vector3(0, 150, 0);
 
-        posz.x = 1.15f;
+        posz.x = 1.2f;
         posz.y = -0.05f;
         zDimension = new DimensionFilter { Attribute = "Year" };
         Z_AXIS = CreateAxis(AbstractVisualisation.PropertyType.Z, zDimension, posz, new Vector3(0f, 90f, 90f), globalScale, 5, csvds, visualisation, go);
@@ -225,12 +235,15 @@ public class BarChartCreator : MonoBehaviour {
             axis.transform.Find("MaxNormaliser").gameObject.SetActive(false);
 
             axis.transform.Find("Cone").localScale = new Vector3(0.04f, 0.8f, 0.04f);
-            
+            if (axis.name != "axis Value")
+            {
+                axis.transform.Find("Cone").localPosition = new Vector3(0, 1.12f, 0);
+            }
 
             Transform axisLabels = axis.transform.Find("AxisLabels");
             foreach (Transform t in axisLabels) {
                 TextMeshPro tmp = t.GetComponent<TextMeshPro>();
-                tmp.fontSize = 0.5f;
+                tmp.fontSize = 0.8f;
                 tmp.maskType = MaskingTypes.MaskSoft;
             }
 
@@ -263,7 +276,9 @@ public class BarChartCreator : MonoBehaviour {
                 TextContainer tc = attributeLabel.GetComponent<TextContainer>();
                 tc.pivot = new Vector2(0.5f, 2);
 
-                
+                for (int i = 1; i < axis.transform.Find("AxisLabels").childCount; i++) {
+                    axis.transform.Find("AxisLabels").GetChild(i).localPosition = new Vector3(0, 0.25f * (i - 1), 0);
+                }
             }
 
             if (axis.name == "axis Year")
@@ -272,12 +287,12 @@ public class BarChartCreator : MonoBehaviour {
                 attributeLabel.localPosition = new Vector3(-0.1f, 0.5f, 0);
                 attributeLabel.localEulerAngles = new Vector3(180, -180, 90);
 
-                axis.transform.Find("AxisLabels").localPosition = new Vector3(0.26f, 0, 0);
+                axis.transform.Find("AxisLabels").localPosition = new Vector3(0.34f, 0, 0);
 
                 for (int i = 1; i < axis.transform.Find("AxisLabels").childCount; i++)
                 {
                     TextMeshPro tmp = axis.transform.Find("AxisLabels").GetChild(i).GetComponent<TextMeshPro>();
-                    tmp.text = tmp.text.Substring(0, 4);
+                    tmp.text = (1999 + i) + "";
                 }
 
                 if (axis.transform.GetSiblingIndex() == 6)
@@ -298,19 +313,19 @@ public class BarChartCreator : MonoBehaviour {
                     Transform attributeLabel = axis.transform.Find("AttributeLabel");
                     attributeLabel.localEulerAngles = new Vector3(0, 180, 90);
 
-                    axis.transform.Find("AxisLabels").localEulerAngles = new Vector3(0, 180, 0);
+                    axis.transform.Find("AxisLabels").localEulerAngles = new Vector3(0, 150, 0);
                 }
                 Transform valueAxisLabels = axis.transform.Find("AxisLabels");
 
-                if (valueAxisLabels.childCount != 5)
+                if (valueAxisLabels.childCount != 6)
                 {
                     Debug.LogError("wrong value label child count");
                 }
                 else {
-                    for (int i = 0; i < 4; i++) {
-                        valueAxisLabels.GetChild(i + 1).GetComponent<TextMeshPro>().text = (33.3 * i) + "%";
+                    for (int i = 0; i < 5; i++) {
+                        valueAxisLabels.GetChild(i + 1).GetComponent<TextMeshPro>().text = (25 * i) + "%";
                     }
-                    valueAxisLabels.GetChild(4).GetComponent<TextMeshPro>().text = "100%";
+                    valueAxisLabels.GetChild(5).GetComponent<TextMeshPro>().text = "100%";
                 }
             }
         }
@@ -343,16 +358,21 @@ public class BarChartCreator : MonoBehaviour {
         BindMinMaxAxisValues(axis, dimensionFilter, vis);
 
         AxisHolder.transform.Find("axis_mesh").GetChild(0).gameObject.AddComponent(typeof(CapsuleCollider));
-        if (AxisHolder.name != "axis Value") {
-            AxisHolder.transform.Find("Cone").localPosition += Vector3.up * 0.05f;
-            AxisHolder.transform.Find("axis_mesh").localPosition -= Vector3.up * 0.05f;
-            AxisHolder.transform.Find("axis_mesh").localScale += Vector3.up * 0.1f;
-        }
 
+        AxisHolder.transform.Find("axis_mesh").localPosition = new Vector3(0, -0.125f, 0);
+        AxisHolder.transform.Find("axis_mesh").localScale = new Vector3(0.05f, 1.25f, 0.05f);
 
         CapsuleCollider cc = AxisHolder.transform.Find("axis_mesh").GetChild(0).GetComponent<CapsuleCollider>();
         cc.radius = 3f;
         cc.height = 2f;
+
+
+        if (AxisHolder.name == "axis Value")
+        {
+            AxisHolder.transform.Find("Cone").localPosition = new Vector3(0, 1, 0);
+            AxisHolder.transform.Find("axis_mesh").localPosition = new Vector3(0, 0f, 0);
+            AxisHolder.transform.Find("axis_mesh").localScale = new Vector3(0.05f, 1f, 0.05f);
+        }
 
         return AxisHolder;
     }

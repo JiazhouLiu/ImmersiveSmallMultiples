@@ -94,8 +94,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     float baseVPosition = 0.8f;
     float delta = 0.8f; // 0.65f
     float vDelta = 0.7f;
-    float d1VerticalDiff = 0.5f;
-    float d2Scale = 0.3f;
+    float d2Scale = 0.2f;
     // end shelf variables
 
     // string variables
@@ -140,13 +139,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     // brushing for barchart
     Dictionary<string, Dictionary<Vector2, Vector3>> chessBoardPoints;
 
-    bool[] chessBoardBrushingBool = new bool[100]; // single brushing and axis brushing
-    bool[] hoveringChessBoardBrushingBool = new bool[100]; // hovering effect
-    bool[] filteredChessBoardBrushingBool = new bool[100]; // y-axis filtering
-    bool[] rangeSelectionChessBoardBrushingBool = new bool[100];
-    bool[] hoveringRangeSelectionChessBoardBrushingBool = new bool[100];
+    bool[] chessBoardBrushingBool; // single brushing and axis brushing
+    bool[] hoveringChessBoardBrushingBool; // hovering effect
+    bool[] filteredChessBoardBrushingBool; // y-axis filtering
+    bool[] rangeSelectionChessBoardBrushingBool;
+    bool[] hoveringRangeSelectionChessBoardBrushingBool;
 
-    bool[] finalChessBoardBrushingBool = new bool[100]; // final highlight
+    bool[] finalChessBoardBrushingBool; // final highlight
     string currentFindHightlighted = "";
 
     [HideInInspector]
@@ -170,7 +169,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     Vector2 leftFindHoveringV2FromChessBoard = new Vector2(0, 0);
     bool leftHighlighedForY = false;
     int currentCountryLeftFilterPosition = 0;
-    int currentCountryRightFilterPosition = 10;
+    int currentCountryRightFilterPosition;
 
     [HideInInspector]
     public bool rightFilterMoving = false;
@@ -194,7 +193,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     [HideInInspector]
     public bool triggerPressedForFilterMoving = false;
     int currentYearLeftFilterPosition = 0;
-    int currentYearRightFilterPosition = 10;
+    int currentYearRightFilterPosition;
 
     List<GameObject> rightYearFilters;
     List<GameObject> leftYearFilters;
@@ -323,9 +322,11 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     // optimising
     List<string> oldRelatedSensors;
 
+    int barNum = 25;
+
     // Use this for initialization
     void Start () {
-        QualitySettings.vSyncCount = 1;
+        QualitySettings.vSyncCount = 0;
         userHeight = ExperimentManager.userHeight;
 
         interactionTrainingCount = 8;
@@ -450,6 +451,17 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 highlightedSM = new Vector2[taskNo];
                 trainingTaskArray = new string[taskNo / 2];
                 highlightedTrainingSM = new Vector2[taskNo / 2];
+
+                chessBoardBrushingBool = new bool[barNum]; // single brushing and axis brushing
+                hoveringChessBoardBrushingBool = new bool[barNum]; // hovering effect
+                filteredChessBoardBrushingBool = new bool[barNum]; // y-axis filtering
+                rangeSelectionChessBoardBrushingBool = new bool[barNum];
+                hoveringRangeSelectionChessBoardBrushingBool = new bool[barNum];
+
+                finalChessBoardBrushingBool = new bool[barNum]; // final highlight
+
+                currentYearRightFilterPosition = (int) Mathf.Sqrt(barNum);
+                currentCountryRightFilterPosition = (int)Mathf.Sqrt(barNum);
 
                 rightYearFilters = new List<GameObject>();
                 leftYearFilters = new List<GameObject>();
@@ -2722,12 +2734,28 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 VRTK_ObjectTooltip tt = tooltip.GetComponent<VRTK_ObjectTooltip>();
                 tt.containerSize = new Vector2(300, 60);
                 tt.fontSize = 24;
-                tt.displayText = GetBarChartName(i + 1);
+                //tt.displayText = GetBarChartName(i + 1);
+                tt.displayText = "BarChart " + (i + 1);
                 tt.alwaysFaceHeadset = false;
 
 
                 dataObj.transform.SetParent(shelf.transform);
                 dataObj.transform.localPosition = AssignSMPositionBasedOnLayout(i);
+                dataObj.transform.localEulerAngles = new Vector3(0, dataObj.transform.localEulerAngles.y, 0);
+
+                if (circleLayout)
+                {
+                    GameObject center = new GameObject();
+                    center.transform.SetParent(shelf.transform);
+                    center.transform.localPosition = dataObj.transform.localPosition;
+                    center.transform.localPosition = new Vector3(0, center.transform.localPosition.y, 0);
+
+                    dataObj.transform.LookAt(center.transform.position);
+
+                    dataObj.transform.localEulerAngles += Vector3.up * 180;
+                    Destroy(center);
+                }
+
                 dataSM.Add(dataObj);
 
                 GameObject leftCountryFilter = (GameObject)Instantiate(FilterPrefab, new Vector3(0, 0, 0), Quaternion.identity);
@@ -2885,14 +2913,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         BigMesh bm = barChart.GetChild(0).GetChild(0).GetComponent<BigMesh>();
 
         Dictionary<Vector2, Vector3> points = new Dictionary<Vector2, Vector3>();
-
-        float sizeDelta = 0.111f;
-
-        for (int xDelta = 1; xDelta <= 10; xDelta++)
+        float sizeDelta = 0.25f;
+        for (int xDelta = 1; xDelta <= (int)Mathf.Sqrt(barNum); xDelta++)
         {
-            for (int zDelta = 1; zDelta <= 10; zDelta++)
+            for (int zDelta = 1; zDelta <= (int)Mathf.Sqrt(barNum); zDelta++)
             {
-                Vector3 vertice = barChart.GetChild(0).GetChild(0).TransformPoint(bm.getBigMeshVertices()[(xDelta - 1) * 10 + (zDelta - 1)] + Vector3.up * 0.056f);
+                Vector3 vertice = barChart.GetChild(0).GetChild(0).TransformPoint(bm.getBigMeshVertices()[(xDelta - 1) * 5 + (zDelta - 1)] + Vector3.up * 0.125f);
                 GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 Transform yAxisParent = barChart.GetChild(2);
                 sphere.transform.SetParent(yAxisParent);
@@ -3386,7 +3412,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         }
 
         // reset brushing Bool
-        chessBoardBrushingBool = new bool[100];
+        chessBoardBrushingBool = new bool[barNum];
         for (int i = 0; i < filteredChessBoardBrushingBool.Length; i++)
         {
             filteredChessBoardBrushingBool[i] = true;
@@ -3491,7 +3517,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             foreach (KeyValuePair<string, Dictionary<Vector2, Vector3>> entry in chessBoardPoints)
             {
                 Transform barChart = GameObject.Find(entry.Key).transform;
-                if(barChart.InverseTransformPoint(leftB.position).x >= -0.06f && barChart.InverseTransformPoint(leftB.position).x <= 1.056f && barChart.InverseTransformPoint(leftB.position).z >= -0.06f && barChart.InverseTransformPoint(leftB.position).z <= 1.056f && barChart.InverseTransformPoint(leftB.position).y >= 0 && barChart.InverseTransformPoint(leftB.position).y <= 1.056f)
+                if(barChart.InverseTransformPoint(leftB.position).x >= -0.1f && barChart.InverseTransformPoint(leftB.position).x <= 1.25f && barChart.InverseTransformPoint(leftB.position).z >= -0.1f && barChart.InverseTransformPoint(leftB.position).z <= 1.25f && barChart.InverseTransformPoint(leftB.position).y >= 0 && barChart.InverseTransformPoint(leftB.position).y <= 1.25f)
                 //if (CheckDiff(leftB.position.x, barChart.position.x, 0.4f, false) && CheckDiff(leftB.position.z, barChart.position.z, 0.4f, false))
                 {
                     foreach (KeyValuePair<Vector2, Vector3> secondEntry in entry.Value)
@@ -3500,7 +3526,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                         Vector3 tilesLocalToWorld = barChart.parent.TransformPoint(secondEntry.Value);
                         Vector3 tilesLocalToWorldY = yAxis.TransformPoint(secondEntry.Value);
                         //Debug.Log((CheckDiff(leftB.position.x, tilesLocalToWorld.x, 0.02f, true)) + " " +  (CheckDiff(leftB.position.z, tilesLocalToWorld.z, 0.02f, true)) + " " +  (leftB.position.y >= barChart.position.y) + " " + (leftB.position.y <= tilesLocalToWorld.y + 0.01f));
-                        if (CheckDiff(leftB.position.x, tilesLocalToWorld.x, 0.02f, true) && CheckDiff(leftB.position.z, tilesLocalToWorld.z, 0.02f, true) && leftB.position.y >= barChart.position.y && leftB.position.y <= tilesLocalToWorldY.y + 0.01f)
+                        if (CheckDiff(leftB.position.x, tilesLocalToWorld.x, 0.03f, true) && CheckDiff(leftB.position.z, tilesLocalToWorld.z, 0.03f, true) && leftB.position.y >= barChart.position.y && leftB.position.y <= tilesLocalToWorldY.y + 0.01f)
                         {
                             x = (int)secondEntry.Key.x;
                             z = (int)secondEntry.Key.y;
@@ -3561,7 +3587,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 Transform barChart = GameObject.Find(entry.Key).transform;
                 
 
-                if (barChart.InverseTransformPoint(rightB.position).x >= -0.06f && barChart.InverseTransformPoint(rightB.position).x <= 1.056f && barChart.InverseTransformPoint(rightB.position).z >= -0.06f && barChart.InverseTransformPoint(rightB.position).z <= 1.056f && barChart.InverseTransformPoint(rightB.position).y >= 0 && barChart.InverseTransformPoint(rightB.position).y <= 1.056f)
+                if (barChart.InverseTransformPoint(rightB.position).x >= -0.1f && barChart.InverseTransformPoint(rightB.position).x <= 1.25f && barChart.InverseTransformPoint(rightB.position).z >= -0.1f && barChart.InverseTransformPoint(rightB.position).z <= 1.25f && barChart.InverseTransformPoint(rightB.position).y >= 0 && barChart.InverseTransformPoint(rightB.position).y <= 1.25f)
                 //if (CheckDiff(rightB.position.x, barChart.position.x, 0.4f, false) && CheckDiff(rightB.position.z, barChart.position.z, 0.4f, false))
                 {
                     foreach (KeyValuePair<Vector2, Vector3> secondEntry in entry.Value)
@@ -3570,7 +3596,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                         Vector3 tilesLocalToWorld = barChart.parent.TransformPoint(secondEntry.Value);
                         Vector3 tilesLocalToWorldY = yAxis.TransformPoint(secondEntry.Value);
                         //Debug.Log((CheckDiff(rightB.position.x, tilesLocalToWorld.x, 0.02f, true)) + " " + (CheckDiff(rightB.position.z, tilesLocalToWorld.z, 0.02f, true)) + " " + (rightB.position.y >= barChart.position.y) + " " + (rightB.position.y <= tilesLocalToWorld.y + 0.01f));
-                        if (CheckDiff(rightB.position.x, tilesLocalToWorld.x, 0.02f, true) && CheckDiff(rightB.position.z, tilesLocalToWorld.z, 0.02f, true) && rightB.position.y >= barChart.position.y && rightB.position.y <= tilesLocalToWorldY.y + 0.01f)
+                        if (CheckDiff(rightB.position.x, tilesLocalToWorld.x, 0.03f, true) && CheckDiff(rightB.position.z, tilesLocalToWorld.z, 0.03f, true) && rightB.position.y >= barChart.position.y && rightB.position.y <= tilesLocalToWorldY.y + 0.01f)
                         {
                             x = (int)secondEntry.Key.x;
                             z = (int)secondEntry.Key.y;
@@ -3691,7 +3717,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 foreach (GameObject filter in leftCountryFilters)
                 {
-                    filter.transform.localPosition = new Vector3(-3, position / 10f, 0);
+                    filter.transform.localPosition = new Vector3(-3, position / Mathf.Sqrt(barNum), 0);
                 }
                 currentCountryLeftFilterPosition = (int)position;
                 leftFindHighlighedV2FromCollision = new Vector2(currentCountryLeftFilterPosition + 1, leftFindHighlighedV2FromCollision.y);
@@ -3700,7 +3726,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 foreach (GameObject filter in rightCountryFilters)
                 {
-                    filter.transform.localPosition = new Vector3(-3, position / 10f, 0);
+                    filter.transform.localPosition = new Vector3(-3, position / Mathf.Sqrt(barNum), 0);
                 }
                 currentCountryRightFilterPosition = (int)position;
                 rightFindHighlighedV2FromCollision = new Vector2(currentCountryRightFilterPosition, rightFindHighlighedV2FromCollision.y);
@@ -3712,7 +3738,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 foreach (GameObject filter in leftYearFilters)
                 {
-                    filter.transform.localPosition = new Vector3(-3, position / 10f, 0);
+                    filter.transform.localPosition = new Vector3(-3, position / Mathf.Sqrt(barNum), 0);
                 }
                 currentYearLeftFilterPosition = (int)position;
                 leftFindHighlighedV2FromCollision = new Vector2(leftFindHighlighedV2FromCollision.x, currentYearLeftFilterPosition + 1);
@@ -3721,7 +3747,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 foreach (GameObject filter in rightYearFilters)
                 {
-                    filter.transform.localPosition = new Vector3(-3, position / 10f, 0);
+                    filter.transform.localPosition = new Vector3(-3, position / Mathf.Sqrt(barNum), 0);
                 }
                 currentYearRightFilterPosition = (int)position;
                 rightFindHighlighedV2FromCollision = new Vector2(rightFindHighlighedV2FromCollision.x, currentYearRightFilterPosition);
@@ -3758,13 +3784,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             //Debug.Log(minFilter.localPosition.y + " " + maxFilter.localPosition.y);
             if (minFilter.localPosition.y != 0)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < (int)Mathf.Sqrt(barNum); i++)
                 {
-                    for (int j = 0; j < 10; j++)
+                    for (int j = 0; j < (int)Mathf.Sqrt(barNum); j++)
                     {
                         if (chessBoardPoints[sm.transform.GetChild(0).name][new Vector2(i + 1, j + 1)].y < minFilter.localPosition.y)
                         {
-                            filteredChessBoardBrushingBool[i * 10 + j] = false;
+                            filteredChessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j] = false;
                         }
                     }
                 }
@@ -3772,13 +3798,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
             if (maxFilter.localPosition.y != 1)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < (int)Mathf.Sqrt(barNum); i++)
                 {
-                    for (int j = 0; j < 10; j++)
+                    for (int j = 0; j < (int)Mathf.Sqrt(barNum); j++)
                     {
                         if (chessBoardPoints[sm.transform.GetChild(0).name][new Vector2(i + 1, j + 1)].y > maxFilter.localPosition.y)
                         {
-                            filteredChessBoardBrushingBool[i * 10 + j] = false;
+                            filteredChessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j] = false;
                         }
                     }
                 }
@@ -3794,7 +3820,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     private void CalculateChessBoardBool(Vector4 input, string mode) {
 
         BarChartCreator bcc = GameObject.Find("BarChartManagement").GetComponent<BarChartCreator>();
-        chessBoardBrushingBool = new bool[100];
+        chessBoardBrushingBool = new bool[barNum];
 
         int leftCountryBrushControl = (int)input.x;
         int rightCountryBrushControl = (int)input.y;
@@ -3805,17 +3831,17 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         {
             if (leftYearBrushControl != 0 && leftCountryBrushControl != 0)
             {
-                for (int i = 1; i <= 10; i++)
+                for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                 {
-                    for (int j = 1; j <= 10; j++)
+                    for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                     {
                         if (i == leftCountryBrushControl && j == leftYearBrushControl)
                         {
-                            chessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                            chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                         else
                         {
-                            chessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = false;
+                            chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = false;
                         }
                     }
                 }
@@ -3823,17 +3849,17 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
             if (rightYearBrushControl != 0 && rightCountryBrushControl != 0)
             {
-                for (int i = 1; i <= 10; i++)
+                for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                 {
-                    for (int j = 1; j <= 10; j++)
+                    for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                     {
                         if (i == rightCountryBrushControl && j == rightYearBrushControl)
                         {
-                            chessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                            chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                         else
                         {
-                            chessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = false;
+                            chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = false;
                         }
                     }
                 }
@@ -3855,7 +3881,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     chessBoardBrushingBool[i] = true;
                 }
                 triggerPressedForFilterMoving = true;
-                SetFilterPosition(0, 10, 0, 10);
+                SetFilterPosition(0, (int)Mathf.Sqrt(barNum), 0, (int)Mathf.Sqrt(barNum));
                 triggerPressedForFilterMoving = false;
             }
             else
@@ -3876,12 +3902,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         {
             if (leftYearBrushControl == 0 && leftCountryBrushControl != 0 && rightYearBrushControl != 0 && rightCountryBrushControl == 0)  // check intersection
             {
-                chessBoardBrushingBool[10 * (leftCountryBrushControl - 1) + (rightYearBrushControl - 1)] = true;
+                chessBoardBrushingBool[(int)Mathf.Sqrt(barNum) * (leftCountryBrushControl - 1) + (rightYearBrushControl - 1)] = true;
                 SetFilterPosition(leftCountryBrushControl - 1, leftCountryBrushControl, rightYearBrushControl - 1, rightYearBrushControl);
             }
             else if (leftYearBrushControl != 0 && leftCountryBrushControl == 0 && rightYearBrushControl == 0 && rightCountryBrushControl != 0)  // check intersection
             {
-                chessBoardBrushingBool[10 * (rightCountryBrushControl - 1) + (leftYearBrushControl - 1)] = true;
+                chessBoardBrushingBool[(int)Mathf.Sqrt(barNum) * (rightCountryBrushControl - 1) + (leftYearBrushControl - 1)] = true;
                 SetFilterPosition(rightCountryBrushControl - 1, rightCountryBrushControl, leftYearBrushControl - 1, leftYearBrushControl);
             }
             else if (leftYearBrushControl == 0 && leftCountryBrushControl != 0 && rightYearBrushControl == 0 && rightCountryBrushControl != 0) // check parallel
@@ -3890,30 +3916,30 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 {
                     for (int i = Math.Min(leftCountryBrushControl, rightCountryBrushControl); i <= Math.Max(leftCountryBrushControl, rightCountryBrushControl); i++)
                     {
-                        for (int j = 0; j < 10; j++)
+                        for (int j = 0; j < (int)Mathf.Sqrt(barNum); j++)
                         {
-                                chessBoardBrushingBool[(i - 1) * 10 + j] = true;
+                                chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + j] = true;
                         }
                     }
                 }
                 else
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (j == leftCountryBrushControl)
-                                    chessBoardBrushingBool[(j - 1) * 10 + (i - 1)] = true;
+                                    chessBoardBrushingBool[(j - 1) * (int)Mathf.Sqrt(barNum) + (i - 1)] = true;
                         }
                     }
                 }
                 if (leftCountryBrushControl < rightCountryBrushControl)
                 {
-                    SetFilterPosition(leftCountryBrushControl - 1, rightCountryBrushControl, 0, 10);
+                    SetFilterPosition(leftCountryBrushControl - 1, rightCountryBrushControl, 0, (int)Mathf.Sqrt(barNum));
                 }
                 else
                 {
-                    SetFilterPosition(leftCountryBrushControl, rightCountryBrushControl - 1, 0, 10);
+                    SetFilterPosition(leftCountryBrushControl, rightCountryBrushControl - 1, 0, (int)Mathf.Sqrt(barNum));
                 }
 
             }
@@ -3923,47 +3949,47 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 {
                     for (int i = Math.Min(leftYearBrushControl, rightYearBrushControl); i <= Math.Max(leftYearBrushControl, rightYearBrushControl); i++)
                     {
-                        for (int j = 0; j < 10; j++)
+                        for (int j = 0; j < (int)Mathf.Sqrt(barNum); j++)
                         {
-                                chessBoardBrushingBool[j * 10 + (i - 1)] = true;
+                                chessBoardBrushingBool[j * (int)Mathf.Sqrt(barNum) + (i - 1)] = true;
                         }
                     }
                 }
                 else
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (i == leftYearBrushControl)
-                                    chessBoardBrushingBool[(j - 1) * 10 + (i - 1)] = true;
+                                    chessBoardBrushingBool[(j - 1) * (int)Mathf.Sqrt(barNum) + (i - 1)] = true;
                         }
                     }
                 }
                 if (leftYearBrushControl < rightYearBrushControl)
                 {
-                    SetFilterPosition(0, 10, leftYearBrushControl - 1, rightYearBrushControl);
+                    SetFilterPosition(0, (int)Mathf.Sqrt(barNum), leftYearBrushControl - 1, rightYearBrushControl);
                 }
                 else
                 {
-                    SetFilterPosition(0, 10, leftYearBrushControl, rightYearBrushControl - 1);
+                    SetFilterPosition(0, (int)Mathf.Sqrt(barNum), leftYearBrushControl, rightYearBrushControl - 1);
                 }
             }
             else
             {
                 if (rightCountryBrushControl == 0 && leftCountryBrushControl != 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (i == leftCountryBrushControl)
-                                    chessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                                    chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                     }
                     if (leftYearBrushControl == 0 && rightYearBrushControl == 0)
                     {
-                        SetFilterPosition(leftCountryBrushControl - 1, leftCountryBrushControl, 0, 10);
+                        SetFilterPosition(leftCountryBrushControl - 1, leftCountryBrushControl, 0, (int)Mathf.Sqrt(barNum));
                     }
                     else
                     {
@@ -3972,17 +3998,17 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 }
                 else if (leftCountryBrushControl == 0 && rightCountryBrushControl != 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (i == rightCountryBrushControl)
-                                    chessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                                    chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                     }
                     if (leftYearBrushControl == 0 && rightYearBrushControl == 0)
                     {
-                        SetFilterPosition(rightCountryBrushControl - 1, rightCountryBrushControl, 0, 10);
+                        SetFilterPosition(rightCountryBrushControl - 1, rightCountryBrushControl, 0, (int)Mathf.Sqrt(barNum));
                     }
                     else
                     {
@@ -3992,17 +4018,17 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
                 if (rightYearBrushControl == 0 && leftYearBrushControl != 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (j == leftYearBrushControl)
-                                    chessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                                    chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                     }
                     if (leftCountryBrushControl == 0 && rightCountryBrushControl == 0)
                     {
-                        SetFilterPosition(0, 10, leftYearBrushControl - 1, leftYearBrushControl);
+                        SetFilterPosition(0, (int)Mathf.Sqrt(barNum), leftYearBrushControl - 1, leftYearBrushControl);
                     }
                     else
                     {
@@ -4011,17 +4037,17 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 }
                 else if (rightYearBrushControl != 0 && leftYearBrushControl == 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (j == rightYearBrushControl)
-                                    chessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                                    chessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                     }
                     if (leftCountryBrushControl == 0 && rightCountryBrushControl == 0)
                     {
-                        SetFilterPosition(0, 10, rightYearBrushControl - 1, rightYearBrushControl);
+                        SetFilterPosition(0, (int)Mathf.Sqrt(barNum), rightYearBrushControl - 1, rightYearBrushControl);
                     }
                     else
                     {
@@ -4037,13 +4063,13 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 for (int j = leftYearBrushControl; j < rightYearBrushControl; j++)
                 {
-                    if (!chessBoardBrushingBool[i * 10 + j])
+                    if (!chessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j])
                     {
-                        chessBoardBrushingBool[i * 10 + j] = true;
+                        chessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j] = true;
                     }
                     else
                     {
-                        chessBoardBrushingBool[i * 10 + j] = false;
+                        chessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j] = false;
                     }
                 }
             }
@@ -4056,9 +4082,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     // combine all logic together
     private bool[] CalculateFullLogicOfBrushingAndFiltering() {
 
-        bool[] finalBool = new bool[100];
+        bool[] finalBool = new bool[barNum];
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < barNum; i++) {
             if (chessBoardBrushingBool[i] && filteredChessBoardBrushingBool[i] && rangeSelectionChessBoardBrushingBool[i])
             {
                 finalBool[i] = true;
@@ -4075,7 +4101,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     private void ResetChessBoardBrushingBool() {
         leftHighlighed = false;
         rightHighlighed = false;
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < barNum; i++)
         {
             chessBoardBrushingBool[i] = true;
         }
@@ -4529,15 +4555,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     private void CubeHovering(Transform barChart) {
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < barNum; i++) {
             hoveringRangeSelectionChessBoardBrushingBool[i] = true;
         }
 
         List<Vector2> pointsInBox = new List<Vector2>();
 
-        int minCountry = 10;
+        int minCountry = (int)Mathf.Sqrt(barNum);
         int maxCountry = 1;
-        int minYear = 10;
+        int minYear = (int)Mathf.Sqrt(barNum);
         int maxYear = 1;
         float minValue = 1;
         float maxValue = 0;
@@ -4564,9 +4590,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             }
         }
         //Debug.Log(minCountry + " " + maxCountry + " " + minYear + " " + maxYear);
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < (int)Mathf.Sqrt(barNum); i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < (int)Mathf.Sqrt(barNum); j++)
             {
                 if (pointsInBox.Contains(new Vector2(i + 1, j + 1)))
                 {
@@ -4574,7 +4600,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 }
                 else
                 {
-                    hoveringRangeSelectionChessBoardBrushingBool[i * 10 + j] = false;
+                    hoveringRangeSelectionChessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j] = false;
                 }
             }
         }
@@ -4586,14 +4612,14 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     private void CubeSelection()
     {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < barNum; i++) {
             rangeSelectionChessBoardBrushingBool[i] = true;
         }
 
         int finalMinCountry = 1;
-        int finalMaxCountry = 10;
+        int finalMaxCountry = (int)Mathf.Sqrt(barNum);
         int finalMinYear = 1;
-        int finalMaxYear = 10;
+        int finalMaxYear = (int)Mathf.Sqrt(barNum);
         //bool noCube = true;
         foreach (GameObject sm in dataSM) {
             Transform barChart = sm.transform.GetChild(0);
@@ -4603,9 +4629,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 //noCube = false;
                 List<Vector2> pointsInBox = new List<Vector2>();
 
-                int minCountry = 10;
+                int minCountry = (int)Mathf.Sqrt(barNum);
                 int maxCountry = 1;
-                int minYear = 10;
+                int minYear = (int)Mathf.Sqrt(barNum);
                 int maxYear = 1;
                 float minValue = 1;
                 float maxValue = 0;
@@ -4632,18 +4658,18 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     }
                 }
                 //Debug.Log(minCountry + " " + maxCountry + " " + minYear + " " + maxYear);
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < (int)Mathf.Sqrt(barNum); i++)
                 {
-                    for (int j = 0; j < 10; j++)
+                    for (int j = 0; j < (int)Mathf.Sqrt(barNum); j++)
                     {
-                        if (rangeSelectionChessBoardBrushingBool[i * 10 + j]) {
+                        if (rangeSelectionChessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j]) {
                             if (pointsInBox.Contains(new Vector2(i + 1, j + 1)))
                             {
-                                rangeSelectionChessBoardBrushingBool[i * 10 + j] = true;
+                                rangeSelectionChessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j] = true;
                             }
                             else
                             {
-                                rangeSelectionChessBoardBrushingBool[i * 10 + j] = false;
+                                rangeSelectionChessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + j] = false;
                             }
                         }
                         
@@ -4684,11 +4710,11 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     }
 
     private bool PointInBox(Vector3 point, Transform pointParent, Transform box) {
-        float xMin = 10;
+        float xMin = (int)Mathf.Sqrt(barNum);
         float xMax = 0;
-        float yMin = 10;
+        float yMin = (int)Mathf.Sqrt(barNum);
         float yMax = 0;
-        float zMin = 10;
+        float zMin = (int)Mathf.Sqrt(barNum);
         float zMax = 0;
 
         foreach (Vector3 v in box.transform.GetChild(0).GetComponent<MeshFilter>().mesh.vertices) {
@@ -4748,7 +4774,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     {
         BarChartCreator bcc = GameObject.Find("BarChartManagement").GetComponent<BarChartCreator>();
 
-        hoveringChessBoardBrushingBool = new bool[100];
+        hoveringChessBoardBrushingBool = new bool[barNum];
 
         int leftCountryBrushControl = (int)input.x;
         int rightCountryBrushControl = (int)input.y;
@@ -4759,39 +4785,39 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         {
             if (leftYearBrushControl != 0 && leftCountryBrushControl != 0)
             {
-                hoveringChessBoardBrushingBool[10 * (leftCountryBrushControl - 1) + (leftYearBrushControl - 1)] = true;
+                hoveringChessBoardBrushingBool[(int)Mathf.Sqrt(barNum) * (leftCountryBrushControl - 1) + (leftYearBrushControl - 1)] = true;
             }
             else if (leftYearBrushControl != 0 && leftCountryBrushControl == 0)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < (int)Mathf.Sqrt(barNum); i++)
                 {
-                    hoveringChessBoardBrushingBool[i * 10 + (leftYearBrushControl - 1)] = true;
+                    hoveringChessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + (leftYearBrushControl - 1)] = true;
                 }
             }
             else if (leftYearBrushControl == 0 && leftCountryBrushControl != 0)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < (int)Mathf.Sqrt(barNum); i++)
                 {
-                    hoveringChessBoardBrushingBool[(leftCountryBrushControl - 1) * 10 + i] = true;
+                    hoveringChessBoardBrushingBool[(leftCountryBrushControl - 1) * (int)Mathf.Sqrt(barNum) + i] = true;
                 }
             }
 
             if (rightYearBrushControl != 0 && rightCountryBrushControl != 0)
             {
-                hoveringChessBoardBrushingBool[10 * (rightCountryBrushControl - 1) + (rightYearBrushControl - 1)] = true;
+                hoveringChessBoardBrushingBool[(int)Mathf.Sqrt(barNum) * (rightCountryBrushControl - 1) + (rightYearBrushControl - 1)] = true;
             }
             else if (rightYearBrushControl != 0 && rightCountryBrushControl == 0)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < (int)Mathf.Sqrt(barNum); i++)
                 {
-                    hoveringChessBoardBrushingBool[i * 10 + (rightYearBrushControl - 1)] = true;
+                    hoveringChessBoardBrushingBool[i * (int)Mathf.Sqrt(barNum) + (rightYearBrushControl - 1)] = true;
                 }
             }
             else if (rightYearBrushControl == 0 && rightCountryBrushControl != 0)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < (int)Mathf.Sqrt(barNum); i++)
                 {
-                    hoveringChessBoardBrushingBool[(rightCountryBrushControl - 1) * 10 + i] = true;
+                    hoveringChessBoardBrushingBool[(rightCountryBrushControl - 1) * (int)Mathf.Sqrt(barNum) + i] = true;
                 }
             }
 
@@ -4817,11 +4843,11 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             // check intersection
             if (leftYearBrushControl == 0 && leftCountryBrushControl != 0 && rightYearBrushControl != 0 && rightCountryBrushControl == 0)
             {
-                hoveringChessBoardBrushingBool[10 * (leftCountryBrushControl - 1) + (rightYearBrushControl - 1)] = true;
+                hoveringChessBoardBrushingBool[(int)Mathf.Sqrt(barNum) * (leftCountryBrushControl - 1) + (rightYearBrushControl - 1)] = true;
             }
             else if (leftYearBrushControl != 0 && leftCountryBrushControl == 0 && rightYearBrushControl == 0 && rightCountryBrushControl != 0)
             {
-                hoveringChessBoardBrushingBool[10 * (rightCountryBrushControl - 1) + (leftYearBrushControl - 1)] = true;
+                hoveringChessBoardBrushingBool[(int)Mathf.Sqrt(barNum) * (rightCountryBrushControl - 1) + (leftYearBrushControl - 1)] = true;
             }
             else if (leftYearBrushControl == 0 && leftCountryBrushControl != 0 && rightYearBrushControl == 0 && rightCountryBrushControl != 0) // check parallel
             {
@@ -4829,20 +4855,20 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 {
                     for (int i = Math.Min(leftCountryBrushControl, rightCountryBrushControl); i <= Math.Max(leftCountryBrushControl, rightCountryBrushControl); i++)
                     {
-                        for (int j = 0; j < 10; j++)
+                        for (int j = 0; j < (int)Mathf.Sqrt(barNum); j++)
                         {
-                            hoveringChessBoardBrushingBool[(i - 1) * 10 + j] = true;
+                            hoveringChessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + j] = true;
                         }
                     }
                 }
                 else
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (j == leftCountryBrushControl)
-                                hoveringChessBoardBrushingBool[(j - 1) * 10 + (i - 1)] = true;
+                                hoveringChessBoardBrushingBool[(j - 1) * (int)Mathf.Sqrt(barNum) + (i - 1)] = true;
                         }
                     }
                 }
@@ -4853,20 +4879,20 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 {
                     for (int i = Math.Min(leftYearBrushControl, rightYearBrushControl); i <= Math.Max(leftYearBrushControl, rightYearBrushControl); i++)
                     {
-                        for (int j = 0; j < 10; j++)
+                        for (int j = 0; j < (int)Mathf.Sqrt(barNum); j++)
                         {
-                            hoveringChessBoardBrushingBool[j * 10 + (i - 1)] = true;
+                            hoveringChessBoardBrushingBool[j * (int)Mathf.Sqrt(barNum) + (i - 1)] = true;
                         }
                     }
                 }
                 else
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (i == leftYearBrushControl)
-                                hoveringChessBoardBrushingBool[(j - 1) * 10 + (i - 1)] = true;
+                                hoveringChessBoardBrushingBool[(j - 1) * (int)Mathf.Sqrt(barNum) + (i - 1)] = true;
                         }
                     }
                 }
@@ -4875,46 +4901,46 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 if (rightCountryBrushControl == 0 && leftCountryBrushControl != 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (i == leftCountryBrushControl)
-                                hoveringChessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                                hoveringChessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                     }
                 }
                 else if (leftCountryBrushControl == 0 && rightCountryBrushControl != 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (i == rightCountryBrushControl)
-                                hoveringChessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                                hoveringChessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                     }
                 }
 
                 if (rightYearBrushControl == 0 && leftYearBrushControl != 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (j == leftYearBrushControl)
-                                hoveringChessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                                hoveringChessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                     }
                 }
                 else if (rightYearBrushControl != 0 && leftYearBrushControl == 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= (int)Mathf.Sqrt(barNum); i++)
                     {
-                        for (int j = 1; j <= 10; j++)
+                        for (int j = 1; j <= (int)Mathf.Sqrt(barNum); j++)
                         {
                             if (j == rightYearBrushControl)
-                                hoveringChessBoardBrushingBool[(i - 1) * 10 + (j - 1)] = true;
+                                hoveringChessBoardBrushingBool[(i - 1) * (int)Mathf.Sqrt(barNum) + (j - 1)] = true;
                         }
                     }
                 }
@@ -4931,7 +4957,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 foreach (GameObject filter in leftCountryFilters)
                 {
-                    filter.transform.localPosition = new Vector3(-3, leftCountry / 10f, 0);
+                    filter.transform.localPosition = new Vector3(-3, leftCountry / Mathf.Sqrt(barNum), 0);
                 }
                 currentCountryLeftFilterPosition = leftCountry;
             }
@@ -4940,7 +4966,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 foreach (GameObject filter in leftYearFilters)
                 {
-                    filter.transform.localPosition = new Vector3(-3, leftYear / 10f, 0);
+                    filter.transform.localPosition = new Vector3(-3, leftYear / Mathf.Sqrt(barNum), 0);
                 }
                 currentYearLeftFilterPosition = leftYear;
             }
@@ -4949,7 +4975,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 foreach (GameObject filter in rightCountryFilters)
                 {
-                    filter.transform.localPosition = new Vector3(-3, rightCountry / 10f, 0);
+                    filter.transform.localPosition = new Vector3(-3, rightCountry / Mathf.Sqrt(barNum), 0);
                 }
                 currentCountryRightFilterPosition = rightCountry;
             }
@@ -4958,7 +4984,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 foreach (GameObject filter in rightYearFilters)
                 {
-                    filter.transform.localPosition = new Vector3(-3, rightYear / 10f, 0);
+                    filter.transform.localPosition = new Vector3(-3, rightYear / Mathf.Sqrt(barNum), 0);
                 }
                 currentYearRightFilterPosition = rightYear;
             }

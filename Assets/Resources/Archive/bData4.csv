@@ -1,101 +1,101 @@
 Country,Year,Value
-Qatar,1968,75.38
-Qatar,1972,81.82
-Qatar,1976,58.73
-Qatar,1980,56.79
-Qatar,1984,39.18
-Qatar,1988,27.76
-Qatar,1992,50.62
-Qatar,1996,49.68
-Qatar,2000,46.65
-Qatar,2004,44.02
-Luxembourg,1968,36.53
-Luxembourg,1972,38.94
-Luxembourg,1976,32.82
-Luxembourg,1980,29.02
-Luxembourg,1984,23.32
-Luxembourg,1988,23.04
-Luxembourg,1992,30.12
-Luxembourg,1996,20.3
-Luxembourg,2000,18.77
-Luxembourg,2004,23.92
-Kuwait,1968,35.52
-Kuwait,1972,32.82
-Kuwait,1976,17.24
-Kuwait,1980,18.01
-Kuwait,1984,17.32
-Kuwait,1988,16.68
-Kuwait,1992,14.07
-Kuwait,1996,29.51
-Kuwait,2000,36.03
-Kuwait,2004,36.03
-Brunei,1968,3.7
-Brunei,1972,66.86
-Brunei,1976,37.27
-Brunei,1980,37.16
-Brunei,1984,9
-Brunei,1988,23.52
-Brunei,1992,21.22
-Brunei,1996,18.31
-Brunei,2000,19.4
-Brunei,2004,16.63
-Bahrain,1968,5.31
-Bahrain,1972,15.95
-Bahrain,1976,24.02
-Bahrain,1980,22.69
-Bahrain,1984,22.55
-Bahrain,1988,25.91
-Bahrain,1992,20
-Bahrain,1996,26.65
-Bahrain,2000,31.15
-Bahrain,2004,26.63
-Bahamas,1968,10.36
-Bahamas,1972,36.39
-Bahamas,1976,33.45
-Bahamas,1980,38.06
-Bahamas,1984,8.07
-Bahamas,1988,6.21
-Bahamas,1992,6.79
-Bahamas,1996,6.21
-Bahamas,2000,6.19
-Bahamas,2004,6.7
-New Caledonia,1968,18.5
-New Caledonia,1972,13.59
-New Caledonia,1976,17.77
-New Caledonia,1980,14.36
-New Caledonia,1984,8.06
-New Caledonia,1988,9.56
-New Caledonia,1992,10.08
-New Caledonia,1996,9.33
-New Caledonia,2000,11.39
-New Caledonia,2004,11.94
-Singapore,1968,2.69
-Singapore,1972,10.33
-Singapore,1976,13.1
-Singapore,1980,13.02
-Singapore,1984,12.18
-Singapore,1988,12.58
-Singapore,1992,15.53
-Singapore,1996,15.06
-Singapore,2000,12.97
-Singapore,2004,11.7
-Faeroe Islands,1968,4.82
-Faeroe Islands,1972,6.03
-Faeroe Islands,1976,7.97
-Faeroe Islands,1980,9.7
-Faeroe Islands,1984,11.07
-Faeroe Islands,1988,11.21
-Faeroe Islands,1992,13.81
-Faeroe Islands,1996,14.98
-Faeroe Islands,2000,14.49
-Faeroe Islands,2004,14.46
-Gibraltar,1968,2.53
-Gibraltar,1972,2.54
-Gibraltar,1976,2.59
-Gibraltar,1980,3.01
-Gibraltar,1984,1.17
-Gibraltar,1988,2.44
-Gibraltar,1992,3.25
-Gibraltar,1996,7.13
-Gibraltar,2000,12.1
-Gibraltar,2004,13.44
+Austria,1989,75.38
+Austria,1990,81.82
+Austria,1991,58.73
+Austria,1992,56.79
+Austria,1993,39.18
+Austria,1994,27.76
+Austria,1995,50.62
+Austria,1996,49.68
+Austria,1997,46.65
+Austria,1998,44.02
+France,1989,36.53
+France,1990,38.94
+France,1991,32.82
+France,1992,29.02
+France,1993,23.32
+France,1994,23.04
+France,1995,30.12
+France,1996,20.3
+France,1997,18.77
+France,1998,23.92
+Australia,1989,35.52
+Australia,1990,32.82
+Australia,1991,17.24
+Australia,1992,18.01
+Australia,1993,17.32
+Australia,1994,16.68
+Australia,1995,14.07
+Australia,1996,29.51
+Australia,1997,36.03
+Australia,1998,36.03
+Belgium,1989,3.7
+Belgium,1990,66.86
+Belgium,1991,37.27
+Belgium,1992,37.16
+Belgium,1993,9
+Belgium,1994,23.52
+Belgium,1995,21.22
+Belgium,1996,18.31
+Belgium,1997,19.4
+Belgium,1998,16.63
+Canada,1989,5.31
+Canada,1990,15.95
+Canada,1991,24.02
+Canada,1992,22.69
+Canada,1993,22.55
+Canada,1994,25.91
+Canada,1995,20
+Canada,1996,26.65
+Canada,1997,31.15
+Canada,1998,26.63
+Netherlands,1989,10.36
+Netherlands,1990,36.39
+Netherlands,1991,33.45
+Netherlands,1992,38.06
+Netherlands,1993,8.07
+Netherlands,1994,6.21
+Netherlands,1995,6.79
+Netherlands,1996,6.21
+Netherlands,1997,6.19
+Netherlands,1998,6.7
+Italy,1989,18.5
+Italy,1990,13.59
+Italy,1991,17.77
+Italy,1992,14.36
+Italy,1993,8.06
+Italy,1994,9.56
+Italy,1995,10.08
+Italy,1996,9.33
+Italy,1997,11.39
+Italy,1998,11.94
+Denmark,1989,2.69
+Denmark,1990,10.33
+Denmark,1991,13.1
+Denmark,1992,13.02
+Denmark,1993,12.18
+Denmark,1994,12.58
+Denmark,1995,15.53
+Denmark,1996,15.06
+Denmark,1997,12.97
+Denmark,1998,11.7
+United States,1989,4.82
+United States,1990,6.03
+United States,1991,7.97
+United States,1992,9.7
+United States,1993,11.07
+United States,1994,11.21
+United States,1995,13.81
+United States,1996,14.98
+United States,1997,14.49
+United States,1998,14.46
+Norway,1989,2.53
+Norway,1990,2.54
+Norway,1991,2.59
+Norway,1992,3.01
+Norway,1993,1.17
+Norway,1994,2.44
+Norway,1995,3.25
+Norway,1996,7.13
+Norway,1997,12.1
+Norway,1998,13.44

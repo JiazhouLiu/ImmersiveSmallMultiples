@@ -456,8 +456,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7532ea681b91ae54e991dea518ceadb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExperimentID: 13
-  TrialNumber: 1
+  ExperimentID: 14
+  TrialNumber: 9
 --- !u!4 &383085825
 Transform:
   m_ObjectHideFlags: 0
@@ -1437,6 +1437,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &968748585
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 465540205}
+    m_Modifications:
+    - target: {fileID: 4318746005596556, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318746005596556, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318746005596556, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318746005596556, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318746005596556, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318746005596556, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318746005596556, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318746005596556, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 87b0d36b4a7c7f44a8a62840d8b60f32, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1010673533
 GameObject:
   m_ObjectHideFlags: 0

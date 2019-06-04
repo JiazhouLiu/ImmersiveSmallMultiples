@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/StartScene.unity
+    guid: 03fdddf11c78c1143944ad468381b9c1
+  - enabled: 1
     path: Assets/Scenes/SmallMultiples - DataSet 1 - Flat.unity
     guid: 02be308f7b9ed1043baf913befde976f
   - enabled: 1
@@ -23,6 +26,3 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SmallMultiples - DataSet 2 - Half Circle.unity
     guid: ce724a2a7c7601140871e56f65d269a0
-  - enabled: 1
-    path: Assets/Scenes/StartScene.unity
-    guid: 03fdddf11c78c1143944ad468381b9c1

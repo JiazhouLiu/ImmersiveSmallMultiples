@@ -700,7 +700,7 @@ namespace IATK
             MeshFilter mf = theMesh.GetComponent<MeshFilter>();
             MeshRenderer mr = theMesh.GetComponent<MeshRenderer>();
 
-            if (mf != null && mr !=null)
+            if (mf != null && mr != null)
             {
                 Mesh mesh = mf.sharedMesh;
                 mr.sharedMaterial = material;
@@ -711,7 +711,7 @@ namespace IATK
                 AssetDatabase.SaveAssets();
 
                 Mesh m = AssetDatabase.LoadAssetAtPath<Mesh>(meshNameInPath);
-                
+
                 mf.mesh = m;
                 indexCount++;
             }
@@ -788,18 +788,18 @@ namespace IATK
 
         public void Tween(TweenType type)
         {
-            if (type == TweenType.Position)
-            {
-                _tweenPosition = 0.0f;
-                this.SharedMaterial.SetFloat("_Tween", 0);
-                EditorApplication.update = DoTheTween;
-            }
-            else if (type == TweenType.Size)
-            {
-                _tweenSize = 0.0f;
-                this.SharedMaterial.SetFloat("_TweenSize", 0);
-                EditorApplication.update = DoTheTween;
-            }
+            //if (type == TweenType.Position)
+            //{
+            //    _tweenPosition = 0.0f;
+            //    this.SharedMaterial.SetFloat("_Tween", 0);
+            //    EditorApplication.update = DoTheTween;
+            //}
+            //else if (type == TweenType.Size)
+            //{
+            //    _tweenSize = 0.0f;
+            //    this.SharedMaterial.SetFloat("_TweenSize", 0);
+            //    EditorApplication.update = DoTheTween;
+            //}
         }
 
         private void DoTheTween()
@@ -832,10 +832,10 @@ namespace IATK
                 this.SharedMaterial.SetFloat("_TweenSize", 1);
             }
 
-            if (!isTweening)
-            {
-                EditorApplication.update = null;
-            }
+            //if (!isTweening)
+            //{
+            //    EditorApplication.update = null;
+            //}
         }
     }
 

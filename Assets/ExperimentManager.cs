@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class ExperimentManager : MonoBehaviour {
 
-    public int ExperimentID;
-    public int TrialNumber;
+    public int ExperimentID = 14;
+    public int TrialNumber = 1;
 
     public static int ExperimentSequence;
     public static int ParticipantID;

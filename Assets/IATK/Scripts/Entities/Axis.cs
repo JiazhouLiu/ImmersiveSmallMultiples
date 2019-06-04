@@ -352,7 +352,7 @@ public class Axis : MonoBehaviour {
             }
             else
             {
-                return 4;
+                return 5;
             }
         }
 

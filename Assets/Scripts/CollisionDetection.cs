@@ -819,13 +819,13 @@ public class CollisionDetection : MonoBehaviour
                 filterCoordinitor.transform.localPosition = new Vector3(0, 0, 0);
             }
 
-            for (float i = 0; i <= 1; i = i + 0.1f)
+            for (float i = 0; i <= 1; i = i + 0.2f)
             {
                 i = Mathf.Round(i * 10f) / 10f;
 
                 if (Mathf.Abs(filterCoordinitor.transform.localPosition.y - i) < 0.02f)
                 {
-                    segment = (int)(Mathf.Round(i / 0.1f * 1f) / 1f);
+                    segment = (int)(Mathf.Round(i / 0.2f * 1f) / 1f);
                 }
             }
 
@@ -860,14 +860,14 @@ public class CollisionDetection : MonoBehaviour
                 {
                     if (draggedFilter.transform.GetSiblingIndex() == 2)
                     {
-                        if (draggedFilter.transform.parent.GetChild(3).localPosition.y - (segment / 10f) < 0.08f)
+                        if (draggedFilter.transform.parent.GetChild(3).localPosition.y - (segment / 5f) < 0.08f)
                         {
                             canGrab = false;
                         }
                     }
                     else
                     {
-                        if ((segment / 10f) - draggedFilter.transform.parent.GetChild(2).localPosition.y < 0.08f)
+                        if ((segment / 5f) - draggedFilter.transform.parent.GetChild(2).localPosition.y < 0.08f)
                         {
                             canGrab = false;
                         }
@@ -891,7 +891,7 @@ public class CollisionDetection : MonoBehaviour
                     
                     if (draggedFilter.transform.parent.parent.name.Contains("Country"))
                     {
-                        draggedFilter.transform.localPosition = new Vector3(-3, segment / 10f, 0);
+                        draggedFilter.transform.localPosition = new Vector3(-3, segment / 5f, 0);
                         if (draggedFilter.transform.GetSiblingIndex() == 2)
                         {
                             smms.FilterBarChartFromCollision("Country", "left", segment);
@@ -904,7 +904,7 @@ public class CollisionDetection : MonoBehaviour
                     }
                     else if (draggedFilter.transform.parent.parent.name.Contains("Year"))
                     {
-                        draggedFilter.transform.localPosition = new Vector3(-3, segment / 10f, 0);
+                        draggedFilter.transform.localPosition = new Vector3(-3, segment / 5f, 0);
                         if (draggedFilter.transform.GetSiblingIndex() == 2)
                         {
                             smms.FilterBarChartFromCollision("Year", "left", segment);
@@ -955,6 +955,22 @@ public class CollisionDetection : MonoBehaviour
                                         leftValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
                                     }
                                 }
+                                else {
+                                    if (filterCoordinitor.transform.localPosition.y == 0)
+                                    {
+                                        GameObject leftValuePlane = draggedFilter.transform.parent.parent.parent.GetChild(2).Find("axis_mesh").Find("leftValuePlane").gameObject;
+
+                                        SetColorForFilter(leftValuePlane.transform.GetChild(0).gameObject, 0f);
+                                        leftValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
+                                    }
+                                    else
+                                    {
+                                        GameObject leftValuePlane = draggedFilter.transform.parent.parent.parent.GetChild(2).Find("axis_mesh").Find("leftValuePlane").gameObject;
+
+                                        SetColorForFilter(leftValuePlane.transform.GetChild(0).gameObject, 0.3f);
+                                        leftValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
+                                    }
+                                }
                             }
                             else {
                                 draggedFilter.transform.parent.parent.parent.GetChild(2).GetChild(1).Find("rightValueFilter").localPosition = new Vector3(-3, filterCoordinitor.transform.localPosition.y, 0);
@@ -974,6 +990,23 @@ public class CollisionDetection : MonoBehaviour
                                     {
 
                                         GameObject rightValuePlane = draggedFilter.transform.parent.Find("rightValuePlane").gameObject;
+
+                                        SetColorForFilter(rightValuePlane.transform.GetChild(0).gameObject, 0.3f);
+                                        rightValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
+                                    }
+                                }
+                                else
+                                {
+                                    if (filterCoordinitor.transform.localPosition.y == 1)
+                                    {
+                                        GameObject rightValuePlane = draggedFilter.transform.parent.parent.parent.GetChild(2).Find("axis_mesh").Find("rightValuePlane").gameObject;
+
+                                        SetColorForFilter(rightValuePlane.transform.GetChild(0).gameObject, 0f);
+                                        rightValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
+                                    }
+                                    else
+                                    {
+                                        GameObject rightValuePlane = draggedFilter.transform.parent.parent.parent.GetChild(2).Find("axis_mesh").Find("rightValuePlane").gameObject;
 
                                         SetColorForFilter(rightValuePlane.transform.GetChild(0).gameObject, 0.3f);
                                         rightValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
@@ -1008,6 +1041,23 @@ public class CollisionDetection : MonoBehaviour
                                         leftValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
                                     }
                                 }
+                                else
+                                {
+                                    if (filterCoordinitor.transform.localPosition.y == 0)
+                                    {
+                                        GameObject leftValuePlane = draggedFilter.transform.parent.parent.parent.GetChild(2).Find("axis_mesh").Find("leftValuePlane").gameObject;
+
+                                        SetColorForFilter(leftValuePlane.transform.GetChild(0).gameObject, 0f);
+                                        leftValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
+                                    }
+                                    else
+                                    {
+                                        GameObject leftValuePlane = draggedFilter.transform.parent.parent.parent.GetChild(2).Find("axis_mesh").Find("leftValuePlane").gameObject;
+
+                                        SetColorForFilter(leftValuePlane.transform.GetChild(0).gameObject, 0.3f);
+                                        leftValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
+                                    }
+                                }
                             }
                             else
                             {
@@ -1027,6 +1077,23 @@ public class CollisionDetection : MonoBehaviour
                                     {
 
                                         GameObject rightValuePlane = draggedFilter.transform.parent.Find("rightValuePlane").gameObject;
+
+                                        SetColorForFilter(rightValuePlane.transform.GetChild(0).gameObject, 0.3f);
+                                        rightValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
+                                    }
+                                }
+                                else
+                                {
+                                    if (filterCoordinitor.transform.localPosition.y == 1)
+                                    {
+                                        GameObject rightValuePlane = draggedFilter.transform.parent.parent.parent.GetChild(2).Find("axis_mesh").Find("rightValuePlane").gameObject;
+
+                                        SetColorForFilter(rightValuePlane.transform.GetChild(0).gameObject, 0f);
+                                        rightValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
+                                    }
+                                    else
+                                    {
+                                        GameObject rightValuePlane = draggedFilter.transform.parent.parent.parent.GetChild(2).Find("axis_mesh").Find("rightValuePlane").gameObject;
 
                                         SetColorForFilter(rightValuePlane.transform.GetChild(0).gameObject, 0.3f);
                                         rightValuePlane.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
@@ -1079,7 +1146,7 @@ public class CollisionDetection : MonoBehaviour
             }
 
 
-            int tmp = (int)(axisCoordinitor.transform.localPosition.y / (1f / 18f)) + 1;
+            int tmp = (int)(axisCoordinitor.transform.localPosition.y / (1f / 8f)) + 1;
             axisSegment = (int)(tmp / 2f) + 1;
 
             
