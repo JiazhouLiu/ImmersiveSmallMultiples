@@ -1,31 +1,31 @@
 QuestionID,Layout,QuestionType,Training,QuestionText,CorrectAnswer
-1,Flat,Long Distance,TRUE,,
-2,Flat,Long Distance,TRUE,,
-3,Flat,Long Distance,FALSE,,
-4,Flat,Long Distance,FALSE,,
-5,Flat,Long Distance,FALSE,,
-6,Circle,Long Distance,TRUE,,
-7,Circle,Long Distance,TRUE,,
-8,Circle,Long Distance,FALSE,,
-9,Circle,Long Distance,FALSE,,
-10,Circle,Long Distance,FALSE,,
-11,Half-Circle,Long Distance,TRUE,,
-12,Half-Circle,Long Distance,TRUE,,
-13,Half-Circle,Long Distance,FALSE,,
-14,Half-Circle,Long Distance,FALSE,,
-15,Half-Circle,Long Distance,FALSE,,
-16,Flat,Trending,TRUE,,
-17,Flat,Trending,TRUE,,
-18,Flat,Trending,FALSE,,
-19,Flat,Trending,FALSE,,
-20,Flat,Trending,FALSE,,
-21,Circle,Trending,TRUE,,
-22,Circle,Trending,TRUE,,
-23,Circle,Trending,FALSE,,
-24,Circle,Trending,FALSE,,
-25,Circle,Trending,FALSE,,
-26,Half-Circle,Trending,TRUE,,
-27,Half-Circle,Trending,TRUE,,
-28,Half-Circle,Trending,FALSE,,
-29,Half-Circle,Trending,FALSE,,
-30,Half-Circle,Trending,FALSE,,
+1,Flat,Long Distance,TRUE,"For sector 3, which country in 1988 had a similar budget as Belgium in 1994?",Belgium
+2,Flat,Long Distance,TRUE,"For sector 2, which country in 1980 had a similar budget as Belgium in 2010?",Belgium
+3,Flat,Long Distance,FALSE,"For sector 4, which country in 1984 had a similar budget as France in 2002?",Belgium
+4,Flat,Long Distance,FALSE,"For sector 2, which country in 2001 had a similar budget as Canada in 2007?",Belgium
+5,Flat,Long Distance,FALSE,"For sector 4, which country in 1982 had a similar budget as Denmark in 2012?",Denmark
+6,Circle,Long Distance,TRUE,"For sector 5, which country in 1981 had a similar budget as Denmark in 1999?",France
+7,Circle,Long Distance,TRUE,"For sector 1, which country in 1991 had a similar budget as France in 2009?",Australia
+8,Circle,Long Distance,FALSE,"For sector 5, which country in 1985 had a similar budget as Canada in 2003?",Denmark
+9,Circle,Long Distance,FALSE,"For sector 4, which country in 2000 had a similar budget as Belgium in 2006?",Canada
+10,Circle,Long Distance,FALSE,"For sector 1, which country in 1986 had a similar budget as Canada in 2004?",Canada
+11,Half-Circle,Long Distance,TRUE,"For sector 4, which country in 1987 had a similar budget as Belgium in 1993?",Canada
+12,Half-Circle,Long Distance,TRUE,"For sector 1, which country in 1983 had a similar budget as France in 2013?",Australia
+13,Half-Circle,Long Distance,FALSE,"For sector 5, which country in 1989 had a similar budget as Canada in 1995?",Belgium
+14,Half-Circle,Long Distance,FALSE,"For sector 2, which country in 1993 had a similar budget as France in 2011?",Denmark
+15,Half-Circle,Long Distance,FALSE,"For sector 3, which country in 1990 had a similar budget as Belgium in 2008?",Australia
+16,Flat,Trending,TRUE,Which year did Belgium have the most budget on sector 4?,2000
+17,Flat,Trending,TRUE,Which year did Canada have the most budget on sector 1?,2009
+18,Flat,Trending,FALSE,Which year did Denmark have the most budget on sector 3?,2014
+19,Flat,Trending,FALSE,Which year did Denmark have the most budget on sector 4?,1988
+20,Flat,Trending,FALSE,Which year did France have the most budget on sector 3?,1995
+21,Circle,Trending,TRUE,Which year did Belgium have the most budget on sector 3?,2014
+22,Circle,Trending,TRUE,Which year did Canada have the most budget on sector 2?,2015
+23,Circle,Trending,FALSE,Which year did Denmark have the most budget on sector 4?,1983
+24,Circle,Trending,FALSE,Which year did Belgium have the most budget on sector 4?,1984
+25,Circle,Trending,FALSE,Which year did Denmark have the most budget on sector 5?,2003
+26,Half-Circle,Trending,TRUE,Which year did Belgium have the most budget on sector 2?,1992
+27,Half-Circle,Trending,TRUE,Which year did Canada have the most budget on sector 3?,1988
+28,Half-Circle,Trending,FALSE,Which year did Denmark have the most budget on sector 5?,2010
+29,Half-Circle,Trending,FALSE,Which year did France have the most budget on sector 3?,1999
+30,Half-Circle,Trending,FALSE,Which year did Belgium have the most budget on sector 4?,2006

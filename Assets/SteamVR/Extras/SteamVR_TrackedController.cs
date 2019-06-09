@@ -279,7 +279,7 @@ public class SteamVR_TrackedController : MonoBehaviour
                     if (!confirmed)
                     {
                         if (!mrs.calibrationFlag)
-                            //mrs.OpenPupilCamera();
+                            mrs.OpenPupilCamera();
                         mrs.ChangeTaskText("Are you sure you want to start now? Please solve the question as quickly as possible. \n\nPress <color=green>Read</color> to read the question.\n\n", -1);
 
                         if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)

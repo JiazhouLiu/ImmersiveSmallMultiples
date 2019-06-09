@@ -423,7 +423,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                         fullTaskID = (ExperimentManager.PublicTrialNumber / 5 * 3 + ExperimentManager.PublicTrialNumber % 5 - 2) - 1 + "";
                     }
                     taskID = ExperimentManager.PublicTrialNumber - 1;
-                    sceneCounter = ExperimentManager.PublicTrialNumber % 5 - 1;
+                    if (ExperimentManager.PublicTrialNumber % 5 == 0) {
+                        sceneCounter = 4;
+                    }else
+                        sceneCounter = ExperimentManager.PublicTrialNumber % 5 - 1;
                     ExperimentManager.PublicTrialNumber = 0;
                 }
                 else {
@@ -717,6 +720,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 GameObject yearAnswers = leftController.transform.GetChild(5).gameObject;
                 yearAnswers.SetActive(true);
+                SetupAnswerPanelYearList(int.Parse(GetQuestionID(sceneCounter)));
             }
         }
         else
@@ -962,6 +966,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     }
 
     public string GetTaskText() {
+
         return taskArray[sceneCounter];
     }
 
@@ -3510,56 +3515,53 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 answerArray = new string[] { "2000", "2001", "2002", "2003", "2004" };
                 break;
             case 17:
-                answerArray = new string[] { "2011", "2012", "2013", "2014", "2015" };
-                break;
-            case 18:
                 answerArray = new string[] { "2005", "2006", "2007", "2008", "2009" };
                 break;
+            case 18:
+                answerArray = new string[] { "2010", "2011", "2012", "2013", "2014" };
+                break;
             case 19:
-                answerArray = new string[] { "1980", "1981", "1982", "1983", "1984" };
+                answerArray = new string[] { "1985", "1986", "1987", "1988", "1989" };
                 break;
             case 20:
-                answerArray = new string[] { "1980", "1981", "1982", "1983", "1984" };
+                answerArray = new string[] { "1995", "1996", "1997", "1998", "1999" };
                 break;
             case 21:
-                answerArray = new string[] { "1995", "1996", "1997", "1998", "1999" };
+                answerArray = new string[] { "2010", "2011", "2012", "2013", "2014" };
                 break;
             case 22:
-                answerArray = new string[] { "1980", "1981", "1982", "1983", "1984" };
+                answerArray = new string[] { "2011", "2012", "2013", "2014", "2015" };
                 break;
             case 23:
-                answerArray = new string[] { "1995", "1996", "1997", "1998", "1999" };
+                answerArray = new string[] { "1980", "1981", "1982", "1983", "1984" };
                 break;
             case 24:
-                answerArray = new string[] { "1985", "1986", "1987", "1988", "1989" };
+                answerArray = new string[] { "1980", "1981", "1982", "1983", "1984" };
                 break;
             case 25:
-                answerArray = new string[] { "1995", "1996", "1997", "1998", "1999" };
+                answerArray = new string[] { "2000", "2001", "2002", "2003", "2004" };
                 break;
             case 26:
-                answerArray = new string[] { "1985", "1986", "1987", "1988", "1989" };
+                answerArray = new string[] { "1991", "1992", "1993", "1994", "1995" };
                 break;
             case 27:
-                answerArray = new string[] { "1991", "1992", "1993", "1994", "1995" };
+                answerArray = new string[] { "1985", "1986", "1987", "1988", "1989" };
                 break;
             case 28:
-                answerArray = new string[] { "1991", "1992", "1993", "1994", "1995" };
+                answerArray = new string[] { "2010", "2011", "2012", "2013", "2014" };
                 break;
             case 29:
                 answerArray = new string[] { "1995", "1996", "1997", "1998", "1999" };
                 break;
             case 30:
-                answerArray = new string[] { "1985", "1986", "1987", "1988", "1989" };
+                answerArray = new string[] { "2005", "2006", "2007", "2008", "2009" };
                 break;
             default:
                 break;
         }
-        int i = 0;
         Transform gridChoices = GameObject.Find("PanelMenuForYears").transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1);
-        foreach (Transform t in gridChoices)
-        {
-            t.GetChild(0).GetComponent<Text>().text = answerArray[i];
-            i++;
+        for (int i = 0; i < 5; i++) {
+            gridChoices.GetChild(i).GetChild(0).GetComponent<Text>().text = answerArray[i];
         }
     }
 
