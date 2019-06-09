@@ -11,6 +11,7 @@ public class BarChartCreator : MonoBehaviour {
     // input data
     public List<TextAsset> datasets;
 
+    private char lineSeperater = '\n'; // It defines line seperate character
     public List<GameObject> barList;
 
     List<GameObject> axisList;
@@ -32,22 +33,22 @@ public class BarChartCreator : MonoBehaviour {
         axisList = new List<GameObject>();
         finalVs = new List<View>();
         int count = 0;
-
+        
         smms = GameObject.Find("SmallMultiplesManager").GetComponent<SmallMultiplesManagerScript>();
 
         datasets.Clear();
+
+
         for (int i = 1; i <= smms.smallMultiplesNumber; i++)
         {
             TextAsset file = (TextAsset)Resources.Load("bData" + i);
             datasets.Add(file);
         }
- 
         foreach (TextAsset ta in datasets)
         {
 
             GameObject go = new GameObject("BarCharts-" + count);
             go.transform.parent = this.transform;
-
             CSVDataSource csvdata = createCSVDataSource(ta.text, go);
             customCSVData = csvdata;
 
@@ -59,6 +60,7 @@ public class BarChartCreator : MonoBehaviour {
 
 
     }
+
 
     CSVDataSource createCSVDataSource(string data, GameObject go)
     {
@@ -142,8 +144,8 @@ public class BarChartCreator : MonoBehaviour {
         ViewBuilder vb = new ViewBuilder(MeshTopology.Points, "BarCharts-" + count).
             initialiseDataView(csvds.DataCount).
             setDataDimension(csvds["Country"].Data, ViewBuilder.VIEW_DIMENSION.X).
-            setDataDimension(csvds["Value"].Data, ViewBuilder.VIEW_DIMENSION.Y).
-            setDataDimension(csvds["Year"].Data, ViewBuilder.VIEW_DIMENSION.Z);
+            setDataDimension(csvds["Budget"].Data, ViewBuilder.VIEW_DIMENSION.Y).
+            setDataDimension(csvds["Sector"].Data, ViewBuilder.VIEW_DIMENSION.Z);
 
       
 
@@ -193,7 +195,7 @@ public class BarChartCreator : MonoBehaviour {
         Vector3 posy = Vector3.zero;
         posy.x = -0.2f;
         posy.z = -0.2f;
-        DimensionFilter yDimension = new DimensionFilter { Attribute = "Value" };
+        DimensionFilter yDimension = new DimensionFilter { Attribute = "Budget" };
         GameObject Y_AXIS = CreateAxis(AbstractVisualisation.PropertyType.Y, yDimension, posy, new Vector3(0f, 0f, 0f), globalScale, 1, csvds, visualisation, go);
         Y_AXIS.transform.localScale = new Vector3(1, 1.25f, 1);
         axisList.Add(Y_AXIS);
@@ -203,7 +205,7 @@ public class BarChartCreator : MonoBehaviour {
         posz.x = -0.2f;
         posz.y = -0.05f;
         posz.y = -0.05f;
-        DimensionFilter zDimension = new DimensionFilter { Attribute = "Year" };
+        DimensionFilter zDimension = new DimensionFilter { Attribute = "Sector" };
         GameObject Z_AXIS = CreateAxis(AbstractVisualisation.PropertyType.Z, zDimension, posz, new Vector3(0f, 90f, 90f), globalScale, 2, csvds, visualisation, go);
         axisList.Add(Z_AXIS);
 
@@ -216,7 +218,7 @@ public class BarChartCreator : MonoBehaviour {
 
         posy.x = 1.2f;
         posy.z = 1.2f;
-        yDimension = new DimensionFilter { Attribute = "Value" };
+        yDimension = new DimensionFilter { Attribute = "Budget" };
         Y_AXIS = CreateAxis(AbstractVisualisation.PropertyType.Y, yDimension, posy, new Vector3(0f, 0f, 0f), globalScale, 4, csvds, visualisation, go);
         Y_AXIS.transform.localScale = new Vector3(1, 1.25f, 1);
         axisList.Add(Y_AXIS);
@@ -224,7 +226,7 @@ public class BarChartCreator : MonoBehaviour {
 
         posz.x = 1.2f;
         posz.y = -0.05f;
-        zDimension = new DimensionFilter { Attribute = "Year" };
+        zDimension = new DimensionFilter { Attribute = "Sector" };
         Z_AXIS = CreateAxis(AbstractVisualisation.PropertyType.Z, zDimension, posz, new Vector3(0f, 90f, 90f), globalScale, 5, csvds, visualisation, go);
         axisList.Add(Z_AXIS);
 
@@ -235,7 +237,7 @@ public class BarChartCreator : MonoBehaviour {
             axis.transform.Find("MaxNormaliser").gameObject.SetActive(false);
 
             axis.transform.Find("Cone").localScale = new Vector3(0.04f, 0.8f, 0.04f);
-            if (axis.name != "axis Value")
+            if (axis.name != "axis Budget")
             {
                 axis.transform.Find("Cone").localPosition = new Vector3(0, 1.12f, 0);
             }
@@ -281,18 +283,19 @@ public class BarChartCreator : MonoBehaviour {
                 }
             }
 
-            if (axis.name == "axis Year")
+            if (axis.name == "axis Sector")
             {
                 Transform attributeLabel = axis.transform.Find("AttributeLabel");
                 attributeLabel.localPosition = new Vector3(-0.1f, 0.5f, 0);
                 attributeLabel.localEulerAngles = new Vector3(180, -180, 90);
 
-                axis.transform.Find("AxisLabels").localPosition = new Vector3(0.34f, 0, 0);
+                axis.transform.Find("AxisLabels").localPosition = new Vector3(0.2f, 0, 0);
 
                 for (int i = 1; i < axis.transform.Find("AxisLabels").childCount; i++)
                 {
                     TextMeshPro tmp = axis.transform.Find("AxisLabels").GetChild(i).GetComponent<TextMeshPro>();
-                    tmp.text = (1999 + i) + "";
+                    tmp.text = i + "";
+                    tmp.fontSize = 1.5f;
                 }
 
                 if (axis.transform.GetSiblingIndex() == 6)
@@ -302,18 +305,32 @@ public class BarChartCreator : MonoBehaviour {
 
                     for (int i = 1; i < axis.transform.Find("AxisLabels").childCount; i++)
                     {
-                        axis.transform.Find("AxisLabels").GetChild(i).localEulerAngles = new Vector3(180, 0, 0);
+                        axis.transform.Find("AxisLabels").GetChild(i).GetComponent<RectTransform>().localPosition = new Vector3(0, (0.25f * (i - 1) + 0.12f), 0);
+                        axis.transform.Find("AxisLabels").GetChild(i).localEulerAngles = new Vector3(0, 180, 90);
+                    }
+                }
+                else {
+                    for (int i = 1; i < axis.transform.Find("AxisLabels").childCount; i++)
+                    {
+                        axis.transform.Find("AxisLabels").GetChild(i).GetComponent<RectTransform>().localPosition = new Vector3(0, (0.25f * (i - 1) - 0.12f), 0);
+                        axis.transform.Find("AxisLabels").GetChild(i).localEulerAngles = new Vector3(0,0,-90);
                     }
                 }
             }
 
-            if (axis.name == "axis Value")
+            if (axis.name == "axis Budget")
             {
-                if (axis.transform.GetSiblingIndex() == 5) {
+                if (axis.transform.GetSiblingIndex() == 5)
+                {
                     Transform attributeLabel = axis.transform.Find("AttributeLabel");
+                    attributeLabel.GetComponent<RectTransform>().localPosition = new Vector3(0.02f, 0.5f, 0);
                     attributeLabel.localEulerAngles = new Vector3(0, 180, 90);
 
                     axis.transform.Find("AxisLabels").localEulerAngles = new Vector3(0, 150, 0);
+                }
+                else {
+                    Transform attributeLabel = axis.transform.Find("AttributeLabel");
+                    attributeLabel.GetComponent<RectTransform>().localPosition = new Vector3(-0.02f, 0.5f, 0);
                 }
                 Transform valueAxisLabels = axis.transform.Find("AxisLabels");
 
@@ -367,7 +384,7 @@ public class BarChartCreator : MonoBehaviour {
         cc.height = 2f;
 
 
-        if (AxisHolder.name == "axis Value")
+        if (AxisHolder.name == "axis Budget")
         {
             AxisHolder.transform.Find("Cone").localPosition = new Vector3(0, 1, 0);
             AxisHolder.transform.Find("axis_mesh").localPosition = new Vector3(0, 0f, 0);
@@ -392,123 +409,14 @@ public class BarChartCreator : MonoBehaviour {
         axis.SetMaxNormalizer(dim.maxScale);
     }
 
-    //private void UpdateAxisBrushing() {
-    //    // check intersection
-    //    if (leftYearBrushControl == 0 && leftCountryBrushControl != 0 && rightYearBrushControl != 0 && rightCountryBrushControl == 0)
-    //    {
-    //        chessBoardBrushingBool = new bool[100];
-    //        chessBoardBrushingBool[10 * (leftCountryBrushControl - 1) + (rightYearBrushControl - 1)] = true;
-    //        smms.SetFilterPosition(leftCountryBrushControl - 1, leftCountryBrushControl, rightYearBrushControl - 1, rightYearBrushControl);
-    //    }
-    //    else if (leftYearBrushControl != 0 && leftCountryBrushControl == 0 && rightYearBrushControl == 0 && rightCountryBrushControl != 0)
-    //    {
-    //        chessBoardBrushingBool = new bool[100];
-    //        chessBoardBrushingBool[10 * (rightCountryBrushControl - 1) + (leftYearBrushControl - 1)] = true;
-    //        smms.SetFilterPosition(rightCountryBrushControl - 1, rightCountryBrushControl, leftYearBrushControl - 1, leftYearBrushControl);
-    //    }
-    //    else if (leftYearBrushControl == 0 && leftCountryBrushControl != 0 && rightYearBrushControl == 0 && rightCountryBrushControl != 0) // check parallel
-    //    {
-    //        if (Math.Abs(leftCountryBrushControl - rightCountryBrushControl) != 0 && Math.Abs(leftCountryBrushControl - rightCountryBrushControl) != 1)
-    //        {
-    //            for (int i = Math.Min(leftCountryBrushControl, rightCountryBrushControl) + 1; i < Math.Max(leftCountryBrushControl, rightCountryBrushControl); i++)
-    //            {
-    //                for (int j = 0; j < 10; j++)
-    //                {
-    //                    chessBoardBrushingBool[(i - 1) * 10 + j] = true;
-    //                }
-    //            }
-    //        }
-    //        if (leftCountryBrushControl < rightCountryBrushControl)
-    //        {
-    //            smms.SetFilterPosition(leftCountryBrushControl - 1, rightCountryBrushControl, 0, 10);
-    //        }
-    //        else
-    //        {
-    //            smms.SetFilterPosition(leftCountryBrushControl, rightCountryBrushControl - 1, 0, 10);
-    //        }
-
-    //    }
-    //    else if (leftYearBrushControl != 0 && leftCountryBrushControl == 0 && rightYearBrushControl != 0 && rightCountryBrushControl == 0) // check parallel
-    //    {
-    //        if (Math.Abs(leftYearBrushControl - rightYearBrushControl) != 0 && Math.Abs(leftYearBrushControl - rightYearBrushControl) != 1)
-    //        {
-    //            for (int i = Math.Min(leftYearBrushControl, rightYearBrushControl) + 1; i < Math.Max(leftYearBrushControl, rightYearBrushControl); i++)
-    //            {
-    //                for (int j = 0; j < 10; j++)
-    //                {
-    //                    chessBoardBrushingBool[j * 10 + (i - 1)] = true;
-    //                }
-    //            }
-    //        }
-    //        if (leftYearBrushControl < rightYearBrushControl)
-    //        {
-    //            smms.SetFilterPosition(0, 10, leftYearBrushControl - 1, rightYearBrushControl);
-    //        }
-    //        else
-    //        {
-    //            smms.SetFilterPosition(0, 10, leftYearBrushControl, rightYearBrushControl - 1);
-    //        }
-    //    }
-    //    else
-    //    {
-
-    //        if (rightCountryBrushControl == 0 && leftCountryBrushControl != 0)
-    //        {
-    //            if (leftYearBrushControl == 0 && rightYearBrushControl == 0)
-    //            {
-    //                smms.SetFilterPosition(leftCountryBrushControl - 1, leftCountryBrushControl, 0, 10);
-    //            }
-    //            else
-    //            {
-    //                smms.SetFilterPosition(leftCountryBrushControl - 1, leftCountryBrushControl, -1, -1);
-    //            }
-    //        }
-    //        else if (leftCountryBrushControl == 0 && rightCountryBrushControl != 0)
-    //        {
-    //            if (leftYearBrushControl == 0 && rightYearBrushControl == 0)
-    //            {
-    //                smms.SetFilterPosition(rightCountryBrushControl - 1, rightCountryBrushControl, 0, 10);
-    //            }
-    //            else
-    //            {
-    //                smms.SetFilterPosition(rightCountryBrushControl - 1, rightCountryBrushControl, -1, -1);
-    //            }
-    //        }
-
-    //        if (rightYearBrushControl == 0 && leftYearBrushControl != 0)
-    //        {
-    //            if (leftCountryBrushControl == 0 && rightCountryBrushControl == 0)
-    //            {
-    //                smms.SetFilterPosition(0, 10, leftYearBrushControl - 1, leftYearBrushControl);
-    //            }
-    //            else
-    //            {
-    //                smms.SetFilterPosition(-1, -1, leftYearBrushControl - 1, leftYearBrushControl);
-    //            }
-    //        }
-    //        else if (rightYearBrushControl != 0 && leftYearBrushControl == 0)
-    //        {
-    //            if (leftCountryBrushControl == 0 && rightCountryBrushControl == 0)
-    //            {
-    //                smms.SetFilterPosition(0, 10, rightYearBrushControl - 1, rightYearBrushControl);
-    //            }
-    //            else
-    //            {
-    //                smms.SetFilterPosition(-1, -1, rightYearBrushControl - 1, rightYearBrushControl);
-    //            }
-    //        }
-
-    //    }
-    //}
-
     public void UpdateBrushing(bool[] calculatedChessBoard)
     {
         chessBoardBrushingBool = calculatedChessBoard;
 
         Color[] dataUpdatedColors = new Color[customCSVData.DataCount];
 
-        float[] barData = customCSVData["Year"].Data;
-        Color[] OldMappedTransparentColors = new Color[100];
+        float[] barData = customCSVData["Sector"].Data;
+        Color[] OldMappedTransparentColors = new Color[25];
 
         for (int i = 0; i < UpdatedMappedColors.Length; i++)
         {
@@ -530,21 +438,6 @@ public class BarChartCreator : MonoBehaviour {
 
         SetColors(dataUpdatedColors);
     }
-
-
-    //private void StopBrushing()
-    //{
-    //    smms.ResetFilters();
-
-    //    foreach (View v in finalVs)
-    //    {
-    //        v.SetColors(OldMappedColors);
-    //    }
-    //}
-
-    //public void RemoveHighlightedBars(List<Vector2> removedBars, string barChartName) {
-    //    this.removedBars.Add(barChartName, removedBars);
-    //}
 
     public void SetColors(Color[] dataUpdatedColors) {
         foreach (View v in finalVs)

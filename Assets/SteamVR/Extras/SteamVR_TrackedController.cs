@@ -134,7 +134,7 @@ public class SteamVR_TrackedController : MonoBehaviour
                 if (touchedFilter == null || (touchedFilter != null && touchedAxis != null)) {
                     if (touchedAxis != null)
                     {
-                        if (!touchedAxis.transform.parent.parent.name.Contains("Value"))
+                        if (!touchedAxis.transform.parent.parent.name.Contains("Budget"))
                         {
                             mrs.CheckDataset2KeepHighted("left", transform.GetChild(0).Find("tip").GetChild(0).GetChild(0).GetChild(0).position);
                         }
@@ -151,7 +151,7 @@ public class SteamVR_TrackedController : MonoBehaviour
                 if (touchedFilter == null || (touchedFilter != null && touchedAxis != null)) {
                     if (touchedAxis != null)
                     {
-                        if (!touchedAxis.transform.parent.parent.name.Contains("Value"))
+                        if (!touchedAxis.transform.parent.parent.name.Contains("Budget"))
                         {
                             mrs.CheckDataset2KeepHighted("right", transform.GetChild(0).Find("tip").GetChild(0).GetChild(0).GetChild(0).position);
                         }
@@ -163,51 +163,6 @@ public class SteamVR_TrackedController : MonoBehaviour
             }
             //mrs.triggerPressedForFilterMoving = true;
         }
-        else if (mrs.dataset == 1)
-            {
-            GameObject touchedFilter = cd.draggedFilter;
-            GameObject touchedAxis = cd.touchedAxis;
-            if (this.name == ("Controller (left)"))
-            {
-                if (touchedFilter == null || (touchedFilter != null && touchedAxis != null)) {
-                    if (touchedAxis != null)
-                    {
-                        if (!(touchedAxis.transform.parent.parent.name == "Y axis"))
-                        {
-                            mrs.CheckDataset1KeepHighted("left", transform.GetChild(0).Find("tip").GetChild(0).GetChild(0).GetChild(0).position);
-                        }
-                    }
-                    else
-                    {
-                        mrs.CheckDataset1KeepHighted("left", transform.GetChild(0).Find("tip").GetChild(0).GetChild(0).GetChild(0).position);
-                    }
-                }
-            }
-            else
-            {
-                if (touchedFilter == null || (touchedFilter != null && touchedAxis != null))
-                {
-                    if (touchedAxis != null)
-                    {
-                        if (!(touchedAxis.transform.parent.parent.name == "Y axis"))
-                        {
-                            mrs.CheckDataset1KeepHighted("right", transform.GetChild(0).Find("tip").GetChild(0).GetChild(0).GetChild(0).position);
-                        }
-                    }
-                    else
-                    {
-                        mrs.CheckDataset1KeepHighted("right", transform.GetChild(0).Find("tip").GetChild(0).GetChild(0).GetChild(0).position);
-                    }
-                }
-
-                //if (cd.touchedIndexOfColorFilter != -1 && mrs.colorFilterActive) {
-                //    Debug.Log("c " + cd.touchedIndexOfColorFilter);
-                //    mrs.ColorFilterForBIMSensors(cd.touchedIndexOfColorFilter - 48);
-                //}
-            }
-        }
-
-        //mrs.ChangeTrialState();
     }
 
     public virtual void OnTriggerUnclicked(ClickedEventArgs e)
@@ -299,91 +254,97 @@ public class SteamVR_TrackedController : MonoBehaviour
     {
         if (PadClicked != null)
             PadClicked(this, e);
-        if (mrs.trialState == TrialState.PreTask)
-        {
-            if (mrs.interactionTrainingNeeded)
+        if (Camera.main != null) {
+            if (mrs.trialState == TrialState.PreTask)
             {
-                if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+                if (mrs.interactionTrainingNeeded)
                 {
-                    GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
-                    GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
-                }
-                if (name == "Controller (left)")
-                {
-                    mrs.SetupPreTaskEnvironment("left");
-                }
-                else {
-                    mrs.SetupPreTaskEnvironment("right");
-                }
-                
-            }
-            else {
-                if (!confirmed)
-                {
-                    if(!mrs.calibrationFlag)
-                        mrs.OpenPupilCamera();
-                    mrs.ChangeTaskText("Are you sure you want to start now? Please remember that you have 60 seconds to finish each task. \n\nPress <color=green>Read</color> to read the question.\n\n", -1);
-                    
                     if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
                     {
-                        GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Read";
-                        GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Read";
+                        GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
+                        GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
+                    }
+                    if (name == "Controller (left)")
+                    {
+                        mrs.SetupPreTaskEnvironment("left");
+                    }
+                    else
+                    {
+                        mrs.SetupPreTaskEnvironment("right");
                     }
 
-                    confirmed = true;
-                    if (this.name == ("Controller (left)") && GameObject.Find("Controller (right)") != null)
-                    {
-                        GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().confirmed = true;
-                    }
-                    else if(this.name == ("Controller (right)") && GameObject.Find("Controller (left)") != null)
-                    {
-                        GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().confirmed = true;
-                    }
-                }
-                else if (!readQuestion)
-                {
-                    mrs.ChangeTaskText(mrs.GetTaskText() + "\n\nPress <color=green>Start</color> to solve the question.\n\n", -1);
-                    if(MultipleManager.transform.localPosition.y > -50f)
-                        MultipleManager.transform.localPosition -= Vector3.up * 100;
-                    if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
-                    {
-                        GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Start";
-                        GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Start";
-                    }
-                    readQuestion = true;
-                    if (this.name == ("Controller (left)") && GameObject.Find("Controller (right)") != null)
-                    {
-                        GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().readQuestion = true;
-                    }
-                    else if (this.name == ("Controller (right)") && GameObject.Find("Controller (left)") != null)
-                    {
-                        GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().readQuestion = true;
-                    }
                 }
                 else
                 {
-                    if (MultipleManager.transform.localPosition.y < -50f)
-                        MultipleManager.transform.localPosition += Vector3.up * 100;
-                    confirmed = false;
-                    readQuestion = false;
-                    if (this.name == ("Controller (left)") && GameObject.Find("Controller (right)") != null)
+                    if (!confirmed)
                     {
-                        GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().confirmed = false;
-                        GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().readQuestion = false;
+                        if (!mrs.calibrationFlag)
+                            //mrs.OpenPupilCamera();
+                        mrs.ChangeTaskText("Are you sure you want to start now? Please solve the question as quickly as possible. \n\nPress <color=green>Read</color> to read the question.\n\n", -1);
+
+                        if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+                        {
+                            GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Read";
+                            GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Read";
+                        }
+
+                        confirmed = true;
+                        if (this.name == ("Controller (left)") && GameObject.Find("Controller (right)") != null)
+                        {
+                            GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().confirmed = true;
+                        }
+                        else if (this.name == ("Controller (right)") && GameObject.Find("Controller (left)") != null)
+                        {
+                            GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().confirmed = true;
+                        }
                     }
-                    else if (this.name == ("Controller (right)") && GameObject.Find("Controller (left)") != null)
+                    else if (!readQuestion)
                     {
-                        GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().confirmed = false;
-                        GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().readQuestion = false;
+                        mrs.ChangeTaskText(mrs.GetTaskText() + "\n\nPress <color=green>Start</color> to solve the question.\n\n", -1);
+                        if (MultipleManager.transform.localPosition.y > -50f)
+                            MultipleManager.transform.localPosition -= Vector3.up * 100;
+                        if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+                        {
+                            GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Start";
+                            GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Start";
+                        }
+                        readQuestion = true;
+                        if (this.name == ("Controller (left)") && GameObject.Find("Controller (right)") != null)
+                        {
+                            GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().readQuestion = true;
+                        }
+                        else if (this.name == ("Controller (right)") && GameObject.Find("Controller (left)") != null)
+                        {
+                            GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().readQuestion = true;
+                        }
                     }
-                   
-                    mrs.StartTask();
+                    else
+                    {
+                        if (MultipleManager.transform.localPosition.y < -50f)
+                            MultipleManager.transform.localPosition += Vector3.up * 100;
+                        confirmed = false;
+                        readQuestion = false;
+                        if (this.name == ("Controller (left)") && GameObject.Find("Controller (right)") != null)
+                        {
+                            GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().confirmed = false;
+                            GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().readQuestion = false;
+                        }
+                        else if (this.name == ("Controller (right)") && GameObject.Find("Controller (left)") != null)
+                        {
+                            GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().confirmed = false;
+                            GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().readQuestion = false;
+                        }
+
+                        mrs.StartTask();
+                    }
                 }
-            }        
+            }
+            else if (mrs.trialState == TrialState.OnTask)
+            {
+                mrs.FinishOrTimeUpToAnswer();
+            }
         }
-        else if (mrs.trialState == TrialState.OnTask) {
-            mrs.FinishOrTimeUpToAnswer();
-        }
+        
     }
 
     public virtual void OnPadUnclicked(ClickedEventArgs e)
@@ -483,7 +444,7 @@ public class SteamVR_TrackedController : MonoBehaviour
                 if (dataSet == 1)
                 {
                     //building.transform.RotateAround(Vector3.up, transform.rotation.y * Time.deltaTime);
-                    BuildingScript buildS = building.transform.GetChild(0).gameObject.GetComponent<BuildingScript>();
+                    BuildingScript buildS = building.transform.GetChild(1).gameObject.GetComponent<BuildingScript>();
                     realCentre = buildS.getCentreCoordinates();
                 }
                 else
@@ -591,7 +552,7 @@ public class SteamVR_TrackedController : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        
+
         if (triggerPressed) {
             triggerTimer++;
         }

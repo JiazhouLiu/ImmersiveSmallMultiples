@@ -1,55 +1,31 @@
-QuestionID,Dataset,Layout,TaskLevel,Training,QuestionText,CorrectAnswer
-1,BIM,Flat,1,TRUE,"On the ground floor, which sensor has the lowest temperature value in both July and October?",Sensor B
-2,BIM,Flat,1,FALSE,"In June, which sensor has the same temperature value as the sensor L in September?",Sensor D
-3,BIM,Flat,1,FALSE,Which sensor has the same temperature value as the sensor I in both February and May?,Sensor H
-4,BIM,Flat,2,TRUE,"In May, which sensor has the same temperature value as the sensor I in April?",Sensor G
-5,BIM,Flat,2,FALSE,"In April, which sensor has the same temperature value as the sensor L in September?",Sensor B
-6,BIM,Flat,2,FALSE,Which sensor has the highest temperature value in both February and December?,Sensor G
-7,BIM,Flat,3,TRUE,"In which month, sensor D and sensor E have the same temperature value?",May
-8,BIM,Flat,3,FALSE,Which month has the most sensors with temperature above 27°C?,January
-9,BIM,Flat,3,FALSE,Which month has the lowest temperature value for sensor H?,July
-10,BIM,Quarter-Circle,1,TRUE,"On the first floor, which sensor has the lowest temperature value in both August and November?",Sensor L
-11,BIM,Quarter-Circle,1,FALSE,"On the ground floor, which sensor has the lowest temperature value in both April and July?",Sensor B
-12,BIM,Quarter-Circle,1,FALSE,"In October, which sensor has the same temperature value as the sensor K in May?",Sensor L
-13,BIM,Quarter-Circle,2,TRUE,"In January, which sensor has the same temperature value as the sensor E in November?",Sensor L
-14,BIM,Quarter-Circle,2,FALSE,"On the first floor, which sensor has the lowest temperature value in both January and December?",Sensor L
-15,BIM,Quarter-Circle,2,FALSE,Which sensor has the lowest temperature value in both April and October?,Sensor B
-16,BIM,Quarter-Circle,3,TRUE,Which month has the highest temperature value for sensor J?,January
-17,BIM,Quarter-Circle,3,FALSE,Which month does sensor L have a temperature value as 21°C to 22°C?,September
-18,BIM,Quarter-Circle,3,FALSE,Which month has the most sensors with temperature below 20°C?,July
-19,BIM,Half-Circle,1,TRUE,Which sensor has the same temperature value as the sensor C in both June and September?,Sensor L
-20,BIM,Half-Circle,1,FALSE,"In December, which sensor has the same temperature value as the sensor G in July?",Sensor C
-21,BIM,Half-Circle,1,FALSE,Which sensor has the same temperature value as the sensor C in both March and August?,Sensor B
-22,BIM,Half-Circle,2,TRUE,"In December, which sensor has the same temperature value as the sensor D in May?",Sensor C
-23,BIM,Half-Circle,2,FALSE,"On the first floor, which sensor has the highest temperature value in both August and September?",Sensor G
-24,BIM,Half-Circle,2,FALSE,"In September, which sensor has the same temperature value as the sensor I in April?",Sensor G
-25,BIM,Half-Circle,3,TRUE,Which month has the most sensors with temperature between 23°C to 24°C?,September
-26,BIM,Half-Circle,3,FALSE,Which month has the most sensors with temperature between 25°C to 26°C?,October
-27,BIM,Half-Circle,3,FALSE,Which month does sensor E have a temperature value as 21°C to 22°C?,July
-28,Bar,Flat,1,TRUE,Which country had the most similar health expenditures in 1992 as the external debt rates of France in the same year?,Belgium
-29,Bar,Flat,1,FALSE,Which country had more education aid in 1990 than the armed forces personnel of Austria in the same year?,Australia
-30,Bar,Flat,1,FALSE,Which country had more gross capital formation in 1991 than the exports of Austria in the same year?,Canada
-31,Bar,Flat,2,TRUE,Which year did Australia have less gross capital formation than its births attended in 1989?,1989
-32,Bar,Flat,2,FALSE,Which year did France have its least agricultural land and health expenditures?,1989
-33,Bar,Flat,2,FALSE,Which year did Belgium have more CO2 emissions than its food consumption in 1992?,1990
-34,Bar,Flat,3,TRUE,"In 1991, in which chart does Canada have the most value compared with all other countries?",Gross Capital Formation
-35,Bar,Flat,3,FALSE,"In which chart, France has exact the same trend (Ascending/Descending) for Agricultural Land over the whole time series?",Health Expenditures
-36,Bar,Flat,3,FALSE,In which chart does Netherlands have its most value in 1995 compared with ITSELF over the whole time series?,HIV Prevalence
-37,Bar,Quarter-Circle,1,TRUE,Which country had more external debt rates in 1989 than the births attended of Austria in the same year?,France
-38,Bar,Quarter-Circle,1,FALSE,Which country had the most similar agricultural land in 1994 as the electricity consumption of Italy in the same year?,Denmark
-39,Bar,Quarter-Circle,1,FALSE,Which country had more education aid in 1992 than the gross capital formation of Italy in the same year?,France
-40,Bar,Quarter-Circle,2,TRUE,Which year did Denmark have more armed forces personnel than its health expenditures in 1997?,1992
-41,Bar,Quarter-Circle,2,FALSE,Which year did Austria have the most similar gross capital formation as its CO2 emmisions in 1994?,1992
-42,Bar,Quarter-Circle,2,FALSE,Which year did Austria have the most similar food consumption as its CO2 emmisions in 1990?,1995
-43,Bar,Quarter-Circle,3,TRUE,"In which chart, Belgium has the greatest difference between two values in 1989 and 1990?",CO2 Emissions
-44,Bar,Quarter-Circle,3,FALSE,"In which chart, Norway has exact the opposite trend (Ascending/Descending) for agricultural land over the whole time series? ",Electricity Consumption
-45,Bar,Quarter-Circle,3,FALSE,"In 1989, in which chart does France have the most value compared with all other countries?",External Debt Rates
-46,Bar,Half-Circle,1,TRUE,Which country had the most similar electricity consumption in 1998 as the food consumption of Netherlands in the same year?,Norway
-47,Bar,Half-Circle,1,FALSE,Which country had the most similar CO2 emmisions in 1990 as the exports of Austria in the same year?,Belgium
-48,Bar,Half-Circle,1,FALSE,Which country had less exports in 1997 than the HIV prevalence of United States in the same year?,Netherlands
-49,Bar,Half-Circle,2,TRUE,Which year did Denmark have the most similar gross capital formation as its agricultural land in 1998?,1993
-50,Bar,Half-Circle,2,FALSE,Which year did United States have less food consumption than its Births attended in 1997?,1989
-51,Bar,Half-Circle,2,FALSE,Which year did Netherlands have the most similar HIV prevalence as its agricultural land value in 1991?,1991
-52,Bar,Half-Circle,3,TRUE,"In which chart, Belgium has the greatest change over the whole time series?",HIV Prevalence
-53,Bar,Half-Circle,3,FALSE,"In 1994, in which chart does Australia have the most value compared with all other countries?",Food Consumption
-54,Bar,Half-Circle,3,FALSE,In which chart does United States reach its bottom of the trend in 1991 over the whole time series?,Electricity Consumption
+QuestionID,Layout,QuestionType,Training,QuestionText,CorrectAnswer
+1,Flat,Long Distance,TRUE,,
+2,Flat,Long Distance,TRUE,,
+3,Flat,Long Distance,FALSE,,
+4,Flat,Long Distance,FALSE,,
+5,Flat,Long Distance,FALSE,,
+6,Circle,Long Distance,TRUE,,
+7,Circle,Long Distance,TRUE,,
+8,Circle,Long Distance,FALSE,,
+9,Circle,Long Distance,FALSE,,
+10,Circle,Long Distance,FALSE,,
+11,Half-Circle,Long Distance,TRUE,,
+12,Half-Circle,Long Distance,TRUE,,
+13,Half-Circle,Long Distance,FALSE,,
+14,Half-Circle,Long Distance,FALSE,,
+15,Half-Circle,Long Distance,FALSE,,
+16,Flat,Trending,TRUE,,
+17,Flat,Trending,TRUE,,
+18,Flat,Trending,FALSE,,
+19,Flat,Trending,FALSE,,
+20,Flat,Trending,FALSE,,
+21,Circle,Trending,TRUE,,
+22,Circle,Trending,TRUE,,
+23,Circle,Trending,FALSE,,
+24,Circle,Trending,FALSE,,
+25,Circle,Trending,FALSE,,
+26,Half-Circle,Trending,TRUE,,
+27,Half-Circle,Trending,TRUE,,
+28,Half-Circle,Trending,FALSE,,
+29,Half-Circle,Trending,FALSE,,
+30,Half-Circle,Trending,FALSE,,

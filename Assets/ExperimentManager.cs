@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class ExperimentManager : MonoBehaviour {
 
-    public int ExperimentID = 14;
-    public int TrialNumber = 1;
+    public int ExperimentID;
+    public int TrialNumber;
 
     public static int ExperimentSequence;
     public static int ParticipantID;
@@ -20,6 +20,7 @@ public class ExperimentManager : MonoBehaviour {
     public static float userHeight;
     public static bool comprehensiveTraining = true;
     public static bool forceStopTrainingForCombinition = false;
+    public static int sceneCounter = 0;
 
     private bool leftTriggerButtonPass = false;
     private bool rightTriggerButtonPass = false;
@@ -46,11 +47,12 @@ public class ExperimentManager : MonoBehaviour {
         taskBoards.Add(GameObject.Find("TaskBoardTop"));
 
         PublicTrialNumber = TrialNumber;
-        
-        if (ExperimentID > 0) {
+
+        if (ExperimentID > 0)
+        {
             ParticipantID = ExperimentID;
 
-            switch (ExperimentID % 12)
+            switch (ExperimentID % 6)
             {
                 case 1:
                     ExperimentSequence = 1;
@@ -67,30 +69,15 @@ public class ExperimentManager : MonoBehaviour {
                 case 5:
                     ExperimentSequence = 5;
                     break;
-                case 6:
-                    ExperimentSequence = 6;
-                    break;
-                case 7:
-                    ExperimentSequence = 7;
-                    break;
-                case 8:
-                    ExperimentSequence = 8;
-                    break;
-                case 9:
-                    ExperimentSequence = 9;
-                    break;
-                case 10:
-                    ExperimentSequence = 10;
-                    break;
-                case 11:
-                    ExperimentSequence = 11;
-                    break;
                 case 0:
-                    ExperimentSequence = 12;
+                    ExperimentSequence = 6;
                     break;
                 default:
                     break;
             }
+        }
+        else { // testing stream
+            ExperimentSequence = 1;
         }
 
         
@@ -123,17 +110,17 @@ public class ExperimentManager : MonoBehaviour {
 
             string writerAnswerFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ParticipantID + "/Participant_" + ParticipantID + "_Answers.csv";
             writer = new StreamWriter(writerAnswerFilePath, false);
-            writer.WriteLine("UserID,Task,Answer,CompletionTime,Dataset,Layout,QuestionLevel,QuestionID,CorrectAnswer");
+            writer.WriteLine("UserID,TrialID,TaskID,Answer,CompletionTime,Dataset,Layout,QuestionLevel,QuestionID,CorrectAnswer");
             writer.Close();
 
             string writerEyeFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ParticipantID + "/Participant_" + ParticipantID + "_EyeTrackingLog.csv";
             writer = new StreamWriter(writerEyeFilePath, false);
-            writer.WriteLine("TimeSinceStart,UserID,Task,Dataset,Layout,QuestionLevel,TrialState,RawGazeFromPupil2D.x,RawGazeFromPupil2D.y,SMHighlighted1,SMHighlighted2,SMGazed,GazePositionAfterCalculation.x,GazePositionAfterCalculation.y,GazePositionAfterCalculation.z");
+            writer.WriteLine("TimeSinceStart,UserID,TrialID,TaskID,Dataset,Layout,QuestionLevel,TrialState,RawGazeFromPupil2D.x,RawGazeFromPupil2D.y,SMHighlighted1,SMHighlighted2,SMGazed,GazePositionAfterCalculation.x,GazePositionAfterCalculation.y,GazePositionAfterCalculation.z");
             writer.Close();
 
             string writerHeadFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ParticipantID + "/Participant_" + ParticipantID + "_HeadPositionLog.csv";
             writer = new StreamWriter(writerHeadFilePath, false);
-            writer.WriteLine("TimeSinceStart,UserID,Task,Dataset,Layout,QuestionLevel,TrialState,SMManagerPosition.x,SMManagerPosition.y,SMManagerPosition.z,SMManagerScale,CameraPosition.x,CameraPosition.y,CameraPosition.z,CameraEulerAngles.x,CameraEulerAngles.y,CameraEulerAngles.z");
+            writer.WriteLine("TimeSinceStart,UserID,TrialID,TaskID,Dataset,Layout,QuestionLevel,TrialState,SMManagerPosition.x,SMManagerPosition.y,SMManagerPosition.z,SMManagerScale,CameraPosition.x,CameraPosition.y,CameraPosition.z,CameraEulerAngles.x,CameraEulerAngles.y,CameraEulerAngles.z");
             writer.Close();
         }
         else {
@@ -170,316 +157,230 @@ public class ExperimentManager : MonoBehaviour {
 
                 switch (ExperimentSequence)
                 {
-                    case 1: 
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
+                    case 1:
+                        if ((TrialNumber % 15 >= 1) && (TrialNumber % 15 <= 5)) {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 3;
+                            }
+                            else {
+                                sceneCounter = 0;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                         }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
+                        else if ((TrialNumber % 15 >= 6) && (TrialNumber % 15 <= 10))
                         {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 4;
+                            }
+                            else
+                            {
+                                sceneCounter = 1;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
+                        else if (((TrialNumber % 15 >= 11) && (TrialNumber % 15 < 15)) || TrialNumber % 15 == 0)
                         {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 5;
+                            }
+                            else
+                            {
+                                sceneCounter = 2;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         break;
                     case 2:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
+                        if ((TrialNumber % 15 >= 1) && (TrialNumber % 15 <= 5))
                         {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 3;
+                            }
+                            else
+                            {
+                                sceneCounter = 0;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                         }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
+                        else if ((TrialNumber % 15 >= 6) && (TrialNumber % 15 <= 10))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 4;
+                            }
+                            else
+                            {
+                                sceneCounter = 1;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
+                        else if (((TrialNumber % 15 >= 11) && (TrialNumber % 15 < 15)) || TrialNumber % 15 == 0)
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 5;
+                            }
+                            else
+                            {
+                                sceneCounter = 2;
+                            }
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         break;
                     case 3:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
+                        if ((TrialNumber % 15 >= 1) && (TrialNumber % 15 <= 5))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 3;
+                            }
+                            else
+                            {
+                                sceneCounter = 0;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
+                        else if ((TrialNumber % 15 >= 6) && (TrialNumber % 15 <= 10))
                         {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 4;
+                            }
+                            else
+                            {
+                                sceneCounter = 1;
+                            }
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
+                        }
+                        else if (((TrialNumber % 15 >= 11) && (TrialNumber % 15 < 15)) || TrialNumber % 15 == 0)
+                        {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 5;
+                            }
+                            else
+                            {
+                                sceneCounter = 2;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
                         break;
                     case 4:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
+                        if ((TrialNumber % 15 >= 1) && (TrialNumber % 15 <= 5))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 3;
+                            }
+                            else
+                            {
+                                sceneCounter = 0;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
+                        else if ((TrialNumber % 15 >= 6) && (TrialNumber % 15 <= 10))
                         {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 4;
+                            }
+                            else
+                            {
+                                sceneCounter = 1;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
+                        else if (((TrialNumber % 15 >= 11) && (TrialNumber % 15 < 15)) || TrialNumber % 15 == 0)
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 5;
+                            }
+                            else
+                            {
+                                sceneCounter = 2;
+                            }
+                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                         }
                         break;
                     case 5:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
+                        if ((TrialNumber % 15 >= 1) && (TrialNumber % 15 <= 5))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 3;
+                            }
+                            else
+                            {
+                                sceneCounter = 0;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
+                        else if ((TrialNumber % 15 >= 6) && (TrialNumber % 15 <= 10))
                         {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 4;
+                            }
+                            else
+                            {
+                                sceneCounter = 1;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                         }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
+                        else if (((TrialNumber % 15 >= 11) && (TrialNumber % 15 < 15)) || TrialNumber % 15 == 0)
                         {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 5;
+                            }
+                            else
+                            {
+                                sceneCounter = 2;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
                         break;
                     case 6:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
+                        if ((TrialNumber % 15 >= 1) && (TrialNumber % 15 <= 5))
                         {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 3;
+                            }
+                            else
+                            {
+                                sceneCounter = 0;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                         }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
+                        else if ((TrialNumber % 15 >= 6) && (TrialNumber % 15 <= 10))
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 4;
+                            }
+                            else
+                            {
+                                sceneCounter = 1;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                         }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
+                        else if (((TrialNumber % 15 >= 11) && (TrialNumber % 15 < 15)) || TrialNumber % 15 == 0)
                         {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        break;
-                    case 7:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
+                            if (TrialNumber > 15)
+                            {
+                                sceneCounter = 5;
+                            }
+                            else
+                            {
+                                sceneCounter = 2;
+                            }
                             SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        break;
-                    case 8:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        break;
-                    case 9:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                        }
-                        break;
-                    case 10:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        break;
-                    case 11:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        break;
-                    case 12:
-                        if (TrialNumber >= (0 * taskNo + 1) && TrialNumber <= (1 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                        }
-                        else if (TrialNumber >= (1 * taskNo + 1) && TrialNumber <= (2 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                        }
-                        else if (TrialNumber >= (2 * taskNo + 1) && TrialNumber <= (3 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                        }
-                        if (TrialNumber >= (3 * taskNo + 1) && TrialNumber <= (4 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                        }
-                        else if (TrialNumber >= (4 * taskNo + 1) && TrialNumber <= (5 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                        }
-                        else if (TrialNumber >= (5 * taskNo + 1) && TrialNumber <= (6 * taskNo))
-                        {
-                            SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
                         }
                         break;
                     default:
@@ -509,8 +410,8 @@ public class ExperimentManager : MonoBehaviour {
                 else if (state == 2)
                 {
                     SteamVR_TrackedControllerForStartScene rightControllerScript = rightControllerGO.GetComponent<SteamVR_TrackedControllerForStartScene>();
-                    WriteToBoard("Before each task, you have free time to get familiar with small multiples data. The data and order of each small multiple will NOT change during the same visualisation experiment. Then, you have free time to read the question. After reading, you have a maximum of 60 seconds to finish the question." +
-                        "Or, you can press the <color=green>Finish</color> button on the controller to start answering the question.\n\nNow, please stand still and press the <color=red>trigger</color> button on your right (R) hand to continue.");
+                    WriteToBoard("Before each task, you have free time to get familiar with small multiples data. Then, you have free time to read the question. After reading, you will be navigated to work on the questions. Please finish as quickly as possible" +
+                        "When you get the result, press the <color=green>Finish</color> button on the controller to start answering the question.\n\nNow, please stand still and press the <color=red>trigger</color> button on your right (R) hand to continue.");
                     if (rightControllerScript.triggerPressed)
                     {
                         userHeight = Camera.main.transform.position.y;
@@ -518,41 +419,23 @@ public class ExperimentManager : MonoBehaviour {
                         switch (ExperimentSequence)
                         {
                             case 1:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                 break;
                             case 2:
                                 SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                 break;
                             case 3:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Flat");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                 break;
                             case 4:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                 break;
                             case 5:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
+                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                 break;
                             case 6:
                                 SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                                break;
-                            case 7:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Full Circle");
-                                break;
-                            case 8:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                                break;
-                            case 9:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                                break;
-                            case 10:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                                break;
-                            case 11:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Half Circle");
-                                break;
-                            case 12:
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                                break;
+                                break; 
                             default:
                                 break;
                         }
@@ -564,131 +447,6 @@ public class ExperimentManager : MonoBehaviour {
             }   
         }
     }
-
-    //public void ChangeState(GameObject controller, string button) {
-    //    switch (state) {
-    //        case 0:
-    //            // load scene based on sequence
-    //            if (ExperimentSequence <= 4 && ExperimentSequence > 0 && ParticipantID > 0)
-    //            {
-    //                switch (ExperimentSequence)
-    //                {
-    //                    case 1:
-    //                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1 - Curved");
-    //                        break;
-    //                    case 2:
-    //                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 1");
-    //                        break;
-    //                    case 3:
-    //                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Curved");
-    //                        break;
-    //                    case 4:
-    //                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2");
-    //                        break;
-    //                    default:
-    //                        break;
-    //                }
-    //            }
-    //            else {
-    //                Debug.Log("Starting loading scene failed!");
-    //            }
-    //            break;
-    //        case 1:
-    //            // start position tut
-    //            WriteToBoard("start position tut");
-    //            if (button == "trigger") {
-    //                state++;
-    //                ChangeState(null, "");
-    //            }
-    //            break;
-    //        case 2:
-    //            // trigger button tut
-    //            WriteToBoard("trigger button tut");
-    //            if (controller != null) {
-    //                if (controller.name == leftController && button == "trigger")
-    //                {
-    //                    SteamVR_TrackedControllerForStartScene tc = controller.GetComponent<SteamVR_TrackedControllerForStartScene>();
-    //                    SteamVR_Controller.Input((int)tc.controllerIndex).TriggerHapticPulse(1000);
-    //                    leftTriggerButtonPass = true;
-    //                }
-    //                else if (controller.name == rightController && button == "trigger")
-    //                {
-    //                    SteamVR_TrackedControllerForStartScene tc = controller.GetComponent<SteamVR_TrackedControllerForStartScene>();
-    //                    SteamVR_Controller.Input((int)tc.controllerIndex).TriggerHapticPulse(1000);
-    //                    rightTriggerButtonPass = true;
-    //                }
-    //            }
-                
-    //            break;
-    //        case 3:
-    //            // grip button tut
-    //            WriteToBoard("grip button tut");
-    //            if (controller != null)
-    //            {
-    //                if (controller.name == leftController && button == "grip")
-    //                {
-    //                    SteamVR_TrackedControllerForStartScene tc = controller.GetComponent<SteamVR_TrackedControllerForStartScene>();
-    //                    SteamVR_Controller.Input((int)tc.controllerIndex).TriggerHapticPulse(1000);
-    //                    leftGripButtonPass = true;
-    //                }
-    //                else if (controller.name == rightController && button == "grip")
-    //                {
-    //                    SteamVR_TrackedControllerForStartScene tc = controller.GetComponent<SteamVR_TrackedControllerForStartScene>();
-    //                    SteamVR_Controller.Input((int)tc.controllerIndex).TriggerHapticPulse(1000);
-    //                    rightGripButtonPass = true;
-    //                }
-    //            }
-    //            break;
-    //        case 4:
-    //            // menu button tut
-    //            WriteToBoard("menu button tut");
-    //            if (controller != null)
-    //            {
-    //                if (controller.name == leftController && button == "menu")
-    //                {
-    //                    SteamVR_TrackedControllerForStartScene tc = controller.GetComponent<SteamVR_TrackedControllerForStartScene>();
-    //                    SteamVR_Controller.Input((int)tc.controllerIndex).TriggerHapticPulse(1000);
-    //                    leftMenuButtonPass = true;
-    //                }
-    //                else if (controller.name == rightController && button == "menu")
-    //                {
-    //                    SteamVR_TrackedControllerForStartScene tc = controller.GetComponent<SteamVR_TrackedControllerForStartScene>();
-    //                    SteamVR_Controller.Input((int)tc.controllerIndex).TriggerHapticPulse(1000);
-    //                    rightMenuButtonPass = true;
-    //                }
-    //            }
-    //            break;
-    //        case 5:
-    //            // touchpad button tut
-    //            WriteToBoard("touchpad button tut");
-    //            if (controller != null)
-    //            {
-    //                if (controller.name == leftController && button == "TouchPad")
-    //                {
-    //                    SteamVR_TrackedControllerForStartScene tc = controller.GetComponent<SteamVR_TrackedControllerForStartScene>();
-    //                    SteamVR_Controller.Input((int)tc.controllerIndex).TriggerHapticPulse(1000);
-    //                    leftTouchPadButtonPass = true;
-    //                }
-    //                else if (controller.name == rightController && button == "TouchPad")
-    //                {
-    //                    SteamVR_TrackedControllerForStartScene tc = controller.GetComponent<SteamVR_TrackedControllerForStartScene>();
-    //                    SteamVR_Controller.Input((int)tc.controllerIndex).TriggerHapticPulse(1000);
-    //                    rightTouchPadButtonPass = true;
-    //                }
-    //            }
-    //            break;
-    //        case 6:
-    //            // stand still and press trigger button to record height
-    //            WriteToBoard("stand still and press trigger button to record height");
-    //            userHeight = Camera.main.transform.position.y;
-    //            //Debug.Log(Camera.main.transform.position.y);
-    //            state = 0;
-    //            break;
-    //        default:
-    //            break;
-    //    }
-    //}
-
 
     // utilities
     private void WriteToBoard(string text) {

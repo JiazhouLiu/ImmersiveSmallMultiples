@@ -674,26 +674,14 @@ MonoBehaviour:
     type: 2}
   tooltipPrefab: {fileID: 1254442756563342, guid: 3382d1533f266e34885c14aaae16b747,
     type: 2}
-  colorSchemePrefab: {fileID: 1174221759574692, guid: 74b265a2e4c442e4cb6249a0789d342e,
-    type: 2}
-  TrajectoriesPrefab: {fileID: 1967261739165816, guid: 05e4ef0d259676141a5137a5e6ddf955,
-    type: 2}
   silhouetteShader: {fileID: 2100000, guid: 5098b4ffb5041ac46b893c8f66bfa287, type: 2}
   haloLightPrefab: {fileID: 108772461146402644, guid: 4d23b93318407784d833b0293ffba1d6,
     type: 2}
   ACFile: {fileID: 4900000, guid: 6c38b44f23b83aa4db1b88f07d3b8a6b, type: 3}
-  BIMCurQsFile: {fileID: 4900000, guid: bf3298ab64266e24c967454731ae1fac, type: 3}
-  BIMFltQsFile: {fileID: 4900000, guid: 413ea4b55e5549348a806669499cf944, type: 3}
-  BIMQCurQsFile: {fileID: 4900000, guid: 1c98dd81ed6b9cc4e813069179086d70, type: 3}
-  BarCurQsFile: {fileID: 4900000, guid: a9d89e784634eab47914c9c4666cce79, type: 3}
-  BarFltQsFile: {fileID: 4900000, guid: 23f376769d67f9547a9c8521b3fba724, type: 3}
-  BarQCurQsFile: {fileID: 4900000, guid: 874c43579ec665d488647d06c3371502, type: 3}
-  BIMCurQsTFile: {fileID: 4900000, guid: 23664292985c98d4586f3a6b473fb26b, type: 3}
-  BIMFltQsTFile: {fileID: 4900000, guid: bbe7b7ad8fe9b004db1cd24164f04e70, type: 3}
-  BIMQCurQsTFile: {fileID: 4900000, guid: a821d413f3328e14da2bdb6cf1db9f0d, type: 3}
-  BarCurQsTFile: {fileID: 4900000, guid: 642c29b8083f7494aa6ade07a3caa5bf, type: 3}
-  BarFltQsTFile: {fileID: 4900000, guid: 8bc2e348046dc5241b2aaf776ab1ec51, type: 3}
-  BarQCurQsTFile: {fileID: 4900000, guid: c22354bc8553dec4a9eafcd980dfdcf6, type: 3}
+  FlatQsFile: {fileID: 4900000, guid: 429d48307235b0a4db08ca443f150807, type: 3}
+  HalfCircleQsFile: {fileID: 4900000, guid: 49aa228c1ca6fab49a5b021d535a1b90, type: 3}
+  FullCircleQsFile: {fileID: 4900000, guid: aee1ecb7b40bd3546ba2d0c079dce4d9, type: 3}
+  ShuffledOrderFile: {fileID: 4900000, guid: c2881a113a221854d81af84d37acd517, type: 3}
   TextHolderPrefab: {fileID: 0}
   FilterPrefab: {fileID: 1485276598334002, guid: 036951f82d283bd418eab9fb17e9531a,
     type: 2}
@@ -710,10 +698,7 @@ MonoBehaviour:
   fullCircle: 0
   dataset: 2
   smallMultiplesNumber: 36
-  dateType: 2
-  taskID: 0
   taskArray: []
-  trainingTaskArray: []
   startTask: 0
   leftFilterMoving: 0
   leftFindHighlighedAxisFromCollision: 0
@@ -728,12 +713,6 @@ MonoBehaviour:
   rightYAxisPosition: 0
   rightFindHighlighedForY: 0
   triggerPressedForFilterMoving: 0
-  leftFindHighlighedSensorFromCollision: 0
-  rightFindHighlighedSensorFromCollision: 0
-  colorFilterOn: 0
-  colorFilterActive: 0
-  rightFindHoveringV2FromCollisionBIM: {x: -1, y: -1}
-  leftFindHoveringV2FromCollisionBIM: {x: -1, y: -1}
   trialState: 0
   selectedAnswer: 
   interactionTrainingNeeded: 0
@@ -3977,6 +3956,21 @@ Prefab:
     - target: {fileID: 4894749872887648, guid: c57e433f2b7068645b1e5a60ad59e0cf, type: 2}
       propertyPath: m_LocalPosition.z
       value: -0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114955776884980014, guid: c57e433f2b7068645b1e5a60ad59e0cf,
+        type: 2}
+      propertyPath: countTimer
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 114363456232697374, guid: c57e433f2b7068645b1e5a60ad59e0cf,
+        type: 2}
+      propertyPath: countTimer
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 114898155272216920, guid: c57e433f2b7068645b1e5a60ad59e0cf,
+        type: 2}
+      propertyPath: countTimer
+      value: 120
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c57e433f2b7068645b1e5a60ad59e0cf, type: 2}

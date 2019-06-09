@@ -6,7 +6,7 @@ using TMPro;
 public class CountDownTimer : MonoBehaviour {
 
     private bool startCount = false;
-    public float countTimer = 60.0f;
+    public float countTimer = 120.0f;
     SmallMultiplesManagerScript smms = null;
 	// Use this for initialization
 	void Start () {
@@ -27,11 +27,16 @@ public class CountDownTimer : MonoBehaviour {
             if (countTimer < 10.5f)
             {
                 tmp.color = Color.red;
+                //transform.GetChild(0).gameObject.SetActive(true);
             }
             else
             {
                 tmp.color = Color.white;
+                //transform.GetChild(0).gameObject.SetActive(false);
             }
+        }
+        else {
+            //transform.GetChild(0).gameObject.SetActive(false);
         }
         if (countTimer < 0.5f && smms != null) {
             smms.FinishOrTimeUpToAnswer();
@@ -43,9 +48,9 @@ public class CountDownTimer : MonoBehaviour {
     }
 
     public void ResetTimer() {
-        countTimer = 60f;
+        countTimer = 120f;
         TextMeshProUGUI tmp = transform.GetChild(0).Find("CountText").GetComponent<TextMeshProUGUI>();
-        tmp.text = "60 s";
+        tmp.text = "120 s";
         tmp.color = Color.white;
         startCount = false;
     }

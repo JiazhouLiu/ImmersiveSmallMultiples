@@ -2,34 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using VRTK;
 
 public class CollisionDetection : MonoBehaviour
 {
     public GameObject FilterPrefab;
+    GameObject TooltipPrefab;
 
     SmallMultiplesManagerScript smms;
     List<GameObject> sm;
 
-    // dataset 1
-    Collider obj = null;
-    GameObject currentLeftHighlight;
-    GameObject currentRightHighlight;
-    int leftGroundSensor = 0;
-    int rightGroundSensor = 0;
-    GameObject keepLeftHighlightGO;
-    GameObject keepRightHighlightGO;
-
     // dataset 2
     GameObject filterCoordinitor;
     GameObject axisCoordinitor;
-    //private List<GameObject> leftCountryFilters;
-    //private List<GameObject> rightCountryFilters;
-    //private List<GameObject> leftYearFilters;
-    //private List<GameObject> rightYearFilters;
-    //private List<GameObject> leftValueFilters;
-    //private List<GameObject> rightValueFilters;
-    //private List<GameObject> leftValuePlanes;
-    //private List<GameObject> rightValuePlanes;
+    GameObject barValueTooltip;
+
     [HideInInspector]
     public int touchedIndexOfColorFilter = -1;
 
@@ -47,10 +34,7 @@ public class CollisionDetection : MonoBehaviour
     // cube selection
     [HideInInspector]
     public Vector3 controllerStartPressingPosition = Vector3.zero;
-    //[HideInInspector]
-    //public Vector3 rightControllerStartPressingPosition = Vector3.zero;
-    //[HideInInspector]
-    //public GameObject currentLeftCube = null;
+
     [HideInInspector]
     public GameObject currentCube = null;
     Transform currentCubeParent = null;
@@ -61,8 +45,6 @@ public class CollisionDetection : MonoBehaviour
     GameObject touchedAnswerGO = null;
     GameObject selectedAnswerGO = null;
 
-    public int BIMlvlIndex = -1; // -1: undefined, 0:both, 1:lower, 2: upper
-
     Vector2 BarYAxisIndex = new Vector2(0, 1);
     public Vector2 selectedBarYAxisIndex = new Vector2(0, 1);
 
@@ -72,6 +54,7 @@ public class CollisionDetection : MonoBehaviour
     {
         
         smms = GameObject.Find("SmallMultiplesManager").GetComponent<SmallMultiplesManagerScript>();
+        TooltipPrefab = smms.tooltipPrefab;
         sm = new List<GameObject>();
 
         cubeSelectionPrefab = smms.cubeSelectionPrefab;
@@ -87,14 +70,17 @@ public class CollisionDetection : MonoBehaviour
             }
         }
 
-        //if (smms.dataset == 2)
-        //{
-            filterCoordinitor = new GameObject();
-            filterCoordinitor.name = "filterCoordinitor";
+        filterCoordinitor = new GameObject();
+        filterCoordinitor.name = "filterCoordinitor";
 
-            axisCoordinitor = new GameObject();
-            axisCoordinitor.name = "axisCoordinitor";
-        //}
+        axisCoordinitor = new GameObject();
+        axisCoordinitor.name = "axisCoordinitor";
+
+        barValueTooltip = (GameObject)Instantiate(TooltipPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        VRTK_ObjectTooltip ot = barValueTooltip.GetComponent<VRTK_ObjectTooltip>();
+        barValueTooltip.transform.Find("TooltipCanvas").Find("UIContainer").gameObject.SetActive(false);
+        barValueTooltip.SetActive(false);
+
         if (transform.parent.parent.parent.parent.parent.name == "Controller (right)")
         {
             this.name = "rightCollisionDetector";
@@ -108,33 +94,12 @@ public class CollisionDetection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (smms.dataset == 1) {
-            FilterManipulationD1();
-            AxisManipulationD1();
-        }
-        if (smms.dataset == 2)
-        {
-            FilterManipulation();
-            AxisManipulation();
-        }
-        
+        FilterManipulation();
+        AxisManipulation();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (smms.dataset == 1)
-        {
-            if (!smms.colorFilterOn && other.transform.parent.name.Equals("Sensor"))
-            {
-                SensorCollisionEnter(other);
-            }
-            if ((transform.parent.parent.parent.parent.parent.name == "Controller (right)" && smms.trialState == TrialState.OnTask) || (smms.trialState == TrialState.PreTask && smms.interactionTrainingCount == 6))
-            {
-                //if (other.transform.parent.name.Contains("PanelItem"))
-                    //smms.ColorFilterEnterCollision();
-            }
-        }
-
         if (other.name == "Box")
         {
             if (touchedAxis == null)
@@ -159,16 +124,6 @@ public class CollisionDetection : MonoBehaviour
         }
     }
 
-    private void ColorFilterCollisionStay(Collider other) {
-        if (other.transform.parent.name.Contains("PanelItem")) {
-            touchedIndexOfColorFilter = int.Parse(other.transform.parent.name[9] + "");
-            //Debug.Log(touchedIndexOfColorFilter);
-            if (smms.colorFilterActive) {
-                smms.ColorFilterForBIMSensors(touchedIndexOfColorFilter);
-            }
-        }
-    }
-
     private void AnswerCollisionEnter(Collider other)
     {
         if (other.transform.parent.name.Contains("PanelItem") && !other.transform.parent.name.Equals("PanelItemConfirm"))
@@ -190,13 +145,6 @@ public class CollisionDetection : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (smms.dataset == 1)
-        {
-            if ((transform.parent.parent.parent.parent.parent.name == "Controller (right)" && smms.trialState == TrialState.OnTask) || (smms.trialState == TrialState.PreTask && smms.interactionTrainingCount == 6))
-            {
-                ColorFilterCollisionStay(other);
-            }
-        }
 
         if (other.name.Contains("Filter"))
         {
@@ -250,9 +198,6 @@ public class CollisionDetection : MonoBehaviour
                         }
                     }
                 }
-                //else {
-                //    SteamVR_Controller.Input((int)rtc.controllerIndex).TriggerHapticPulse(500);
-                //}
             }
         }
     }
@@ -260,71 +205,17 @@ public class CollisionDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (smms.dataset == 1)
-        {
-            if (other.transform.parent.name.Equals("Sensor")) {
-                if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                {
-                    if (keepLeftHighlightGO != null)
-                    {
-                        smms.RegisterCollidedSensorFromLeft(null);
-                    }
-
-                }
-                else
-                {
-                    if (keepRightHighlightGO != null)
-                    {
-                        smms.RegisterCollidedSensorFromRight(null);
-                    }
-                }
-            }
-            
-            if ((transform.parent.parent.parent.parent.parent.name == "Controller (right)" && smms.trialState == TrialState.OnTask) || (smms.trialState == TrialState.PreTask && smms.interactionTrainingCount == 6))
-            {
-                if (other.transform.parent.name.Contains("PanelItem"))
-                {
-                    if (smms.colorFilterActive)
-                    {
-                        smms.ColorFilterExitCollision();
-                        touchedIndexOfColorFilter = -1;
-                    }
-                }
-            }
-        }
-
         if (other.name == "Box")
         {
             if (touchedAxis != null) {
                 touchedAxis.GetComponent<Renderer>().material.color = Color.white;
                 
-
-                //Debug.Log(BIMlvlIndex);
-                if (smms.dataset == 1)
-                {
-                    if (BIMlvlIndex == 0)
-                    {
-                        smms.FilterBIMFromCollision("Y", "max", 2);
-                        smms.FilterBIMFromCollision("Y", "min", 0);
-                    }
-                    else if (BIMlvlIndex == 1)
-                    {
-                        smms.FilterBIMFromCollision("Y", "max", 1);
-                        smms.FilterBIMFromCollision("Y", "min", 0);
-                    }
-                    else if (BIMlvlIndex == 2)
-                    {
-                        smms.FilterBIMFromCollision("Y", "max", 2);
-                        smms.FilterBIMFromCollision("Y", "min", 1);
-                    }
-                }
-                else {
-                    if (other.transform.parent.parent.name.Contains("Value")) {
-                        BarYAxisIndex = new Vector2(0, 1);
-                        if (touchedAxis != null) {
-                            CalculateFinalBarYAxisIndex();
-                            selectedBarYAxisIndex = new Vector2(0, 1);
-                        }
+                
+                if (other.transform.parent.parent.name.Contains("Budget")) {
+                    BarYAxisIndex = new Vector2(0, 1);
+                    if (touchedAxis != null) {
+                        CalculateFinalBarYAxisIndex();
+                        selectedBarYAxisIndex = new Vector2(0, 1);
                     }
                 }
                 touchedAxis = null;
@@ -363,437 +254,7 @@ public class CollisionDetection : MonoBehaviour
                 }
             }
         }
-
-        //if (other.name == "Button")
-        //{
-        //    other.transform.localPosition = Vector3.Lerp(other.transform.localPosition, new Vector3(0, 0.46f, 0), Time.deltaTime * 5);
-        //}
-
-        //if (transform.parent.parent.parent.parent.parent.name == "Controller (right)" && smms.trialState == TrialState.Answer)
-        //{
-        //    if (other.transform.parent.name.Contains("PanelItem"))
-        //    {
-        //        smms.selectedAnswer = "";
-        //    }
-        //}
     }
-
-
-
-    /// <summary>
-    /// Dataset 1
-    /// </summary>
-    /// <returns></returns>
-    private void SensorCollisionEnter(Collider other) {
-        obj = other;
-        if (other.name.Contains("ACG"))
-        {
-            if (int.Parse(other.name.Substring(4)) <= 4 && int.Parse(other.name.Substring(4)) >= 1)
-            {
-                if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                {
-                    currentLeftHighlight = other.gameObject;
-                    leftGroundSensor = 1;
-                }
-                else
-                {
-                    currentRightHighlight = other.gameObject;
-                    rightGroundSensor = 1;
-                }
-            }
-        }
-        else if (other.name.Contains("AC1"))
-        {
-            if ((int.Parse(other.name.Substring(4)) <= 9 && int.Parse(other.name.Substring(4)) >= 3) || int.Parse(other.name.Substring(4)) == 12)
-            {
-                if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                {
-                    currentLeftHighlight = other.gameObject;
-                    leftGroundSensor = 2;
-                }
-                else
-                {
-                    currentRightHighlight = other.gameObject;
-                    rightGroundSensor = 2;
-                }
-            }
-        }
-        else
-        {
-            if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-            {
-                leftGroundSensor = 0;
-            }
-            else
-            {
-                rightGroundSensor = 0;
-            }
-        }
-
-        if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-        {
-            smms.RegisterCollidedSensorFromLeft(FindLeftHighlight());
-            //if (currentLeftHighlight != null) {
-            //    smms.RegisterCollidedSensorFromLeft(currentLeftHighlight);
-            //}
-            //else
-            //{
-            //    smms.RegisterCollidedSensorFromLeft(null);
-            //}
-        }
-        
-
-        if (transform.parent.parent.parent.parent.parent.name == "Controller (right)")
-        {
-            smms.RegisterCollidedSensorFromRight(FindRightHighlight());
-            //if (currentRightHighlight != null) { 
-            //    smms.RegisterCollidedSensorFromRight(currentRightHighlight);
-            //}
-            //else
-            //{
-            //    smms.RegisterCollidedSensorFromRight(null);
-            //}  
-        }  
-    }
-
-
-    private GameObject FindLeftHighlight()
-    {
-        if (currentLeftHighlight != null)
-        {
-            //foreach (GameObject go in sm)
-            //{
-            GameObject sensorObj = null;
-            //BuildingScript bs = sm[0].transform.GetChild(0).GetComponent<BuildingScript>();
-            //bs.ResetHighlightSensor();
-            if (leftGroundSensor == 1)
-            {
-                sensorObj = sm[0].transform.GetChild(0).Find("GroundFloor").Find("Sensor").Find(currentLeftHighlight.name).gameObject;
-            }
-            else if (leftGroundSensor == 2)
-            {
-                sensorObj = sm[0].transform.GetChild(0).Find("Floor1").Find("Sensor").Find(currentLeftHighlight.name).gameObject;
-            }
-
-            if (sensorObj != null)
-            {                    
-                keepLeftHighlightGO = currentLeftHighlight;
-            }
-            else {
-                keepLeftHighlightGO = null;
-            }
-            //}
-            return keepLeftHighlightGO;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    private GameObject FindRightHighlight()
-    {
-        if (currentRightHighlight != null)
-        {
-            //foreach (GameObject go in sm)
-            //{
-                GameObject sensorObj = null;
-                //BuildingScript bs = sm[0].transform.GetChild(0).GetComponent<BuildingScript>();
-                //bs.ResetHighlightSensor();
-                if (rightGroundSensor == 1)
-                {
-                    sensorObj = sm[0].transform.GetChild(0).Find("GroundFloor").Find("Sensor").Find(currentRightHighlight.name).gameObject;
-                }
-                else if (rightGroundSensor == 2)
-                {
-                    sensorObj = sm[0].transform.GetChild(0).Find("Floor1").Find("Sensor").Find(currentRightHighlight.name).gameObject;
-                }
-
-                if (sensorObj != null)
-                {
-                    keepRightHighlightGO = currentRightHighlight;
-                }
-                else
-                {
-                    keepRightHighlightGO = null;
-                }
-            //}
-            return keepRightHighlightGO;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    
-    private void FilterManipulationD1()
-    {
-        
-        if (draggedFilter != null)
-        {
-            filterCoordinitor.transform.SetParent(draggedFilter.transform.parent);
-            filterCoordinitor.transform.localRotation = Quaternion.identity;
-            filterCoordinitor.transform.position = this.transform.position;
-            filterCoordinitor.transform.localPosition = new Vector3(0, filterCoordinitor.transform.localPosition.y, 0);
-
-            if (filterCoordinitor.transform.localPosition.y >= 1)
-            {
-                filterCoordinitor.transform.localPosition = new Vector3(0, 1, 0);
-            }
-            else if (filterCoordinitor.transform.localPosition.y <= 0)
-            {
-                filterCoordinitor.transform.localPosition = new Vector3(0, 0, 0);
-            }
-
-            for (float i = 0; i <= 1; i = i + 0.5f)
-            {
-                i = Mathf.Round(i * 10f) / 10f;
-
-                if (Mathf.Abs(filterCoordinitor.transform.localPosition.y - i) < 0.1f)
-                {
-                    segment = (int)(Mathf.Round(i / 0.5f * 1f) / 1f); // 0, 1, 2 for y axis filter
-                }
-            }
-
-            SteamVR_TrackedController tc = transform.parent.parent.parent.parent.parent.GetComponent<SteamVR_TrackedController>();
-
-            if (tc.triggerPressed)
-            {
-
-                if (tc.triggerTimer == 1)
-                {
-                    canGrab = true;
-                }
-
-                if (draggedFilter.transform.parent.parent.name == "X axis" || draggedFilter.transform.parent.parent.name == "Z axis")
-                {
-                    if (draggedFilter.transform.GetSiblingIndex() == 2)
-                    {
-                        if (draggedFilter.transform.parent.GetChild(3).localPosition.y - filterCoordinitor.transform.localPosition.y < 0.05f)
-                        {
-                            canGrab = false;
-                        }
-                    }
-                    else
-                    {
-                        if (filterCoordinitor.transform.localPosition.y - draggedFilter.transform.parent.GetChild(2).localPosition.y < 0.05f)
-                        {
-                            canGrab = false;
-                        }
-                    }
-                }
-                else
-                {
-                    if (draggedFilter.transform.GetSiblingIndex() == 2)
-                    {
-                        if (draggedFilter.transform.parent.GetChild(3).localPosition.y - (segment / 2f) < 0.08f)
-                        {
-                            canGrab = false;
-                        }
-                    }
-                    else
-                    {
-                        if ((segment / 2f) - draggedFilter.transform.parent.GetChild(2).localPosition.y < 0.08f)
-                        {
-                            canGrab = false;
-                        }
-                    }
-                }
-
-                if (canGrab)
-                {
-                    if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                    {
-                        smms.leftFilterMoving = true;
-                        //smms.leftPressedCount = 0;
-                    }
-                    else
-                    {
-                        smms.rightFilterMoving = true;
-                        //smms.rightPressedCount = 0;
-                    }
-                    draggedFilter.GetComponent<Renderer>().material.color = Color.green;
-
-                    if (draggedFilter.transform.parent.parent.name == "X axis")
-                    {
-                        draggedFilter.transform.localPosition = new Vector3(3, filterCoordinitor.transform.localPosition.y, 0);
-                        if (draggedFilter.transform.GetSiblingIndex() == 2)
-                        {
-                            smms.FilterBIMFromCollision("X", "min", filterCoordinitor.transform.localPosition.y);
-                        }
-                        else
-                        {
-                            smms.FilterBIMFromCollision("X", "max", filterCoordinitor.transform.localPosition.y);
-
-                        }
-                    }
-                    else if (draggedFilter.transform.parent.parent.name == "Z axis")
-                    {
-                        draggedFilter.transform.localPosition = new Vector3(3, filterCoordinitor.transform.localPosition.y, 0);
-                        if (draggedFilter.transform.GetSiblingIndex() == 2)
-                        {
-                            smms.FilterBIMFromCollision("Z", "min", filterCoordinitor.transform.localPosition.y);
-                        }
-                        else
-                        {
-                            smms.FilterBIMFromCollision("Z", "max", filterCoordinitor.transform.localPosition.y);
-                        }
-                    }
-                    else
-                    {
-                        BIMlvlIndex = 0;
-                        if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                        {
-                            GameObject.Find("rightCollisionDetector").GetComponent<CollisionDetection>().BIMlvlIndex = BIMlvlIndex;
-                        }
-                        else
-                        {
-                            GameObject.Find("leftCollisionDetector").GetComponent<CollisionDetection>().BIMlvlIndex = BIMlvlIndex;
-                        }
-                    
-                        draggedFilter.transform.localPosition = new Vector3(3, segment, 0);
-                        if (draggedFilter.transform.GetSiblingIndex() == 2)
-                        {
-                            draggedFilter.transform.localPosition = new Vector3(3, segment / 2f, 0);
-                            smms.FilterBIMFromCollision("Y", "min", segment);
-                        }
-                        else
-                        {
-                            draggedFilter.transform.localPosition = new Vector3(3, segment / 2f, 0);
-                            smms.FilterBIMFromCollision("Y", "max", segment);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (draggedFilter != null)
-                {
-                    if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                    {
-                        smms.leftFilterMoving = false;
-                    }
-                    else
-                    {
-                        smms.rightFilterMoving = false;
-                    }
-                    canGrab = false;
-                    draggedFilter.GetComponent<Renderer>().material.color = new Color(147f / 255f, 1, 1);
-                    draggedFilter = null;
-                }
-            }
-        }
-    }
-
-    private void AxisManipulationD1()
-    {
-        
-        if (touchedAxis != null)
-        {
-            
-            axisCoordinitor.transform.SetParent(touchedAxis.transform.parent);
-            axisCoordinitor.transform.localRotation = Quaternion.identity;
-            axisCoordinitor.transform.position = this.transform.position;
-            axisCoordinitor.transform.localPosition = new Vector3(0, axisCoordinitor.transform.localPosition.y, 0);
-
-            if (axisCoordinitor.transform.localPosition.y >= 1)
-            {
-                axisCoordinitor.transform.localPosition = new Vector3(0, 1, 0);
-            }
-            else if (axisCoordinitor.transform.localPosition.y <= 0)
-            {
-                axisCoordinitor.transform.localPosition = new Vector3(0, 0, 0);
-            }
-
-
-            //int tmp = (int)(axisCoordinitor.transform.localPosition.y / (1f / 18f)) + 1;
-            //axisSegment = (int)(tmp / 2f) + 1;
-
-
-
-            if (touchedAxis.transform.parent.parent.name == "X axis")
-            {
-                touchedAxis.GetComponent<Renderer>().material.color = Color.green;
-                if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                {
-                    smms.leftFindHoveringV2FromCollisionBIM = new Vector2(axisCoordinitor.transform.localPosition.y, -1);
-                    smms.leftFindHighlighedAxisFromCollision = true;
-                    //smms.leftPressedCount = 0;
-                }
-                else
-                {
-                    smms.rightFindHoveringV2FromCollisionBIM = new Vector2(axisCoordinitor.transform.localPosition.y, -1);
-                    smms.rightFindHighlighedAxisFromCollision = true;
-                    //smms.rightPressedCount = 0;
-                }
-
-            }
-            else if (touchedAxis.transform.parent.parent.name == "Z axis")
-            {
-                touchedAxis.GetComponent<Renderer>().material.color = Color.green;
-                if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                {
-                    smms.leftFindHoveringV2FromCollisionBIM = new Vector2(-1, axisCoordinitor.transform.localPosition.y);
-                    smms.leftFindHighlighedAxisFromCollision = true;
-                    //smms.leftPressedCount = 0;
-                }
-                else
-                {
-                    smms.rightFindHoveringV2FromCollisionBIM = new Vector2(-1, axisCoordinitor.transform.localPosition.y);
-                    smms.rightFindHighlighedAxisFromCollision = true;
-                    //smms.rightPressedCount = 0;
-                }
-            }
-            else if (touchedAxis.transform.parent.parent.name == "Y axis")
-            {
-                touchedAxis.GetComponent<Renderer>().material.color = Color.green;
-                
-                if (axisCoordinitor.transform.localPosition.y <= 0.5f) // ground lvl
-                {
-                    smms.FilterBIMFromCollision("Y", "max", 1);
-                    smms.FilterBIMFromCollision("Y", "min", 0);
-
-                    if (transform.parent.parent.parent.parent.parent.GetComponent<SteamVR_TrackedController>().triggerPressed)
-                        BIMlvlIndex = 1;                
-                }
-                else { // first floor 
-                    smms.FilterBIMFromCollision("Y", "max", 2);
-                    smms.FilterBIMFromCollision("Y", "min", 1);
-
-                    if (transform.parent.parent.parent.parent.parent.GetComponent<SteamVR_TrackedController>().triggerPressed)
-                        BIMlvlIndex = 2;
-                }
-
-                if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-                {
-                    //smms.leftPressedCount = 0;
-                    
-                    GameObject.Find("rightCollisionDetector").GetComponent<CollisionDetection>().BIMlvlIndex = BIMlvlIndex;
-                }
-                else
-                {
-                    //smms.rightPressedCount = 0;
-
-                    GameObject.Find("leftCollisionDetector").GetComponent<CollisionDetection>().BIMlvlIndex = BIMlvlIndex;
-                }
-            }
-        }
-        else
-        {
-            if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
-            {
-                smms.leftFindHoveringV2FromCollisionBIM = new Vector2(-1, -1);
-                smms.leftFindHighlighedAxisFromCollision = false;
-            }
-            else
-            {
-                smms.rightFindHoveringV2FromCollisionBIM = new Vector2(-1, -1);
-                smms.rightFindHighlighedAxisFromCollision = false;
-            }
-        }
-    }
-
 
     /// <summary>
     /// DataSet 2
@@ -833,13 +294,12 @@ public class CollisionDetection : MonoBehaviour
 
             if (tc.triggerPressed)
             {
-                
                 if (tc.triggerTimer == 1)
                 {
                     canGrab = true;
                 }
 
-                if (draggedFilter.transform.parent.parent.name.Contains("Value"))
+                if (draggedFilter.transform.parent.parent.name.Contains("Budget"))
                 {
                     if (draggedFilter.transform.GetSiblingIndex() == 2)
                     {
@@ -902,7 +362,7 @@ public class CollisionDetection : MonoBehaviour
 
                         }
                     }
-                    else if (draggedFilter.transform.parent.parent.name.Contains("Year"))
+                    else if (draggedFilter.transform.parent.parent.name.Contains("Sector"))
                     {
                         draggedFilter.transform.localPosition = new Vector3(-3, segment / 5f, 0);
                         if (draggedFilter.transform.GetSiblingIndex() == 2)
@@ -914,7 +374,7 @@ public class CollisionDetection : MonoBehaviour
                             smms.FilterBarChartFromCollision("Year", "right", segment);
                         }
                     }
-                    else if(draggedFilter.transform.parent.parent.name.Contains("Value"))
+                    else if(draggedFilter.transform.parent.parent.name.Contains("Budget"))
                     {
                         if (touchedAxis == null) {
                             selectedBarYAxisIndex = new Vector2(0, 1);
@@ -1146,8 +606,18 @@ public class CollisionDetection : MonoBehaviour
             }
 
 
-            int tmp = (int)(axisCoordinitor.transform.localPosition.y / (1f / 8f)) + 1;
+            int tmp = (int)(axisCoordinitor.transform.localPosition.y / (1f / 9f)) + 1;
             axisSegment = (int)(tmp / 2f) + 1;
+            if (axisCoordinitor.transform.localPosition.y == 0) {
+                axisSegment = 1;
+            }
+            else if (axisCoordinitor.transform.localPosition.y % 0.2f == 0)
+            {
+                axisSegment = (int)(axisCoordinitor.transform.localPosition.y / 0.2f);
+            }
+            else {
+                axisSegment = (int)(axisCoordinitor.transform.localPosition.y / 0.2f) + 1;
+            }
 
             
 
@@ -1168,7 +638,7 @@ public class CollisionDetection : MonoBehaviour
                 }
 
             }
-            else if (touchedAxis.transform.parent.parent.name.Contains("Year"))
+            else if (touchedAxis.transform.parent.parent.name.Contains("Sector"))
             {
                 touchedAxis.GetComponent<Renderer>().material.color = Color.green;
                 if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
@@ -1184,7 +654,7 @@ public class CollisionDetection : MonoBehaviour
                     //smms.rightPressedCount = 0;
                 }
             }
-            else if (touchedAxis.transform.parent.parent.name.Contains("Value"))
+            else if (touchedAxis.transform.parent.parent.name.Contains("Budget"))
             {
                 touchedAxis.GetComponent<Renderer>().material.color = Color.green;
 
@@ -1193,10 +663,32 @@ public class CollisionDetection : MonoBehaviour
 
                 BarYAxisIndex = new Vector2(minValue, maxValue);
 
+                // value tooltip
+                barValueTooltip.SetActive(true);
+                barValueTooltip.transform.SetParent(touchedAxis.transform.parent);
+                if (touchedAxis.transform.parent.parent.GetSiblingIndex() == 2)
+                {
+                    barValueTooltip.transform.localPosition = new Vector3(-6, axisCoordinitor.transform.localPosition.y, 0);
+                }
+                else {
+                    barValueTooltip.transform.localPosition = new Vector3(6, axisCoordinitor.transform.localPosition.y, 0);
+                }
+                
+                barValueTooltip.transform.localEulerAngles = Vector3.zero;
+
+                Text textFront = barValueTooltip.transform.Find("TooltipCanvas").Find("UITextFront").GetComponent<Text>();
+                Text textReverse = barValueTooltip.transform.Find("TooltipCanvas").Find("UITextReverse").GetComponent<Text>();
+
+                textFront.text =  string.Format("{0:0.##\\%}", axisCoordinitor.transform.localPosition.y * 100);
+                textReverse.text = string.Format("{0:0.##\\%}", axisCoordinitor.transform.localPosition.y * 100);
+                textFront.color = Color.red;
+                textReverse.color = Color.red;
+
                 CalculateFinalBarYAxisIndex();
             }
         }
         else {
+            barValueTooltip.SetActive(false);
             if (transform.parent.parent.parent.parent.parent.name == "Controller (left)")
             {
                 smms.leftFindHoveringV2FromCollision = new Vector2(0, 0);
@@ -1213,8 +705,6 @@ public class CollisionDetection : MonoBehaviour
         Vector2 otherControllerBarYAxisIndex = new Vector2(0, 1);
         Vector2 otherControllerSelectedBarYAxisIndex = new Vector2(0, 1);
         Vector2 finalBarYAxisIndex = new Vector2(0, 1);
-
-
 
         if (transform.parent.parent.parent.parent.parent.GetComponent<SteamVR_TrackedController>().triggerPressed)
         {
