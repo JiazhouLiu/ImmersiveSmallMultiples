@@ -209,7 +209,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     [HideInInspector]
     public string selectedAnswer = "";
     int trainingCounting = 0;
-    int trainingCountingLeft = 0;
+    [HideInInspector]
+    public int trainingCountingLeft = 0;
     [HideInInspector]
     public bool interactionTrainingNeeded = false;
     [HideInInspector]
@@ -225,6 +226,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     int sceneCounter = 0;
     string[] QuestionIDs;
     string[] CorrectAnswers;
+    float recordPastTime = 0;
 
 
     // unclick to refresh
@@ -258,15 +260,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
         interactionTrainingCount = 7;
         sceneCounter = 0;
-        
+
         //Debug.Log(ExperimentManager.userHeight);
         //userHeight = 1.7f;
         //GameObject testingBall = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         //testingBall.transform.position = new Vector3(0.5f, userHeight, 0.9f);
         //testingBall.transform.localScale = Vector3.one * 0.05f;
-
-        forceStopedTFCFromManager = ExperimentManager.forceStopTrainingForCombinition;
-        ExperimentManager.forceStopTrainingForCombinition = false;
 
         if (dataSM == null) {
             transform.localScale = 0.6f * Vector3.one;
@@ -410,6 +409,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
                 if (ExperimentManager.PublicTrialNumber != 0)
                 {
+                    recordPastTime = ExperimentManager.lastTimePast;
                     if (ExperimentManager.PublicTrialNumber % 5 == 1 || ExperimentManager.PublicTrialNumber % 5 == 2)
                     {
                         fullTaskID = "Training";
@@ -434,21 +434,16 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 }
                 
 
-                if (forceStopedTFCFromManager)
-                {
-                    trainingCounting = 0;
+                if (ExperimentManager.comprehensiveTraining) {
+                    interactionTrainingNeeded = true;
+                    ExperimentManager.comprehensiveTraining = false;
+                }
+                else
+                    interactionTrainingNeeded = false;
+                trainingCounting = trainingTaskNo;
+                trainingCountingLeft = trainingCounting - sceneCounter;
+                if (trainingCountingLeft < 0)
                     trainingCountingLeft = 0;
-                }
-                else {
-                    if (ExperimentManager.comprehensiveTraining) {
-                        interactionTrainingNeeded = true;
-                        ExperimentManager.comprehensiveTraining = false;
-                    }
-                    else
-                        interactionTrainingNeeded = false;
-                    trainingCounting = trainingTaskNo;
-                    trainingCountingLeft = trainingTaskNo;
-                }
 
                 // create small multiples
                 CreateSM();
@@ -457,6 +452,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 {
                     tooltip.transform.SetParent(shelf.transform);
                 }
+                //foreach (GameObject go in dataSM) {
+                //    Transform t = go.transform;
+                //    SetLayer(9, t.GetChild(0).GetChild(0).GetChild(0));
+                //}
                 SetupPreTaskEnvironment("none");
                 
             }
@@ -675,9 +674,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 Transform frontTextGO = GameObject.Find("Tooltip " + needHighlightedSM.x).transform.Find("TooltipCanvas").GetChild(1);
                 Transform backTextGO = GameObject.Find("Tooltip " + needHighlightedSM.x).transform.Find("TooltipCanvas").GetChild(2);
 
-                containerGO.GetComponent<Image>().color = Color.red;
-                frontTextGO.GetComponent<Text>().color = Color.white;
-                backTextGO.GetComponent<Text>().color = Color.white;
+                containerGO.GetComponent<Image>().color = Color.green;
+                frontTextGO.GetComponent<Text>().color = Color.red;
+                backTextGO.GetComponent<Text>().color = Color.red;
             }
 
             if (GameObject.Find("Tooltip " + needHighlightedSM.y) != null)
@@ -686,9 +685,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 Transform frontTextGO = GameObject.Find("Tooltip " + needHighlightedSM.y).transform.Find("TooltipCanvas").GetChild(1);
                 Transform backTextGO = GameObject.Find("Tooltip " + needHighlightedSM.y).transform.Find("TooltipCanvas").GetChild(2);
 
-                containerGO.GetComponent<Image>().color = Color.red;
-                frontTextGO.GetComponent<Text>().color = Color.white;
-                backTextGO.GetComponent<Text>().color = Color.white;
+                containerGO.GetComponent<Image>().color = Color.green;
+                frontTextGO.GetComponent<Text>().color = Color.red;
+                backTextGO.GetComponent<Text>().color = Color.red;
             }
         }
         currentHighlightedSM = needHighlightedSM;
@@ -750,201 +749,221 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                         GetQuestionID(sceneCounter) + "," + GetCorrectAnswer(sceneCounter));
                     writerAnswer.Close();
                     answerLogged = true;
-                    sceneCounter++;
-                    trainingCountingLeft--;
+                    //trainingCountingLeft--;
                 }
 
-                if (sceneCounter == 5)
+                if (trainingCountingLeft > 0)
                 {
-                    switch (ExperimentManager.ExperimentSequence)
+                    //Debug.Log(selectedAnswer + " " + GetCorrectAnswer(sceneCounter));
+                    if (selectedAnswer.Trim() == GetCorrectAnswer(sceneCounter).Trim())
                     {
-                        case 1:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
-                            {
-                                if (ExperimentManager.sceneCounter > 3)
-                                {
-                                    taskID = -1;
-                                    fullTaskID = "All Finished";
-                                    if (writer.BaseStream != null)
-                                    {
-                                        EndWritingFile(writer);
-                                    }
-                                    UnityEditor.EditorApplication.isPlaying = false;
-                                }
-                                else {
-                                    EndWritingFile(writer);
-                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                                }
-                            }
-                            break;
-                        case 2:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
-                            {
-                                if (ExperimentManager.sceneCounter > 3)
-                                {
-                                    taskID = -1;
-                                    fullTaskID = "All Finished";
-                                    if (writer.BaseStream != null)
-                                    {
-                                        EndWritingFile(writer);
-                                    }
-                                    UnityEditor.EditorApplication.isPlaying = false;
-                                }
-                                else
-                                {
-                                    EndWritingFile(writer);
-                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                                }
-                            }
-                            break;
-                        case 3:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
-                            {
-                                if (ExperimentManager.sceneCounter > 3)
-                                {
-                                    taskID = -1;
-                                    fullTaskID = "All Finished";
-                                    if (writer.BaseStream != null)
-                                    {
-                                        EndWritingFile(writer);
-                                    }
-                                    UnityEditor.EditorApplication.isPlaying = false;
-                                }
-                                else
-                                {
-                                    EndWritingFile(writer);
-                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                                }
-                            }
-                            break;
-                        case 4:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
-                            {
-                                if (ExperimentManager.sceneCounter > 3)
-                                {
-                                    taskID = -1;
-                                    fullTaskID = "All Finished";
-                                    if (writer.BaseStream != null)
-                                    {
-                                        EndWritingFile(writer);
-                                    }
-                                    UnityEditor.EditorApplication.isPlaying = false;
-                                }
-                                else
-                                {
-                                    EndWritingFile(writer);
-                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                                }
-                            }
-                            break;
-                        case 5:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
-                            {
-                                if (ExperimentManager.sceneCounter > 3)
-                                {
-                                    taskID = -1;
-                                    fullTaskID = "All Finished";
-                                    if (writer.BaseStream != null)
-                                    {
-                                        EndWritingFile(writer);
-                                    }
-                                    UnityEditor.EditorApplication.isPlaying = false;
-                                }
-                                else
-                                {
-                                    EndWritingFile(writer);
-                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                                }
-                            }
-                            break;
-                        case 6:
-                            if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
-                            {
-                                EndWritingFile(writer);
-                                SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
-                            }
-                            else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
-                            {
-                                if (ExperimentManager.sceneCounter > 3)
-                                {
-                                    taskID = -1;
-                                    fullTaskID = "All Finished";
-                                    if (writer.BaseStream != null)
-                                    {
-                                        EndWritingFile(writer);
-                                    }
-                                    UnityEditor.EditorApplication.isPlaying = false;
-                                }
-                                else
-                                {
-                                    EndWritingFile(writer);
-                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
-                                }
-                            }
-                            break;
-                        default:
-                            break;
+                        trainingCountingLeft--;
+                        sceneCounter++;
+                        SetupPreTaskEnvironment("none");
+                    }
+                    else {
+                        ChangeTaskText("<color=red>Wrong. </color>Please do it again.\n" + taskArray[sceneCounter], sceneCounter);
                     }
                 }
-                else
-                {
-                    SetupPreTaskEnvironment("none");
-                }
+                else {
+                    trainingCountingLeft--;
+                    if (sceneCounter < 5) {
+                        sceneCounter++;
+                    }
+                    
+                    if (sceneCounter == 5)
+                    {
+                        switch (ExperimentManager.ExperimentSequence)
+                        {
+                            case 1:
+                                if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
+                                {
+                                    if (ExperimentManager.sceneCounter > 3)
+                                    {
+                                        taskID = -1;
+                                        fullTaskID = "All Finished";
+                                        if (writer.BaseStream != null)
+                                        {
+                                            EndWritingFile(writer);
+                                        }
+                                        UnityEditor.EditorApplication.isPlaying = false;
+                                    }
+                                    else
+                                    {
+                                        EndWritingFile(writer);
+                                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
+                                {
+                                    if (ExperimentManager.sceneCounter > 3)
+                                    {
+                                        taskID = -1;
+                                        fullTaskID = "All Finished";
+                                        if (writer.BaseStream != null)
+                                        {
+                                            EndWritingFile(writer);
+                                        }
+                                        UnityEditor.EditorApplication.isPlaying = false;
+                                    }
+                                    else
+                                    {
+                                        EndWritingFile(writer);
+                                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
+                                {
+                                    if (ExperimentManager.sceneCounter > 3)
+                                    {
+                                        taskID = -1;
+                                        fullTaskID = "All Finished";
+                                        if (writer.BaseStream != null)
+                                        {
+                                            EndWritingFile(writer);
+                                        }
+                                        UnityEditor.EditorApplication.isPlaying = false;
+                                    }
+                                    else
+                                    {
+                                        EndWritingFile(writer);
+                                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
+                                    }
+                                }
+                                break;
+                            case 4:
+                                if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
+                                {
+                                    if (ExperimentManager.sceneCounter > 3)
+                                    {
+                                        taskID = -1;
+                                        fullTaskID = "All Finished";
+                                        if (writer.BaseStream != null)
+                                        {
+                                            EndWritingFile(writer);
+                                        }
+                                        UnityEditor.EditorApplication.isPlaying = false;
+                                    }
+                                    else
+                                    {
+                                        EndWritingFile(writer);
+                                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
+                                    }
+                                }
+                                break;
+                            case 5:
+                                if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
+                                {
+                                    if (ExperimentManager.sceneCounter > 3)
+                                    {
+                                        taskID = -1;
+                                        fullTaskID = "All Finished";
+                                        if (writer.BaseStream != null)
+                                        {
+                                            EndWritingFile(writer);
+                                        }
+                                        UnityEditor.EditorApplication.isPlaying = false;
+                                    }
+                                    else
+                                    {
+                                        EndWritingFile(writer);
+                                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
+                                    }
+                                }
+                                break;
+                            case 6:
+                                if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
+                                {
+                                    EndWritingFile(writer);
+                                    SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
+                                }
+                                else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
+                                {
+                                    if (ExperimentManager.sceneCounter > 3)
+                                    {
+                                        taskID = -1;
+                                        fullTaskID = "All Finished";
+                                        if (writer.BaseStream != null)
+                                        {
+                                            EndWritingFile(writer);
+                                        }
+                                        UnityEditor.EditorApplication.isPlaying = false;
+                                    }
+                                    else
+                                    {
+                                        EndWritingFile(writer);
+                                        SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        SetupPreTaskEnvironment("none");
+                    }
+                } 
             }
         }
         else {
@@ -1080,18 +1099,20 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     if (hit.transform.name.Contains("Small Multiples"))
                     {
                         finalResult = hit.transform.name;
-                        GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;
+                        if (GameObject.Find("TestingText") != null)
+                            GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;        
                     }
                     else
                     {
-                        GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;
+                        if (GameObject.Find("TestingText") != null)
+                            GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;
                     }
                 }
                 else
                 {
-
                     finalResult = "NA";
-                    GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at nothing";
+                    if (GameObject.Find("TestingText") != null)
+                        GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at nothing";
                 }
             }
         }
@@ -1123,7 +1144,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             //GameObject.Find("EnvironmentForUserStudy").transform.Find("Canvas").GetComponent<Canvas>().worldCamera = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>();
             afterCalibration = false;
             calibrationFlag = true;
-            GameObject.Find("TestingText").GetComponent<Text>().text = "Calibrating!!!";
+            if (GameObject.Find("TestingText") != null)
+                GameObject.Find("TestingText").GetComponent<Text>().text = "Calibrating!!!";
         }
     }
 
@@ -1140,23 +1162,24 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     // get log info
     float GetFixedTime()
     {
-        float finalTime = 0;
-        if (ExperimentManager.PublicTrialNumber != 0)
-        {
-            finalTime = ExperimentManager.lastTimePast + Time.fixedTime;
-        }
-        else
-        {
-            finalTime = Time.fixedTime;
-        }
-        return finalTime;
+        //float finalTime = 0;
+        //if (ExperimentManager.PublicTrialNumber != 0)
+        //{
+        //    finalTime = pasttim + Time.fixedTime;
+        //}
+        //else
+        //{
+        //    finalTime = Time.fixedTime;
+        //}
+
+        return recordPastTime + Time.fixedTime;
     }
 
     string GetCurrentTaskLevel() {
         if (ExperimentManager.sceneCounter > 3)
-            return "Long Distance";
-        else
             return "Trending";
+        else
+            return "Long Distance";
     }
 
     string GetCurrentLayout() {
@@ -1350,7 +1373,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             GameObject tooltip = (GameObject)Instantiate(tooltipPrefab, new Vector3(0, 0, 0), Quaternion.identity);
             tooltip.gameObject.name = "Tooltip " + (i + 1);
             tooltip.transform.SetParent(dataObj.transform);
-            tooltip.transform.localPosition = new Vector3(-1f, 0.8f, 0);
+            tooltip.transform.localPosition = new Vector3(-1f, 0.8f, -0.5f);
             tooltip.transform.localEulerAngles= new Vector3(0, 0, 90);
 
             smToolTips.Add(tooltip);
@@ -1514,7 +1537,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             rightValuePlane.transform.localPosition = Vector3.zero;
             rightValuePlane.transform.localScale = Vector3.one;
             rightValuePlane.transform.localEulerAngles = Vector3.zero;
-            rightValuePlanes.Add(rightValuePlane); 
+            rightValuePlanes.Add(rightValuePlane);
         }
         GetChessBoardDic();
     }
@@ -3297,7 +3320,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     private void ShuffleSMOrder() {
 
         for (int i = 0; i < smallMultiplesNumber; i++) {
-            GameObject.Find("BarCharts-" + i).transform.SetParent(GameObject.Find("Small Multiples " + shuffledOrders[taskID][i]).transform);
+            GameObject.Find("BarCharts-" + i).transform.SetParent(GameObject.Find("Small Multiples " + shuffledOrders[int.Parse(QuestionIDs[sceneCounter])][i]).transform);
             GameObject.Find("BarCharts-" + i).transform.localPosition = new Vector3(-0.5f, 0.3f, -0.5f);
             GameObject.Find("BarCharts-" + i).transform.localEulerAngles = Vector3.zero;
         }
@@ -3373,6 +3396,19 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         else
         {
             return (taskID / 5 * 3 + taskID % 5 - 2) + "";
+        }
+    }
+
+    void SetLayer(int newLayer, Transform trans)
+    {
+        trans.gameObject.layer = newLayer;
+        foreach (Transform child in trans)
+        {
+            child.gameObject.layer = newLayer;
+            if (child.childCount > 0)
+            {
+                SetLayer(newLayer, child.transform);
+            }
         }
     }
 
@@ -3466,10 +3502,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 if (taskID == 1 || taskID == 2)
                 {
-                     t.text = "Training Task " + taskID + ": " + taskText;            
+                     t.text = "Training Task " + taskID + ": \n" + taskText;            
                 }
                 else {
-                    t.text = "Task " + (taskID - 2) + ": " + taskText;
+                    t.text = "Task " + (taskID - 2) + ":\n" + taskText;
                 }
             }
             else {
@@ -3542,7 +3578,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 answerArray = new string[] { "2000", "2001", "2002", "2003", "2004" };
                 break;
             case 26:
-                answerArray = new string[] { "1991", "1992", "1993", "1994", "1995" };
+                answerArray = new string[] { "1990", "1991", "1992", "1993", "1994" };
                 break;
             case 27:
                 answerArray = new string[] { "1985", "1986", "1987", "1988", "1989" };

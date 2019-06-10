@@ -272,7 +272,6 @@ public class SteamVR_TrackedController : MonoBehaviour
                     {
                         mrs.SetupPreTaskEnvironment("right");
                     }
-
                 }
                 else
                 {
@@ -280,7 +279,16 @@ public class SteamVR_TrackedController : MonoBehaviour
                     {
                         if (!mrs.calibrationFlag)
                             mrs.OpenPupilCamera();
-                        mrs.ChangeTaskText("Are you sure you want to start now? Please solve the question as quickly as possible. \n\nPress <color=green>Read</color> to read the question.\n\n", -1);
+                        if (mrs.trainingCountingLeft > 0)
+                        {
+                            mrs.ChangeTaskText("The next question is a <color=red>training</color> question. You have multiple chances to answer this question until you get the correct answer.\n\n" +
+                                "Press <color=green>Read</color> to read the question.\n\n", -1);
+                        }
+                        else {
+                            mrs.ChangeTaskText("The next question is an <color=red>experiment</color> question. Please solve the question as quickly as possible.\n\n" +
+                                "Press <color=green>Read</color> to read the question.\n\n", -1);
+                        }
+                       // mrs.ChangeTaskText("Are you sure you want to start now? Please solve the question as quickly as possible. \n\nPress <color=green>Read</color> to read the question.\n\n", -1);
 
                         if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
                         {

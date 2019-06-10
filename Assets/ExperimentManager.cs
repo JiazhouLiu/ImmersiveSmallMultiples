@@ -95,7 +95,7 @@ public class ExperimentManager : MonoBehaviour {
             //    "LeftPillarToLeft,LeftPillarToRight,RightPillarToLeft,RightPillarToRight,(Shortcut)IncreasingCurvature,(Shortcut)DecreasingCurvature,(Shortcut)IncreasingRowNumber," +
             //    "(Shortcut)DecreasingRowNumber,TogglingSMOrientation";
 
-            string logFileHeader = "TimeSinceStart,UserHeight,TrialID,ParticipantID,ExperimentSequence,Dataset,Layout,TaskID,TaskLevel,TrialState,CameraPosition.x,CameraPosition.y,CameraPosition.z,CameraEulerAngles.x," +
+            string logFileHeader = "TimeSinceStart,UserHeight,TrialID,ParticipantID,ExperimentSequence,Dataset,Layout,TaskID,QuestionType,TrialState,CameraPosition.x,CameraPosition.y,CameraPosition.z,CameraEulerAngles.x," +
                 "CameraEulerAngles.y,CameraEulerAngles.z,LeftControllerPosition.x,LeftControllerPosition.y,LeftControllerPosition.z," +
                 "LeftControllerEulerAngles.x,LeftControllerEulerAngles.y,LeftControllerEulerAngles.z,RightControllerPosition.x,RightControllerPosition.y,RightControllerPosition.z," +
                 "RightControllerEulerAngles.x,RightControllerEulerAngles.y,RightControllerEulerAngles.z,LeftMenuButtonPressed," +
@@ -110,17 +110,17 @@ public class ExperimentManager : MonoBehaviour {
 
             string writerAnswerFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ParticipantID + "/Participant_" + ParticipantID + "_Answers.csv";
             writer = new StreamWriter(writerAnswerFilePath, false);
-            writer.WriteLine("UserID,TrialID,TaskID,Answer,CompletionTime,Dataset,Layout,QuestionLevel,QuestionID,CorrectAnswer");
+            writer.WriteLine("UserID,TrialID,TaskID,Answer,CompletionTime,Dataset,Layout,QuestionType,QuestionID,CorrectAnswer");
             writer.Close();
 
             string writerEyeFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ParticipantID + "/Participant_" + ParticipantID + "_EyeTrackingLog.csv";
             writer = new StreamWriter(writerEyeFilePath, false);
-            writer.WriteLine("TimeSinceStart,UserID,TrialID,TaskID,Dataset,Layout,QuestionLevel,TrialState,RawGazeFromPupil2D.x,RawGazeFromPupil2D.y,SMHighlighted1,SMHighlighted2,SMGazed,GazePositionAfterCalculation.x,GazePositionAfterCalculation.y,GazePositionAfterCalculation.z");
+            writer.WriteLine("TimeSinceStart,UserID,TrialID,TaskID,Dataset,Layout,QuestionType,TrialState,RawGazeFromPupil2D.x,RawGazeFromPupil2D.y,SMHighlighted1,SMHighlighted2,SMGazed,GazePositionAfterCalculation.x,GazePositionAfterCalculation.y,GazePositionAfterCalculation.z");
             writer.Close();
 
             string writerHeadFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ParticipantID + "/Participant_" + ParticipantID + "_HeadPositionLog.csv";
             writer = new StreamWriter(writerHeadFilePath, false);
-            writer.WriteLine("TimeSinceStart,UserID,TrialID,TaskID,Dataset,Layout,QuestionLevel,TrialState,SMManagerPosition.x,SMManagerPosition.y,SMManagerPosition.z,SMManagerScale,CameraPosition.x,CameraPosition.y,CameraPosition.z,CameraEulerAngles.x,CameraEulerAngles.y,CameraEulerAngles.z");
+            writer.WriteLine("TimeSinceStart,UserID,TrialID,TaskID,Dataset,Layout,QuestionType,TrialState,SMManagerPosition.x,SMManagerPosition.y,SMManagerPosition.z,SMManagerScale,CameraPosition.x,CameraPosition.y,CameraPosition.z,CameraEulerAngles.x,CameraEulerAngles.y,CameraEulerAngles.z");
             writer.Close();
         }
         else {
@@ -150,7 +150,6 @@ public class ExperimentManager : MonoBehaviour {
 
                 // stop start training and stop combinition training
                 comprehensiveTraining = false;
-                forceStopTrainingForCombinition = true;
 
                 lastTimePast = lastTime;
                 userHeight = lastUserHeight;
@@ -410,7 +409,7 @@ public class ExperimentManager : MonoBehaviour {
                 else if (state == 2)
                 {
                     SteamVR_TrackedControllerForStartScene rightControllerScript = rightControllerGO.GetComponent<SteamVR_TrackedControllerForStartScene>();
-                    WriteToBoard("Before each task, you have free time to get familiar with small multiples data. Then, you have free time to read the question. After reading, you will be navigated to work on the questions. Please finish as quickly as possible" +
+                    WriteToBoard("Before each task, you have free time to get familiar with small multiples data. Then, you have free time to read the question. After reading, you will be navigated to work on the questions. Please finish as quickly as possible. " +
                         "When you get the result, press the <color=green>Finish</color> button on the controller to start answering the question.\n\nNow, please stand still and press the <color=red>trigger</color> button on your right (R) hand to continue.");
                     if (rightControllerScript.triggerPressed)
                     {

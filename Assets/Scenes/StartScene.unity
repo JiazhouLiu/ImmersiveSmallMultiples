@@ -456,7 +456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7532ea681b91ae54e991dea518ceadb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExperimentID: 1
+  ExperimentID: 5
   TrialNumber: 0
 --- !u!4 &383085825
 Transform:
@@ -2566,7 +2566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1601957502
 Transform:
   m_ObjectHideFlags: 0
