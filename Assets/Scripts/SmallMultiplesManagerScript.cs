@@ -44,6 +44,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     public GameObject cubeSelectionPrefab;
     public GameObject worldInMiniturePrefab;
     public GameObject LRLabelPrefab;
+    // controller
+    public Transform globalLeftController;
+    public Transform globalRightController;
+    public GameObject CameraRig;
 
     [HideInInspector]
     public bool fixedPosition = false;
@@ -62,10 +66,6 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     GameObject shelf;
     List<GameObject> taskBoards;
 	GameObject colorScheme;
-
-    // controller
-    GameObject leftController;
-    GameObject rightController;
 
     int shelfRows = 3;
     int shelfItemPerRow = 0;
@@ -488,7 +488,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             GetGazeInfo();
             FixedPositionCondition();
 
-            if (writer != null) {
+            if (writer != null)
+            {
                 if (writer.BaseStream != null)
                 {
                     WritingLog();
@@ -534,10 +535,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         RefreshDataSet2();
 
         // reset answer section
-        GameObject leftController = GameObject.Find("Controller (left)");
+        GameObject leftController = globalLeftController.gameObject;
         if (leftController != null)
         {
-
             leftController.transform.GetChild(4).gameObject.SetActive(false);
             GameObject countryAnswers = leftController.transform.GetChild(4).gameObject;
             Transform choicesParent = countryAnswers.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1);
@@ -586,9 +586,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 if (interactionTrainingCount == 1) // answer training
                 {
-                    if (GameObject.Find("Controller (left)") != null)
+                    if (globalLeftController != null)
                     {
-                        GameObject.Find("Controller (left)").transform.GetChild(4).gameObject.SetActive(true);
+                        globalLeftController.GetChild(4).gameObject.SetActive(true);
                     }
                 }
 
@@ -597,19 +597,19 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
                 if (interactionTrainingCount == 0)
                 {
-                    if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+                    if (globalLeftController != null && globalRightController != null)
                     {
-                        GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Done";
-                        GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Done";
+                        globalLeftController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Done";
+                        globalRightController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Done";
                     }
                 }
             }
             else
             {
                 interactionTrainingNeeded = false;
-                if (GameObject.Find("Controller (left)") != null)
+                if (globalLeftController != null)
                 {
-                    GameObject.Find("Controller (left)").transform.GetChild(4).gameObject.SetActive(false);
+                    globalLeftController.GetChild(4).gameObject.SetActive(false);
                 }
                 SetupPreTaskEnvironment("none");
             }
@@ -620,10 +620,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             taskID++;
             fullTaskID = TaskIDToFullTaskID(taskID);
             ShuffleSMOrder();
-            if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+            if (globalLeftController != null && globalRightController != null)
             {
-                GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
-                GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
+                globalLeftController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
+                globalRightController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
             }
             GameObject.Find("EnvironmentForUserStudy").transform.GetChild(3).gameObject.SetActive(true);
             ChangeTaskText("Please stand on the floor marker.\n\n" +
@@ -639,10 +639,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         trialState = TrialState.OnTask;
 
         // change trackpad label
-        if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+        if (globalLeftController != null && globalRightController != null)
         {
-            GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Finish";
-            GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Finish";
+            globalLeftController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Finish";
+            globalRightController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Finish";
         }
         GameObject.Find("EnvironmentForUserStudy").transform.GetChild(3).gameObject.SetActive(false);
 
@@ -712,12 +712,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         ChangeTaskText("Please choose the answer from the options attached to your left controller. And press <color=red>trigger</color> button to confirm.", -1);
 
         // change answer panel
-        GameObject leftController = GameObject.Find("Controller (left)");
+        Transform leftController = globalLeftController;
         if (ExperimentManager.sceneCounter > 3) // trending questions
         {
             if (leftController != null)
             {
-                GameObject yearAnswers = leftController.transform.GetChild(5).gameObject;
+                GameObject yearAnswers = leftController.GetChild(5).gameObject;
                 yearAnswers.SetActive(true);
                 SetupAnswerPanelYearList(int.Parse(GetQuestionID(sceneCounter)));
             }
@@ -726,7 +726,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         {
             if (leftController != null)
             {
-                GameObject countryAnswers = leftController.transform.GetChild(4).gameObject;
+                GameObject countryAnswers = leftController.GetChild(4).gameObject;
                 countryAnswers.SetActive(true);
             }
         }
@@ -968,9 +968,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         }
         else {
             interactionTrainingNeeded = false;
-            if (GameObject.Find("Controller (left)") != null)
+            if (globalLeftController != null)
             {
-                GameObject.Find("Controller (left)").transform.GetChild(5).gameObject.SetActive(false);
+                globalLeftController.GetChild(5).gameObject.SetActive(false);
             }
             SetupPreTaskEnvironment("none");
         }
@@ -1006,8 +1006,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     // write log functions
     void WritingLog() {
-        GameObject leftController = GameObject.Find("Controller (left)");
-        GameObject rightController = GameObject.Find("Controller (right)"); 
+        Transform leftController = globalLeftController;
+        Transform rightController = globalRightController; 
 
         if (writer != null && Camera.main != null && leftController != null && rightController != null)
         {
@@ -1016,8 +1016,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
             writer.WriteLine(GetFixedTime() + "," + ExperimentManager.userHeight + "," + taskID.ToString() + "," + ExperimentManager.ParticipantID + "," + ExperimentManager.ExperimentSequence + "," +
                 GetCurrentDataset() + "," + GetCurrentLayout() + "," + fullTaskID + "," + GetCurrentTaskLevel() + "," + trialState + "," + VectorToString(Camera.main.transform.position) + "," + VectorToString(Camera.main.transform.eulerAngles) + "," +
-                VectorToString(leftController.transform.position) + "," + VectorToString(leftController.transform.eulerAngles) + "," + VectorToString(rightController.transform.position) + "," +
-                VectorToString(rightController.transform.eulerAngles) + "," + leftControllerScript.menuPressed + "," + leftControllerScript.triggerPressed + "," + leftControllerScript.gripped + "," +
+                VectorToString(leftController.position) + "," + VectorToString(leftController.eulerAngles) + "," + VectorToString(rightController.position) + "," +
+                VectorToString(rightController.eulerAngles) + "," + leftControllerScript.menuPressed + "," + leftControllerScript.triggerPressed + "," + leftControllerScript.gripped + "," +
                 leftControllerScript.padPressed + "," + rightControllerScript.menuPressed + "," + rightControllerScript.triggerPressed + "," + rightControllerScript.gripped + "," +
                 rightControllerScript.padPressed + "," + clockRotation + "," + antiClockRotation + "," + scaleUp + "," + scaleDown + "," + VectorToString(transform.position) + "," + transform.localScale.x + "," + SMRotationDiff + "," +
                 GetSMFilterPositions() + "," + rawGazePositionOnScreen.x + "," + rawGazePositionOnScreen.y + "," + GetGazedSM() + "," + GetGazedWorldPosition());
@@ -1060,9 +1060,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         {
             Vector2 gazePointCenter = PupilData._2D.GazePosition;
             Vector3 viewportPoint = new Vector3(gazePointCenter.x, gazePointCenter.y, 1f);
-            if (GameObject.Find("[CameraRig]") != null && GameObject.Find("[CameraRig]").transform.GetChild(2) != null && GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>() != null)
+            if (CameraRig != null && CameraRig.transform.GetChild(2) != null && CameraRig.transform.GetChild(2).GetComponent<Camera>() != null)
             {
-                Ray ray = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>().ViewportPointToRay(viewportPoint);
+                Ray ray = CameraRig.transform.GetChild(2).GetComponent<Camera>().ViewportPointToRay(viewportPoint);
                 RaycastHit hit;
 
                 // see this for ray stop point
@@ -1089,9 +1089,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             Vector2 gazePointCenter = PupilData._2D.GazePosition;
             rawGazePositionOnScreen = PupilData._2D.GazePosition;
             Vector3 viewportPoint = new Vector3(gazePointCenter.x, gazePointCenter.y, 1f);
-            if (GameObject.Find("[CameraRig]") != null && GameObject.Find("[CameraRig]").transform.GetChild(2) != null && GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>() != null)
+            if (CameraRig != null && CameraRig.transform.GetChild(2) != null && CameraRig.transform.GetChild(2).GetComponent<Camera>() != null)
             {
-                Ray ray = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>().ViewportPointToRay(viewportPoint);
+                Ray ray = CameraRig.transform.GetChild(2).GetComponent<Camera>().ViewportPointToRay(viewportPoint);
 
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
@@ -1099,20 +1099,20 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     if (hit.transform.name.Contains("Small Multiples"))
                     {
                         finalResult = hit.transform.name;
-                        if (GameObject.Find("TestingText") != null)
-                            GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;        
+                        //if (GameObject.Find("TestingText") != null)
+                        //    GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;        
                     }
                     else
                     {
-                        if (GameObject.Find("TestingText") != null)
-                            GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;
+                        //if (GameObject.Find("TestingText") != null)
+                        //    GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at " + hit.transform.name;
                     }
                 }
                 else
                 {
                     finalResult = "NA";
-                    if (GameObject.Find("TestingText") != null)
-                        GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at nothing";
+                    //if (GameObject.Find("TestingText") != null)
+                    //    GameObject.Find("TestingText").GetComponent<Text>().text = "I'm looking at nothing";
                 }
             }
         }
@@ -1124,8 +1124,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     public void OpenMainCamera()
     {
-        GameObject.Find("[CameraRig]").transform.GetChild(2).gameObject.SetActive(true);
-        PupilSettings.Instance.currentCamera = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>();
+        CameraRig.transform.GetChild(2).gameObject.SetActive(true);
+        PupilSettings.Instance.currentCamera = CameraRig.transform.GetChild(2).GetComponent<Camera>();
 
         afterCalibration = true;
 
@@ -1137,15 +1137,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     }
 
     public void OpenPupilCamera() {
-        if (GameObject.Find("[CameraRig]") != null && GameObject.Find("[CameraRig]").transform.GetChild(2) != null)
+        if (CameraRig != null && CameraRig.transform.GetChild(2) != null)
         {
-            GameObject.Find("[CameraRig]").transform.GetChild(2).gameObject.SetActive(false);
+            CameraRig.transform.GetChild(2).gameObject.SetActive(false);
             PupilSettings.Instance.currentCamera = GameObject.Find("Pupil Manager").transform.GetChild(2).GetComponent<Camera>();
-            //GameObject.Find("EnvironmentForUserStudy").transform.Find("Canvas").GetComponent<Canvas>().worldCamera = GameObject.Find("[CameraRig]").transform.GetChild(2).GetComponent<Camera>();
+
             afterCalibration = false;
             calibrationFlag = true;
-            if (GameObject.Find("TestingText") != null)
-                GameObject.Find("TestingText").GetComponent<Text>().text = "Calibrating!!!";
+            //if (GameObject.Find("TestingText") != null)
+            //    GameObject.Find("TestingText").GetComponent<Text>().text = "Calibrating!!!";
         }
     }
 
@@ -1205,20 +1205,18 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     }
 
     void FixedPositionCondition() {
-
         // change controller button color
-        if (GameObject.Find("Controller (left)") != null) {
-            GameObject.Find("Controller (left)").transform.Find("Model").GetComponent<ControllerColor>().fixedPosition = true;
-            if (interactionTrainingNeeded && interactionTrainingCount != 0) {
-                GameObject.Find("Controller (left)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
-            }
-        }
-        if (GameObject.Find("Controller (right)") != null) {
-            GameObject.Find("Controller (right)").transform.Find("Model").GetComponent<ControllerColor>().fixedPosition = true;
+        if (globalLeftController != null)
+        {
             if (interactionTrainingNeeded && interactionTrainingCount != 0)
-            {
-                GameObject.Find("Controller (right)").transform.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
-            }
+                if (globalLeftController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text != "Next")
+                    globalLeftController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
+        }
+        if (globalRightController != null)
+        {
+            if (interactionTrainingNeeded && interactionTrainingCount != 0)
+                if (globalRightController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text != "Next")
+                    globalRightController.Find("TrackPadLabel").GetComponent<TextMeshPro>().text = "Next";
         }
 
     }
@@ -1840,10 +1838,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     // single brushing variable assignment
     private void DetectLeftTouchBarInteractionForBarChart()
     {
+        bool insideSM = false;
+
         GameObject leftTouchbar = null;
-        if (GameObject.Find("Controller (left)") != null)
+        if (globalLeftController != null)
         {
-            Transform leftController = GameObject.Find("Controller (left)").transform;
+            Transform leftController = globalLeftController;
             if (leftController.GetChild(0) != null)
             {
                 Transform lModel = leftController.GetChild(0);
@@ -1866,27 +1866,57 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             int x = 0;
             int z = 0;
             Transform leftB = leftTouchbar.transform.GetChild(0);
-
-            foreach (KeyValuePair<string, Dictionary<Vector2, Vector3>> entry in chessBoardPoints)
-            {
-                Transform barChart = GameObject.Find(entry.Key).transform;
-                if(barChart.InverseTransformPoint(leftB.position).x >= -0.1f && barChart.InverseTransformPoint(leftB.position).x <= 1.25f && barChart.InverseTransformPoint(leftB.position).z >= -0.1f && barChart.InverseTransformPoint(leftB.position).z <= 1.25f && barChart.InverseTransformPoint(leftB.position).y >= 0 && barChart.InverseTransformPoint(leftB.position).y <= 1.25f)
-                //if (CheckDiff(leftB.position.x, barChart.position.x, 0.4f, false) && CheckDiff(leftB.position.z, barChart.position.z, 0.4f, false))
+            if (!circleLayout) {
+                if (leftB.position.z > 0.6f) {
+                    insideSM = true;
+                }
+                else {
+                    insideSM = false;
+                }
+            } else if (fullCircle) {
+                if (Vector3.Distance(Vector3.zero, new Vector3(leftB.position.x, 0, leftB.position.z)) > 0.6f)
                 {
-                    foreach (KeyValuePair<Vector2, Vector3> secondEntry in entry.Value)
+                    insideSM = true;
+                }
+                else
+                {
+                    insideSM = false;
+                }
+            } else {
+                if (Vector3.Distance(new Vector3(0, 0, -0.6f), new Vector3(leftB.position.x, 0, leftB.position.z)) > 1.4f)
+                {
+                    insideSM = true;
+                }
+                else
+                {
+                    insideSM = false;
+                }
+            }
+
+
+            if (insideSM) {
+                foreach (KeyValuePair<string, Dictionary<Vector2, Vector3>> entry in chessBoardPoints)
+                {
+                    Transform barChart = GameObject.Find(entry.Key).transform;
+                    if (barChart.InverseTransformPoint(leftB.position).x >= -0.1f && barChart.InverseTransformPoint(leftB.position).x <= 1.25f && barChart.InverseTransformPoint(leftB.position).z >= -0.1f && barChart.InverseTransformPoint(leftB.position).z <= 1.25f && barChart.InverseTransformPoint(leftB.position).y >= 0 && barChart.InverseTransformPoint(leftB.position).y <= 1.25f)
+                    //if (CheckDiff(leftB.position.x, barChart.position.x, 0.4f, false) && CheckDiff(leftB.position.z, barChart.position.z, 0.4f, false))
                     {
-                        Transform yAxis = barChart.GetChild(2).GetChild(1);
-                        Vector3 tilesLocalToWorld = barChart.parent.TransformPoint(secondEntry.Value);
-                        Vector3 tilesLocalToWorldY = yAxis.TransformPoint(secondEntry.Value);
-                        //Debug.Log((CheckDiff(leftB.position.x, tilesLocalToWorld.x, 0.02f, true)) + " " +  (CheckDiff(leftB.position.z, tilesLocalToWorld.z, 0.02f, true)) + " " +  (leftB.position.y >= barChart.position.y) + " " + (leftB.position.y <= tilesLocalToWorld.y + 0.01f));
-                        if (CheckDiff(leftB.position.x, tilesLocalToWorld.x, 0.03f, true) && CheckDiff(leftB.position.z, tilesLocalToWorld.z, 0.03f, true) && leftB.position.y >= barChart.position.y && leftB.position.y <= tilesLocalToWorldY.y + 0.01f)
+                        foreach (KeyValuePair<Vector2, Vector3> secondEntry in entry.Value)
                         {
-                            x = (int)secondEntry.Key.x;
-                            z = (int)secondEntry.Key.y;
+                            Transform yAxis = barChart.GetChild(2).GetChild(1);
+                            Vector3 tilesLocalToWorld = barChart.parent.TransformPoint(secondEntry.Value);
+                            Vector3 tilesLocalToWorldY = yAxis.TransformPoint(secondEntry.Value);
+                            //Debug.Log((CheckDiff(leftB.position.x, tilesLocalToWorld.x, 0.02f, true)) + " " +  (CheckDiff(leftB.position.z, tilesLocalToWorld.z, 0.02f, true)) + " " +  (leftB.position.y >= barChart.position.y) + " " + (leftB.position.y <= tilesLocalToWorld.y + 0.01f));
+                            if (CheckDiff(leftB.position.x, tilesLocalToWorld.x, 0.03f, true) && CheckDiff(leftB.position.z, tilesLocalToWorld.z, 0.03f, true) && leftB.position.y >= barChart.position.y && leftB.position.y <= tilesLocalToWorldY.y + 0.01f)
+                            {
+                                x = (int)secondEntry.Key.x;
+                                z = (int)secondEntry.Key.y;
+                            }
                         }
                     }
                 }
             }
+            
             if (x != 0 || z != 0)
             {
                 leftFindHighlighedFromChessBoard = true;
@@ -1908,10 +1938,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
     private void DetectRightTouchBarInteractionForBarChart()
     {
+        bool insideSM = false;
+
         GameObject rightTouchbar = null;
-        if (GameObject.Find("Controller (right)") != null)
+        if (globalRightController != null)
         {
-            Transform rightController = GameObject.Find("Controller (right)").transform;
+            Transform rightController = globalRightController;
             if (rightController.GetChild(0) != null)
             {
                 Transform rModel = rightController.GetChild(0);
@@ -1934,30 +1966,66 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             int x = 0;
             int z = 0;
             Transform rightB = rightTouchbar.transform.GetChild(0);
-
-            foreach (KeyValuePair<string, Dictionary<Vector2, Vector3>> entry in chessBoardPoints)
+            if (!circleLayout)
             {
-                Transform barChart = GameObject.Find(entry.Key).transform;
-                
-
-                if (barChart.InverseTransformPoint(rightB.position).x >= -0.1f && barChart.InverseTransformPoint(rightB.position).x <= 1.25f && barChart.InverseTransformPoint(rightB.position).z >= -0.1f && barChart.InverseTransformPoint(rightB.position).z <= 1.25f && barChart.InverseTransformPoint(rightB.position).y >= 0 && barChart.InverseTransformPoint(rightB.position).y <= 1.25f)
-                //if (CheckDiff(rightB.position.x, barChart.position.x, 0.4f, false) && CheckDiff(rightB.position.z, barChart.position.z, 0.4f, false))
+                if (rightB.position.z > 0.6f)
                 {
-                    foreach (KeyValuePair<Vector2, Vector3> secondEntry in entry.Value)
-                    {
-                        Transform yAxis = barChart.GetChild(2).GetChild(1);
-                        Vector3 tilesLocalToWorld = barChart.parent.TransformPoint(secondEntry.Value);
-                        Vector3 tilesLocalToWorldY = yAxis.TransformPoint(secondEntry.Value);
-                        //Debug.Log((CheckDiff(rightB.position.x, tilesLocalToWorld.x, 0.02f, true)) + " " + (CheckDiff(rightB.position.z, tilesLocalToWorld.z, 0.02f, true)) + " " + (rightB.position.y >= barChart.position.y) + " " + (rightB.position.y <= tilesLocalToWorld.y + 0.01f));
-                        if (CheckDiff(rightB.position.x, tilesLocalToWorld.x, 0.03f, true) && CheckDiff(rightB.position.z, tilesLocalToWorld.z, 0.03f, true) && rightB.position.y >= barChart.position.y && rightB.position.y <= tilesLocalToWorldY.y + 0.01f)
-                        {
-                            x = (int)secondEntry.Key.x;
-                            z = (int)secondEntry.Key.y;
-                        }
+                    insideSM = true;
+                }
+                else
+                {
+                    insideSM = false;
+                }
+            }
+            else if (fullCircle)
+            {
+                if (Vector3.Distance(Vector3.zero, new Vector3(rightB.position.x, 0, rightB.position.z)) > 0.6f)
+                {
+                    insideSM = true;
+                }
+                else
+                {
+                    insideSM = false;
+                }
+            }
+            else
+            {
+                if (Vector3.Distance(new Vector3(0, 0, -0.6f), new Vector3(rightB.position.x, 0, rightB.position.z)) > 1.4f)
+                {
+                    insideSM = true;
+                }
+                else
+                {
+                    insideSM = false;
+                }
+            }
 
+            if (insideSM) {
+                foreach (KeyValuePair<string, Dictionary<Vector2, Vector3>> entry in chessBoardPoints)
+                {
+                    Transform barChart = GameObject.Find(entry.Key).transform;
+
+
+                    if (barChart.InverseTransformPoint(rightB.position).x >= -0.1f && barChart.InverseTransformPoint(rightB.position).x <= 1.25f && barChart.InverseTransformPoint(rightB.position).z >= -0.1f && barChart.InverseTransformPoint(rightB.position).z <= 1.25f && barChart.InverseTransformPoint(rightB.position).y >= 0 && barChart.InverseTransformPoint(rightB.position).y <= 1.25f)
+                    //if (CheckDiff(rightB.position.x, barChart.position.x, 0.4f, false) && CheckDiff(rightB.position.z, barChart.position.z, 0.4f, false))
+                    {
+                        foreach (KeyValuePair<Vector2, Vector3> secondEntry in entry.Value)
+                        {
+                            Transform yAxis = barChart.GetChild(2).GetChild(1);
+                            Vector3 tilesLocalToWorld = barChart.parent.TransformPoint(secondEntry.Value);
+                            Vector3 tilesLocalToWorldY = yAxis.TransformPoint(secondEntry.Value);
+                            //Debug.Log((CheckDiff(rightB.position.x, tilesLocalToWorld.x, 0.02f, true)) + " " + (CheckDiff(rightB.position.z, tilesLocalToWorld.z, 0.02f, true)) + " " + (rightB.position.y >= barChart.position.y) + " " + (rightB.position.y <= tilesLocalToWorld.y + 0.01f));
+                            if (CheckDiff(rightB.position.x, tilesLocalToWorld.x, 0.03f, true) && CheckDiff(rightB.position.z, tilesLocalToWorld.z, 0.03f, true) && rightB.position.y >= barChart.position.y && rightB.position.y <= tilesLocalToWorldY.y + 0.01f)
+                            {
+                                x = (int)secondEntry.Key.x;
+                                z = (int)secondEntry.Key.y;
+                            }
+
+                        }
                     }
                 }
             }
+            
 
             if (x != 0 || z != 0)
             {
@@ -2493,9 +2561,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         SteamVR_TrackedController rtc = null;
 
         GameObject leftTouchbar = null;
-        if (GameObject.Find("Controller (left)") != null)
+        if (globalLeftController != null)
         {
-            Transform leftController = GameObject.Find("Controller (left)").transform;
+            Transform leftController = globalLeftController;
             ltc = leftController.GetComponent<SteamVR_TrackedController>();
             if (leftController.GetChild(0) != null)
             {
@@ -2515,9 +2583,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         }
 
         GameObject rightTouchbar = null;
-        if (GameObject.Find("Controller (right)") != null)
+        if (globalRightController != null)
         {
-            Transform rightController = GameObject.Find("Controller (right)").transform;
+            Transform rightController = globalRightController;
             rtc = rightController.GetComponent<SteamVR_TrackedController>();
             if (rightController.GetChild(0) != null)
             {
@@ -2535,15 +2603,15 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 }
             }
         }
-
+        
         if (leftTouchbar != null && rightTouchbar != null && ltc != null && rtc != null)
         {
             Transform leftB = leftTouchbar.transform.GetChild(0);
             Transform rightB = rightTouchbar.transform.GetChild(0);
 
             Vector3 touchBarMiddlePosition = (leftB.position + rightB.position) / 2;
-            if (ltc.triggerPressed && rtc.triggerPressed && !leftFindHighlighedAxisFromCollision && !rightFindHighlighedAxisFromCollision && 
-                GameObject.Find("leftCollisionDetector").GetComponent<CollisionDetection>().draggedFilter == null && GameObject.Find("rightCollisionDetector").GetComponent<CollisionDetection>().draggedFilter == null)
+            if (ltc.triggerPressed && rtc.triggerPressed && !leftFindHighlighedAxisFromCollision && !rightFindHighlighedAxisFromCollision &&
+                leftB.GetComponent<CollisionDetection>().draggedFilter == null && rightB.GetComponent<CollisionDetection>().draggedFilter == null)
             {
                 Quaternion currentRotation = Quaternion.identity;
                 Vector3 currentScale = Vector3.zero;
@@ -3418,9 +3486,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     {
         if (trialState == TrialState.Answer)
         {
-            if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+            if (globalLeftController != null && globalRightController != null)
             {
-                if (GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().triggerPressed && answerConfirmed)
+                if (globalLeftController.GetComponent<SteamVR_TrackedController>().triggerPressed && answerConfirmed)
                 {
                     flyingFlag = true;
                     if (flyingFlag)
@@ -3430,7 +3498,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     }
 
                 }
-                else if (GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().triggerPressed && answerConfirmed)
+                else if (globalRightController.GetComponent<SteamVR_TrackedController>().triggerPressed && answerConfirmed)
                 {
                     flyingFlag = true;
                     if (flyingFlag)
@@ -3443,10 +3511,10 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
         }
         else
         {
-            if (GameObject.Find("Controller (left)") != null && GameObject.Find("Controller (right)") != null)
+            if (globalLeftController != null && globalRightController != null)
             {
                 //StartCoroutine(PerformFlying("left"));
-                if (GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedController>().padPressed)
+                if (globalLeftController.GetComponent<SteamVR_TrackedController>().padPressed)
                 {
                     flyingFlag = true;
                     if (flyingFlag)
@@ -3456,7 +3524,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                     }
 
                 }
-                else if (GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedController>().padPressed)
+                else if (globalRightController.GetComponent<SteamVR_TrackedController>().padPressed)
                 {
                     flyingFlag = true;
                     if (flyingFlag)
@@ -3481,11 +3549,11 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                 Vector3 oldPosition = taskBoardPositions[j];
                 if (controller == "left")
                 {
-                    taskBoards[j].transform.position = Vector3.Lerp(GameObject.Find("Controller (left)").transform.position, oldPosition, Mathf.SmoothStep(0.0f, 1.0f, i));
+                    taskBoards[j].transform.position = Vector3.Lerp(globalLeftController.position, oldPosition, Mathf.SmoothStep(0.0f, 1.0f, i));
                 }
                 else
                 {
-                    taskBoards[j].transform.position = Vector3.Lerp(GameObject.Find("Controller (right)").transform.position, oldPosition, Mathf.SmoothStep(0.0f, 1.0f, i));
+                    taskBoards[j].transform.position = Vector3.Lerp(globalRightController.position, oldPosition, Mathf.SmoothStep(0.0f, 1.0f, i));
                 }
                 taskBoards[j].transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one * 0.01f, Mathf.SmoothStep(0.0f, 1.0f, i));
             }

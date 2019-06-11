@@ -456,8 +456,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7532ea681b91ae54e991dea518ceadb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExperimentID: 5
-  TrialNumber: 0
+  ExperimentID: 0
+  TrialNumber: 1
 --- !u!4 &383085825
 Transform:
   m_ObjectHideFlags: 0

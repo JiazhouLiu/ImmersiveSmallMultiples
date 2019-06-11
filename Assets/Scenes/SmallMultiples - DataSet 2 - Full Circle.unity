@@ -735,6 +735,9 @@ MonoBehaviour:
     type: 2}
   LRLabelPrefab: {fileID: 1995362171341216, guid: 02213a0e32e82164b84d7ce4d6e1e042,
     type: 2}
+  globalLeftController: {fileID: 1548224534}
+  globalRightController: {fileID: 1006546677}
+  CameraRig: {fileID: 102184957}
   fixedPosition: 1
   circleLayout: 1
   fullCircle: 1
@@ -757,6 +760,7 @@ MonoBehaviour:
   triggerPressedForFilterMoving: 0
   trialState: 0
   selectedAnswer: 
+  trainingCountingLeft: 0
   interactionTrainingNeeded: 0
   interactionTrainingCount: 9
   confirmButtonPressed: 0
@@ -1731,7 +1735,6 @@ MonoBehaviour:
   sky: {fileID: 2100000, guid: e068f8b1bc3028747b72ef644ccb359d, type: 2}
   blue: {fileID: 2100000, guid: e72f7202cf55cff449ba6cc69b6a46a5, type: 2}
   purple: {fileID: 2100000, guid: ce340933f3fecc049aa094dea5f08e40, type: 2}
-  fixedPosition: 0
 --- !u!224 &599764977 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22412712, guid: 9ab61c80dfd411f4c86b8553b0c42cf1,
@@ -2388,7 +2391,6 @@ MonoBehaviour:
   sky: {fileID: 2100000, guid: e068f8b1bc3028747b72ef644ccb359d, type: 2}
   blue: {fileID: 2100000, guid: e72f7202cf55cff449ba6cc69b6a46a5, type: 2}
   purple: {fileID: 2100000, guid: ce340933f3fecc049aa094dea5f08e40, type: 2}
-  fixedPosition: 0
 --- !u!1 &725254269 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 182086, guid: 9ab61c80dfd411f4c86b8553b0c42cf1, type: 2}
