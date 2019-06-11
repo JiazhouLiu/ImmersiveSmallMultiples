@@ -96,6 +96,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     StreamWriter writer;
     StreamWriter writerEye;
     StreamWriter writerHead;
+    StreamWriter writerAnswer;
 
     [HideInInspector]
     public bool startTask = false;
@@ -269,7 +270,7 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
         if (dataSM == null) {
             transform.localScale = 0.6f * Vector3.one;
-            transform.localPosition = new Vector3(transform.localPosition.x, 0.6f / 1.7f * userHeight, transform.localPosition.z);
+            transform.localPosition = new Vector3(transform.localPosition.x, 0.5f / 1.7f * userHeight, transform.localPosition.z);
 
             if (smallMultiplesNumber < 1)
 			{
@@ -387,6 +388,9 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
 
                 string writerHeadFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ExperimentManager.ParticipantID + "/Participant_" + ExperimentManager.ParticipantID + "_HeadPositionLog.csv";
                 writerHead = new StreamWriter(writerHeadFilePath, true);
+
+                string writerAnswerFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ExperimentManager.ParticipantID + "/Participant_" + ExperimentManager.ParticipantID + "_Answers.csv";
+                writerAnswer = new StreamWriter(writerAnswerFilePath, true);
 
                 if (smallMultiplesNumber % shelfRows == 0)
                 {
@@ -711,6 +715,8 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             
         ChangeTaskText("Please choose the answer from the options attached to your left controller. And press <color=red>trigger</color> button to confirm.", -1);
 
+        if (transform.localPosition.y > -50f)
+            transform.localPosition -= Vector3.up * 100;
         // change answer panel
         Transform leftController = globalLeftController;
         if (ExperimentManager.sceneCounter > 3) // trending questions
@@ -740,17 +746,16 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
             {
                 if (!answerLogged) {
                     // write to file
-                    string writerAnswerFilePath = "Assets/ExperimentData/ExperimentLog/Participant " + ExperimentManager.ParticipantID + 
-                        "/Participant_" + ExperimentManager.ParticipantID + "_Answers.csv";
-                    StreamWriter writerAnswer = new StreamWriter(writerAnswerFilePath, true);
-
-                    writerAnswer.Write(ExperimentManager.ParticipantID + "," + taskID.ToString() + "," + fullTaskID + "," + selectedAnswer + "," + 
+                    writerAnswer.WriteLine(ExperimentManager.ParticipantID + "," + taskID.ToString() + "," + fullTaskID + "," + selectedAnswer + "," + 
                         completionTime + "," + GetCurrentDataset() + "," + GetCurrentLayout() + "," + GetCurrentTaskLevel() + "," + 
                         GetQuestionID(sceneCounter) + "," + GetCorrectAnswer(sceneCounter));
-                    writerAnswer.Close();
+                    writerAnswer.Flush();
                     answerLogged = true;
                     //trainingCountingLeft--;
                 }
+
+                if (transform.localPosition.y < -50f)
+                    transform.localPosition += Vector3.up * 100;
 
                 if (trainingCountingLeft > 0)
                 {
@@ -778,12 +783,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             case 1:
                                 if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
@@ -792,15 +797,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                                     {
                                         taskID = -1;
                                         fullTaskID = "All Finished";
-                                        if (writer.BaseStream != null)
-                                        {
-                                            EndWritingFile(writer);
-                                        }
+                                        EndWritingFile();
                                         UnityEditor.EditorApplication.isPlaying = false;
                                     }
                                     else
                                     {
-                                        EndWritingFile(writer);
+                                        EndWritingFile();
                                         SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                     }
                                 }
@@ -808,12 +810,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             case 2:
                                 if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
@@ -822,15 +824,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                                     {
                                         taskID = -1;
                                         fullTaskID = "All Finished";
-                                        if (writer.BaseStream != null)
-                                        {
-                                            EndWritingFile(writer);
-                                        }
+                                        EndWritingFile();
                                         UnityEditor.EditorApplication.isPlaying = false;
                                     }
                                     else
                                     {
-                                        EndWritingFile(writer);
+                                        EndWritingFile();
                                         SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                     }
                                 }
@@ -838,12 +837,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             case 3:
                                 if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
@@ -852,15 +851,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                                     {
                                         taskID = -1;
                                         fullTaskID = "All Finished";
-                                        if (writer.BaseStream != null)
-                                        {
-                                            EndWritingFile(writer);
-                                        }
+                                        EndWritingFile();
                                         UnityEditor.EditorApplication.isPlaying = false;
                                     }
                                     else
                                     {
-                                        EndWritingFile(writer);
+                                        EndWritingFile();
                                         SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                     }
                                 }
@@ -868,12 +864,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             case 4:
                                 if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
@@ -882,15 +878,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                                     {
                                         taskID = -1;
                                         fullTaskID = "All Finished";
-                                        if (writer.BaseStream != null)
-                                        {
-                                            EndWritingFile(writer);
-                                        }
+                                        EndWritingFile();
                                         UnityEditor.EditorApplication.isPlaying = false;
                                     }
                                     else
                                     {
-                                        EndWritingFile(writer);
+                                        EndWritingFile();
                                         SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                     }
                                 }
@@ -898,12 +891,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             case 5:
                                 if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
@@ -912,15 +905,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                                     {
                                         taskID = -1;
                                         fullTaskID = "All Finished";
-                                        if (writer.BaseStream != null)
-                                        {
-                                            EndWritingFile(writer);
-                                        }
+                                        EndWritingFile();
                                         UnityEditor.EditorApplication.isPlaying = false;
                                     }
                                     else
                                     {
-                                        EndWritingFile(writer);
+                                        EndWritingFile();
                                         SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                     }
                                 }
@@ -928,12 +918,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                             case 6:
                                 if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Full Circle")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Half Circle");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Half Circle")
                                 {
-                                    EndWritingFile(writer);
+                                    EndWritingFile();
                                     SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Flat");
                                 }
                                 else if (SceneManager.GetActiveScene().name == "SmallMultiples - DataSet 2 - Flat")
@@ -942,15 +932,12 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
                                     {
                                         taskID = -1;
                                         fullTaskID = "All Finished";
-                                        if (writer.BaseStream != null)
-                                        {
-                                            EndWritingFile(writer);
-                                        }
+                                        EndWritingFile();
                                         UnityEditor.EditorApplication.isPlaying = false;
                                     }
                                     else
                                     {
-                                        EndWritingFile(writer);
+                                        EndWritingFile();
                                         SceneManager.LoadScene(sceneName: "SmallMultiples - DataSet 2 - Full Circle");
                                     }
                                 }
@@ -992,16 +979,22 @@ public class SmallMultiplesManagerScript : MonoBehaviour {
     // close functions
     void OnApplicationQuit()
     {
-        EndWritingFile(writer);
+        EndWritingFile();
     }
 
-    void EndWritingFile(StreamWriter writer) {
-        if (writer != null) {
-            writer.Close();
-        }
-        if (writerEye != null) {
-            writerEye.Close();
-        }
+    void EndWritingFile() {
+        if (writer != null)
+            if (writer.BaseStream != null)
+                writer.Close();
+        if (writerEye != null)
+            if (writerEye.BaseStream != null)
+                writerEye.Close();
+        if (writerHead != null)
+            if (writerHead.BaseStream != null)
+                writerHead.Close();
+        if (writerAnswer != null)
+            if (writerAnswer.BaseStream != null)
+                writerAnswer.Close();
     }
 
     // write log functions

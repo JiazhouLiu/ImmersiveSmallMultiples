@@ -12736,7 +12736,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114040405524262676
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13295,7 +13294,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114068010392751472
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13755,7 +13753,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114113978115881364
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14035,7 +14032,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114134218445126040
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -15399,7 +15395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114210129222328748
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -16317,7 +16312,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114350145201639856
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -17436,7 +17430,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114496815896588966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -18142,7 +18135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114565659535557324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -18520,7 +18512,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114602023252770012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -19786,7 +19777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114672095885653622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -20079,7 +20069,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114703912850790908
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -20332,7 +20321,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114710379399988020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -20592,7 +20580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114730102809665288
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -20604,7 +20591,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114731009925036418
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21431,7 +21417,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114773363635591586
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21601,7 +21586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114790383050081194
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21853,7 +21837,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114826836866371042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21865,7 +21848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114833055493930766
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21928,7 +21910,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114849491524411446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -22552,7 +22533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114903549879359076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -22888,7 +22868,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114930159396888958
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -22920,7 +22899,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9f93615a6c9b04594aba2730b5dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorColorIndex: 0
 --- !u!114 &114951202496175538
 MonoBehaviour:
   m_ObjectHideFlags: 1

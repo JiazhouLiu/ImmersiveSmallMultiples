@@ -1,2 +1,33 @@
-UserID,TrialID,TaskID,Answer,CompletionTime,Dataset,Layout,QuestionLevel,QuestionID,CorrectAnswer
-0,1,Training,France,0.240448,Bar,Flat,Trending,1,Belgium0,2,Training,France,0.1831207,Bar,Flat,Trending,2,Belgium0,3,1,France,0.1863556,Bar,Flat,Trending,3,Belgium0,4,2,France,0.1848068,Bar,Flat,Trending,4,Belgium0,5,3,France,0.1796875,Bar,Flat,Trending,5,Denmark0,6,Training,France,0.3281631,Bar,Full-Circle,Trending,6,France0,7,Training,France,0.2024231,Bar,Full-Circle,Trending,7,Australia0,8,4,France,0.2002029,Bar,Full-Circle,Trending,8,Denmark0,9,5,France,0.7623749,Bar,Full-Circle,Trending,9,Canada0,10,6,France,0.1979523,Bar,Full-Circle,Trending,10,Canada0,1,Training,Canada,2.048615,Bar,Flat,Long Distance,1,Belgium0,1,Training,Denmark,1.589851,Bar,Flat,Long Distance,1,Belgium0,1,Training,Denmark,0.947052,Bar,Flat,Long Distance,1,Belgium0,1,Training,Belgium,1.464355,Bar,Flat,Long Distance,1,Belgium0,1,Training,Canada,0.4559402,Bar,Half-Circle,Long Distance,11,Canada
+UserID,TrialID,TaskID,Answer,CompletionTime,Dataset,Layout,QuestionType,QuestionID,CorrectAnswer
+0,1,Training,Belgium,0.5821228,Bar,Flat,Long Distance,1,Belgium
+0,2,Training,Belgium,0.1777802,Bar,Flat,Long Distance,2,Belgium
+0,3,1,Belgium,0.1764221,Bar,Flat,Long Distance,3,Belgium
+0,4,2,Belgium,0.1661758,Bar,Flat,Long Distance,4,Belgium
+0,5,3,Belgium,0.1774597,Bar,Flat,Long Distance,5,Denmark
+0,6,Training,Canada,0.1994171,Bar,Full-Circle,Long Distance,6,France
+0,7,Training,Canada,0.2105484,Bar,Full-Circle,Long Distance,7,Australia
+0,8,4,France,0.2149887,Bar,Full-Circle,Long Distance,8,Denmark
+0,9,5,France,0.2057571,Bar,Full-Circle,Long Distance,9,Canada
+0,10,6,France,0.200058,Bar,Full-Circle,Long Distance,10,Canada
+0,11,Training,Canada,0.1959076,Bar,Half-Circle,Long Distance,11,Canada
+0,12,Training,Australia,0.1705856,Bar,Half-Circle,Long Distance,12,Australia
+0,13,7,Belgium,0.1988068,Bar,Half-Circle,Long Distance,13,Belgium
+0,14,8,France,0.1870728,Bar,Half-Circle,Long Distance,14,Denmark
+0,15,9,France,0.1781693,Bar,Half-Circle,Long Distance,15,Australia
+0,16,Training,2004,0.4930115,Bar,Flat,Trending,16,2000
+0,17,Training,2009,0.1778641,Bar,Flat,Trending,17,2009
+0,18,10,2014,0.199501,Bar,Flat,Trending,18,2014
+0,19,11,1989,0.1663361,Bar,Flat,Trending,19,1988
+0,20,12,1999,0.2108459,Bar,Flat,Trending,20,1995
+0,21,Training,2014,0.193634,Bar,Full-Circle,Trending,21,2014
+0,22,Training,2015,0.1789169,Bar,Full-Circle,Trending,22,2015
+0,23,13,1984,0.1727066,Bar,Full-Circle,Trending,23,1983
+0,24,14,1984,0.1782074,Bar,Full-Circle,Trending,24,1984
+0,25,15,2004,0.1525421,Bar,Full-Circle,Trending,25,2003
+0,26,Training,1994,0.2042999,Bar,Half-Circle,Trending,26,1992
+0,27,Training,1989,0.1991272,Bar,Half-Circle,Trending,27,1988
+0,28,16,2014,0.1685028,Bar,Half-Circle,Trending,28,2010
+0,29,17,1999,0.1545792,Bar,Half-Circle,Trending,29,1999
+0,30,18,2009,0.177948,Bar,Half-Circle,Trending,30,2006
+0,1,Training,France,1.965446,Bar,Flat,Long Distance,1,Belgium
+0,2,Training,Canada,0.2540283,Bar,Flat,Long Distance,2,Belgium

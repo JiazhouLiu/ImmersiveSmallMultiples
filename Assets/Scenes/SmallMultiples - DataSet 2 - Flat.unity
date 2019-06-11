@@ -5433,6 +5433,11 @@ Prefab:
       propertyPath: highlightMethod
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114165634593613226, guid: fa4796be702c33e44956c25e9086c1c6,
+        type: 2}
+      propertyPath: barShader
+      value: 
+      objectReference: {fileID: 4800000, guid: 9802c0cad0c3c6546919692cbde98c7a, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fa4796be702c33e44956c25e9086c1c6, type: 2}
   m_IsPrefabParent: 0
