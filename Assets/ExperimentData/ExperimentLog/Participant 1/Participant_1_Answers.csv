@@ -29,3 +29,6 @@ UserID,TrialID,TaskID,Answer,CompletionTime,Dataset,Layout,QuestionType,Question
 1,28,16,2010,48.5198,Bar,Half-Circle,Trending,28,2010
 1,29,17,1997,63.34305,Bar,Half-Circle,Trending,29,1999
 1,30,18,2006,46.74055,Bar,Half-Circle,Trending,30,2006
+1,11,Training,Canada,26.38766,Bar,Half-Circle,Long Distance,11,Canada
+1,12,Training,Canada,46.65944,Bar,Half-Circle,Long Distance,12,Australia
+1,6,Training,Belgium,25.16217,Bar,Full-Circle,Long Distance,6,France

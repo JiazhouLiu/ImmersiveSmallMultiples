@@ -1,0 +1,31 @@
+UserID,TrialID,TaskID,Answer,CompletionTime,Dataset,Layout,QuestionType,QuestionID,CorrectAnswer
+7,1,Training,Canada,14.61549,Bar,Flat,Long Distance,1,Belgium
+7,2,Training,Belgium,59.05899,Bar,Flat,Long Distance,2,Belgium
+7,3,1,Belgium,117.1167,Bar,Flat,Long Distance,3,Belgium
+7,4,2,Denmark,40.72694,Bar,Flat,Long Distance,4,Belgium
+7,5,3,Denmark,49.99268,Bar,Flat,Long Distance,5,Denmark
+7,6,Training,France,53.62646,Bar,Full-Circle,Long Distance,6,France
+7,7,Training,Australia,26.1872,Bar,Full-Circle,Long Distance,7,Australia
+7,8,4,Denmark,42.93864,Bar,Full-Circle,Long Distance,8,Denmark
+7,9,5,Belgium,49.0994,Bar,Full-Circle,Long Distance,9,Canada
+7,10,6,Canada,41.2863,Bar,Full-Circle,Long Distance,10,Canada
+7,11,Training,Canada,37.89268,Bar,Half-Circle,Long Distance,11,Canada
+7,12,Training,Australia,28.63354,Bar,Half-Circle,Long Distance,12,Australia
+7,13,7,Belgium,38.56132,Bar,Half-Circle,Long Distance,13,Belgium
+7,14,8,Denmark,24.41431,Bar,Half-Circle,Long Distance,14,Denmark
+7,15,9,Australia,33.04108,Bar,Half-Circle,Long Distance,15,Australia
+7,16,Training,2002,119.5637,Bar,Flat,Trending,16,2000
+7,17,Training,2005,89.27565,Bar,Flat,Trending,17,2009
+7,18,10,2014,45.60272,Bar,Flat,Trending,18,2014
+7,19,11,1988,39.636,Bar,Flat,Trending,19,1988
+7,20,12,1995,35.76397,Bar,Flat,Trending,20,1995
+7,21,Training,2010,67.45236,Bar,Full-Circle,Trending,21,2014
+7,22,Training,2015,43.79475,Bar,Full-Circle,Trending,22,2015
+7,23,13,1983,30.09903,Bar,Full-Circle,Trending,23,1983
+7,24,14,1984,32.23138,Bar,Full-Circle,Trending,24,1984
+7,25,15,2003,70.10564,Bar,Full-Circle,Trending,25,2003
+7,26,Training,1992,39.02317,Bar,Half-Circle,Trending,26,1992
+7,27,Training,1988,32.78826,Bar,Half-Circle,Trending,27,1988
+7,28,16,2010,52.01404,Bar,Half-Circle,Trending,28,2010
+7,29,17,1999,55.63725,Bar,Half-Circle,Trending,29,1999
+7,30,18,2006,35.51248,Bar,Half-Circle,Trending,30,2006
